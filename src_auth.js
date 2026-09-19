@@ -108,6 +108,10 @@
   }
 
   function showDashboard(user) {
+    if (appStarted) {
+      updateUserBar(user);
+      return;
+    }
     appStarted = true;
     var gate = document.getElementById('authGate');
     var shell = document.querySelector('.app-shell');
