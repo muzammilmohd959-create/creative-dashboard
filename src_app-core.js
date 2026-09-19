@@ -215,9 +215,9 @@ function applyDateRange(data) {
     return Object.assign({date:d}, aggregate(byDate[d]));
   });
   out.overall = aggregate(rows);
-  out.creatorMetrics = metricsByDimension(rows, 'creatorId');
-  out.campaignMetrics = metricsByDimension(rows, 'campaignId');
-  out.creativeMetrics = metricsByDimension(rows, 'creativeId');
+  out.creatorMetrics = aggMap(rows, function(r){ return r.creatorId; });
+  out.campaignMetrics = aggMap(rows, function(r){ return r.campaignId; });
+  out.creativeMetrics = aggMap(rows, function(r){ return r.creativeId; });
   out.adMetrics = aggMap(rows, function(r){ return r.adId; });
   out.insights = typeof generateInsights === 'function' ? generateInsights(out) : (data.insights || []);
   out.evidenceInsights = typeof buildEvidenceInsights === 'function' ? buildEvidenceInsights(out) : (data.evidenceInsights || []);
