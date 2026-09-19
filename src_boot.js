@@ -239,11 +239,16 @@ function tryAutoReconnectSupabase() {
   } catch (e) {}
 }
 
-(function boot() {
+window.startDashboard = function () {
   loadTheme();
   wireTopBar();
   setModeIndicator();
   renderSidebar();
   mountPage();
   tryAutoReconnectSupabase();
+};
+
+(function boot() {
+  if (typeof initAuth === 'function') initAuth();
+  else if (typeof window.startDashboard === 'function') window.startDashboard();
 })();
