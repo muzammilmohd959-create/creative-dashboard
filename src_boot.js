@@ -23,14 +23,24 @@ function setModeIndicator() {
 }
 
 function loadSampleData() {
-  var raw = generateDemoData();
-  App.rawData = enrichDemoData(raw);
-  App.data = App.rawData;
-  App.mode = 'demo';
-  App.params = {};
-  try { window.localStorage.setItem('cpd-mode', 'demo'); } catch (e) {}
-  setModeIndicator();
-  mountPage();
+  try {
+    var raw = generateDemoData();
+    App.rawData = enrichDemoData(raw);
+    App.data = App.rawData;
+    App.mode = 'demo';
+    App.params = {};
+    try { window.localStorage.setItem('cpd-mode', 'demo'); } catch (e) {}
+    setModeIndicator();
+    mountPage();
+  } catch (e) {
+    console.error('Sample data load failed:', e);
+    var container = document.getElementById('pageContent');
+    if (container) {
+      container.innerHTML = '<div class="empty big"><p><strong>Sample data could not be loaded.</strong></p><p style="color:#ff7a63;white-space:pre-wrap;">' +
+        escapeHtml(e && e.stack ? e.stack : String(e)) +
+        '</p><p>Open the browser console (F12 → Console) if you need the full error.</p></div>';
+    }
+  }
 }
 
 function clearData() {
