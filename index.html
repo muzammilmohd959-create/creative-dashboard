@@ -221,6 +221,28 @@
   </div>
 </div>
 
+<script>
+window.addEventListener('error', function(e) {
+  try {
+    var el = document.getElementById('pageContent');
+    if (el && !el.innerHTML.trim()) {
+      el.innerHTML = '<div style="padding:32px;font-family:system-ui"><h2>Dashboard startup error</h2><p>' +
+        String(e.message || 'Unknown JavaScript error').replace(/[&<>]/g, function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c];}) +
+        '</p><p style="color:#8B93A3">Open browser console for the exact file and line.</p></div>';
+    }
+  } catch (_) {}
+});
+window.addEventListener('unhandledrejection', function(e) {
+  try {
+    var el = document.getElementById('pageContent');
+    if (el && !el.innerHTML.trim()) {
+      el.innerHTML = '<div style="padding:32px;font-family:system-ui"><h2>Dashboard startup error</h2><p>' +
+        String((e.reason && e.reason.message) || e.reason || 'Unhandled promise rejection').replace(/[&<>]/g, function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c];}) +
+        '</p></div>';
+    }
+  } catch (_) {}
+});
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.116.0"></script>
