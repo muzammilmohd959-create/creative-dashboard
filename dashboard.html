@@ -181,28 +181,24 @@
     .content{padding:0; max-width:none;}
     body{background:#fff; color:#000;}
   }
+</style>
 
 <style>
-.rec-card{transition:transform .15s ease,border-color .15s ease}
-.rec-card:hover{transform:translateY(-1px)}
-.brief-editor{max-width:900px}
-.brief-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.brief-grid label,.brief-editor label{font-size:11px;text-transform:uppercase;letter-spacing:.05em}
-.brief-grid input,.brief-grid select,.brief-editor textarea,.brief-editor input{display:block;width:100%;margin-top:6px;box-sizing:border-box;padding:9px 10px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);font:inherit}
-@media(max-width:700px){.brief-grid{grid-template-columns:1fr}}
+.global-date-range{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end;margin-right:8px}
+.date-range-label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;opacity:.65;margin-right:2px}
+.date-preset{border:1px solid var(--border,#2a2d35);background:var(--panel,#111318);color:var(--text,#e8eaf0);border-radius:7px;padding:6px 8px;font-size:11px;cursor:pointer}
+.date-preset:hover{border-color:var(--accent,#8b5cf6)}
+.date-preset.active{background:var(--accent,#8b5cf6);border-color:var(--accent,#8b5cf6);color:#fff}
+.date-range-values{font-size:11px;opacity:.7;white-space:nowrap;margin-left:3px}
+@media(max-width:900px){.global-date-range{justify-content:flex-start;width:100%;margin-top:8px}.page-head{align-items:flex-start;flex-direction:column}}
+</style>
 
 <style>
-.workflow-pipeline{display:grid;grid-template-columns:repeat(8,minmax(80px,1fr));gap:8px;margin:14px 0 4px}
-.workflow-step{border:1px solid var(--border);border-radius:8px;padding:10px 8px;background:var(--surface);text-align:center}
-.workflow-step strong{display:block;font-size:20px}.workflow-step span{display:block;margin-top:4px;font-size:10px;opacity:.7}
-.workflow-card{display:flex;align-items:center;gap:14px;margin-bottom:9px}
-.workflow-card button{white-space:nowrap}
-@media(max-width:900px){.workflow-pipeline{grid-template-columns:repeat(4,1fr)}}
-@media(max-width:600px){.workflow-pipeline{grid-template-columns:repeat(2,1fr)}.workflow-card{align-items:flex-start;flex-direction:column}}
+.evidence-card{position:relative;overflow:hidden}
+.evidence-bar{margin-top:12px;display:grid;grid-template-columns:auto 1fr auto 1fr;gap:7px 10px;align-items:center;font-size:11px;opacity:.9}
+.evidence-bar strong{text-align:right}
+.insight-cat{text-transform:uppercase;letter-spacing:.07em}
 </style>
-</style>
-</style>
-
 </head>
 <body>
 <div class="app-shell">
@@ -417,7 +413,6 @@ function rightsStatus(daysRemaining) {
   if (daysRemaining <= 30) return 'Expiring within 30 days';
   return 'Active';
 }
-
 ;
 function groupMetricsByDimension(data, dimKey, excludeValue) {
   var creativeById = {};
@@ -477,7 +472,13 @@ function generateInsights(data) {
     insights.push({
       category: 'Angles',
       text: bestAngle + ' angles produced ' + Math.round(diff2) + '% lower CPA than ' + worstAngle.toLowerCase() + ' angles.',
-      detail: '$' + byAngle[bestAngle].cpa.toFixed(2) + ' CPA vs $' + byAngle[worstAngle].cpa.toFixed(2),
+      detail: '
+</script>
+</body>
+</html> + byAngle[bestAngle].cpa.toFixed(2) + ' CPA vs 
+</script>
+</body>
+</html> + byAngle[worstAngle].cpa.toFixed(2),
       magnitude: Math.abs(diff2)
     });
   }
@@ -493,7 +494,13 @@ function generateInsights(data) {
     insights.push({
       category: 'Creators',
       text: creatorNames[bestCreator] + ' generated ' + Math.round(diff3) + '% lower CPA than the account average.',
-      detail: '$' + byCreator[bestCreator].cpa.toFixed(2) + ' vs $' + overall.cpa.toFixed(2) + ' average',
+      detail: '
+</script>
+</body>
+</html> + byCreator[bestCreator].cpa.toFixed(2) + ' vs 
+</script>
+</body>
+</html> + overall.cpa.toFixed(2) + ' average',
       magnitude: Math.abs(diff3)
     });
   }
@@ -517,7 +524,10 @@ function generateInsights(data) {
   if (bestLength) {
     insights.push({
       category: 'Video length',
-      text: bestLength + ' videos generated the lowest average CPA, at $' + byLength[bestLength].cpa.toFixed(2) + '.',
+      text: bestLength + ' videos generated the lowest average CPA, at 
+</script>
+</body>
+</html> + byLength[bestLength].cpa.toFixed(2) + '.',
       detail: 'Across ' + Object.keys(byLength).length + ' length groups tested',
       magnitude: 100 - (byLength[bestLength].cpa / overall.cpa) * 100
     });
@@ -567,7 +577,10 @@ function generateAlerts(data) {
   });
   var highCpaCount = creativeMetrics.filter(function (c) { return c.cpa > overall.cpa * 1.3 && c.spend > 100; }).length;
   if (highCpaCount > 0) {
-    alerts.push({ level: 'warn', text: highCpaCount + ' creative' + (highCpaCount === 1 ? '' : 's') + ' running above target CPA (over $' + Math.round(overall.cpa * 1.3) + ').' });
+    alerts.push({ level: 'warn', text: highCpaCount + ' creative' + (highCpaCount === 1 ? '' : 's') + ' running above target CPA (over 
+</script>
+</body>
+</html> + Math.round(overall.cpa * 1.3) + ').' });
   }
 
   var lowRoasCount = creativeMetrics.filter(function (c) { return c.roas < 2 && c.spend > 100; }).length;
@@ -593,11 +606,16 @@ function generateAlerts(data) {
   }
   return alerts;
 }
-
 ;
 // ================= Formatting helpers =================
-function fmtCurrency(v) { return '$' + Number(v || 0).toLocaleString(undefined, { maximumFractionDigits: 0 }); }
-function fmtCurrency2(v) { return '$' + Number(v || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+function fmtCurrency(v) { return '
+</script>
+</body>
+</html> + Number(v || 0).toLocaleString(undefined, { maximumFractionDigits: 0 }); }
+function fmtCurrency2(v) { return '
+</script>
+</body>
+</html> + Number(v || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
 function fmtPct(v) { return (Number(v || 0) * 100).toFixed(2) + '%'; }
 function fmtPct1(v) { return (Number(v || 0) * 100).toFixed(1) + '%'; }
 function fmtNum(v) { return Number(v || 0).toLocaleString(); }
@@ -622,6 +640,7 @@ var App = {
   page: 'overview',
   params: {},
   charts: {},
+  dateRange: { preset: '30d', start: '', end: '' },
   creativesFilter: { creator: '', campaign: '', hook: '', angle: '', format: '', perf: '' },
   creativesSort: { key: 'spend', dir: 'desc' },
   creativesView: 'table', // 'table' | 'library'
@@ -674,6 +693,8 @@ function enrichDemoData(raw) {
   });
   raw.overall = aggregate(raw.dailyRows);
   raw.insights = generateInsights(raw);
+  raw.evidenceInsights = buildEvidenceInsights(raw);
+  raw.recommendations = buildRecommendations(raw);
   raw.alerts = generateAlerts(raw);
   return raw;
 }
@@ -699,6 +720,7 @@ function buildEvidenceInsights(data) {
     var quality=groups[win].spend>=500 && groups[win].purchases>=10 ? 'strong' : (groups[win].spend>=250 ? 'moderate':'directional');
     out.push({category:dim.label, winner:win, metric:dim.metric, value:groups[win][dim.metric], baseline:base[dim.metric], delta:delta, spend:groups[win].spend, purchases:groups[win].purchases, sampleSize:groups[win].impressions, quality:quality});
   });
+  // Creator signal: compare creator CPA to blended CPA with minimum spend.
   var byCreator=groupMetricsByDimension(data,'creatorId');
   Object.keys(byCreator).forEach(function(id){
     var m=byCreator[id]; if(m.spend<250 || !m.purchases) return;
@@ -707,6 +729,7 @@ function buildEvidenceInsights(data) {
   });
   return out.sort(function(a,b){ return Math.abs(b.delta||0)-Math.abs(a.delta||0); });
 }
+
 function buildRecommendations(data) {
   var evidence=buildEvidenceInsights(data), recs=[];
   evidence.slice(0,6).forEach(function(e){
@@ -766,6 +789,83 @@ function themeColors() {
 }
 
 // ================= Generic sortable table =================
+
+// ================= Global date range =================
+function dateRangeBounds(data) {
+  var rows = (data && data.dailyRows) || [];
+  var dates = rows.map(function(r){ return r.date; }).filter(Boolean).sort();
+  return { min: dates[0] || '', max: dates[dates.length - 1] || '' };
+}
+function isoDaysAgo(endIso, days) {
+  var d = new Date(endIso + 'T00:00:00');
+  d.setDate(d.getDate() - days + 1);
+  return d.toISOString().slice(0,10);
+}
+function resolveDateRange(data) {
+  var b = dateRangeBounds(data);
+  var end = App.dateRange.end || b.max;
+  var start = App.dateRange.start;
+  if (App.dateRange.preset && App.dateRange.preset !== 'custom') {
+    var n = App.dateRange.preset === '7d' ? 7 : App.dateRange.preset === '14d' ? 14 : App.dateRange.preset === '30d' ? 30 : App.dateRange.preset === '90d' ? 90 : 0;
+    start = n ? isoDaysAgo(end, n) : b.min;
+  }
+  if (!start) start = b.min;
+  if (!end) end = b.max;
+  if (b.min && start < b.min) start = b.min;
+  if (b.max && end > b.max) end = b.max;
+  return { start: start, end: end, min: b.min, max: b.max };
+}
+function filteredDailyRows(data) {
+  var r = resolveDateRange(data);
+  return ((data && data.dailyRows) || []).filter(function(row){
+    return (!r.start || row.date >= r.start) && (!r.end || row.date <= r.end);
+  });
+}
+function applyDateRange(data) {
+  if (!data) return data;
+  var rows = filteredDailyRows(data);
+  var out = Object.assign({}, data, { dailyRows: rows, dateRange: resolveDateRange(data) });
+  var byDate = groupSum(rows, function(r){ return r.date; });
+  out.dateSeries = Object.keys(byDate).sort().map(function(d){
+    return Object.assign({date:d}, aggregate(byDate[d]));
+  });
+  out.overall = aggregate(rows);
+  out.creatorMetrics = metricsByDimension(rows, 'creatorId');
+  out.campaignMetrics = metricsByDimension(rows, 'campaignId');
+  out.creativeMetrics = metricsByDimension(rows, 'creativeId');
+  out.adMetrics = aggMap(rows, function(r){ return r.adId; });
+  out.insights = typeof generateInsights === 'function' ? generateInsights(out) : (data.insights || []);
+  out.evidenceInsights = typeof buildEvidenceInsights === 'function' ? buildEvidenceInsights(out) : (data.evidenceInsights || []);
+  out.recommendations = typeof buildRecommendations === 'function' ? buildRecommendations(out) : (data.recommendations || []);
+  out.alerts = typeof generateAlerts === 'function' ? generateAlerts(out) : (data.alerts || []);
+  return out;
+}
+function setDateRangePreset(preset) {
+  App.dateRange.preset = preset;
+  App.dateRange.start = '';
+  App.dateRange.end = '';
+  if (typeof window.renderCurrentPage === 'function') window.renderCurrentPage();
+}
+function setCustomDateRange(start, end) {
+  App.dateRange.preset = 'custom';
+  App.dateRange.start = start || '';
+  App.dateRange.end = end || '';
+  if (typeof window.renderCurrentPage === 'function') window.renderCurrentPage();
+}
+function renderGlobalDateRange() {
+  if (!App.data) return '';
+  var r = resolveDateRange(App.data);
+  return '<div class="global-date-range" aria-label="Date range">' +
+    '<span class="date-range-label">Date range</span>' +
+    '<button class="date-preset '+(App.dateRange.preset==='7d'?'active':'')+'" onclick="setDateRangePreset(\'7d\')">7D</button>' +
+    '<button class="date-preset '+(App.dateRange.preset==='14d'?'active':'')+'" onclick="setDateRangePreset(\'14d\')">14D</button>' +
+    '<button class="date-preset '+(App.dateRange.preset==='30d'?'active':'')+'" onclick="setDateRangePreset(\'30d\')">30D</button>' +
+    '<button class="date-preset '+(App.dateRange.preset==='90d'?'active':'')+'" onclick="setDateRangePreset(\'90d\')">90D</button>' +
+    '<button class="date-preset '+(App.dateRange.preset==='all'?'active':'')+'" onclick="setDateRangePreset(\'all\')">All</button>' +
+    '<span class="date-range-values">'+fmtDateShort(r.start)+' – '+fmtDateShort(r.end)+'</span>' +
+    '</div>';
+}
+
 function sortRows(rows, sortState, columns) {
   var col = columns.filter(function (c) { return c.key === sortState.key; })[0];
   var getVal = col && col.sortValue ? col.sortValue : function (r) { return r[sortState.key]; };
@@ -829,7 +929,6 @@ function thumb(creative, creator) {
   return '<div class="thumb" style="background:linear-gradient(135deg,' + color + '33,' + color + '11); color:' + color + ';">' +
     '<span>' + escapeHtml(initials) + '</span></div>';
 }
-
 ;
 // ================= Shell =================
 function renderSidebar() {
@@ -857,6 +956,7 @@ var PAGES = {}; // filled in by each page module: { render: fn, mount: fn }
 
 function mountPage() {
   destroyAllCharts();
+  if (App.rawData) App.data = applyDateRange(App.rawData);
   var container = document.getElementById('pageContent');
   var mod = PAGES[App.page];
   if (!mod) { container.innerHTML = '<div class="empty">Page not found.</div>'; return; }
@@ -963,8 +1063,9 @@ PAGES.overview = {
 };
 
 function pageHeader(title, subtitle, actionsHtml) {
+  var range = App.data ? renderGlobalDateRange() : '';
   return '<div class="page-head"><div><h1>' + escapeHtml(title) + '</h1><p class="sub">' + escapeHtml(subtitle) + '</p></div>' +
-    '<div class="page-actions">' + (actionsHtml || '') + '</div></div>';
+    '<div class="page-actions">' + range + (actionsHtml || '') + '</div></div>';
 }
 
 function renderAlertsList(alerts) {
@@ -998,3 +1099,1064 @@ function chartOptsHBar(colors, axis) {
     plugins: { legend: { display: false } },
     scales: {
       x: { ticks: { color: colors.text, font: { size: 10 } }, grid: { color: colors.grid } },
+      y: { ticks: { color: colors.text, font: { size: 10 } }, grid: { display: false } }
+    }
+  };
+}
+;
+PAGES.creators = {
+  render: function () {
+    if (App.mode === 'empty') return pageHeader('Creators', 'Every creator in your program, ranked by outcomes.') + noDataState('your creator roster');
+    if (App.params.creatorId) return renderCreatorDetail(App.params.creatorId);
+
+    var d = App.data;
+    var rows = d.creators.map(function (c) {
+      var m = d.creatorMetrics[c.id] || aggregate([]);
+      return Object.assign({ id: c.id, name: c.name }, m);
+    });
+    var sorted = sortRows(rows, App.creatorsSort, creatorColumns());
+    var scoreCol = App.showInternalScore ? [{ key: 'score', label: 'Internal score*', align: 'right', format: function (r) { return internalScore(r, rows).toFixed(1); } }] : [];
+
+    var toggle = '<label class="chk"><input type="checkbox" id="toggleScore"' + (App.showInternalScore ? ' checked' : '') + '> Show internal score</label>';
+
+    return pageHeader('Creators', 'Every creator in your program, ranked by outcomes.', toggle) +
+      tableHTML(creatorColumns().concat(scoreCol), sorted, App.creatorsSort, 'id') +
+      (App.showInternalScore ? '<p class="foot-note">*Internal score is an optional blended metric (60% ROAS, 40% CPA efficiency) for quick triage — not a primary KPI.</p>' : '');
+  },
+  mount: function (container) {
+    if (App.mode === 'empty') return;
+    if (App.params.creatorId) { mountCreatorDetail(container, App.params.creatorId); return; }
+    wireTable(container, App.creatorsSort, function () { mountPage(); }, function (id) { setPage('creators', { creatorId: id }); });
+    var cb = document.getElementById('toggleScore');
+    if (cb) cb.addEventListener('change', function () { App.showInternalScore = cb.checked; mountPage(); });
+  }
+};
+
+function creatorColumns() {
+  return [
+    { key: 'name', label: 'Creator', align: 'left' },
+    { key: 'spend', label: 'Spend', format: function (r) { return fmtCurrency(r.spend); } },
+    { key: 'purchases', label: 'Purchases', format: function (r) { return fmtNum(r.purchases); } },
+    { key: 'cpa', label: 'CPA', format: function (r) { return fmtCurrency2(r.cpa); } },
+    { key: 'revenue', label: 'Revenue', format: function (r) { return fmtCurrency(r.revenue); } },
+    { key: 'roas', label: 'ROAS', format: function (r) { return fmtX(r.roas); } }
+  ];
+}
+
+function internalScore(row, allRows) {
+  var maxRoas = Math.max.apply(null, allRows.map(function (r) { return r.roas; }).concat([0.0001]));
+  var maxCpa = Math.max.apply(null, allRows.map(function (r) { return r.cpa; }).concat([0.0001]));
+  var roasPart = maxRoas ? row.roas / maxRoas : 0;
+  var cpaPart = maxCpa ? 1 - (row.cpa / maxCpa) : 0;
+  return Math.max(0, (roasPart * 0.6 + cpaPart * 0.4) * 100);
+}
+
+function renderCreatorDetail(creatorId) {
+  var d = App.data;
+  var creator = d.creators.filter(function (c) { return c.id === creatorId; })[0];
+  if (!creator) return '<div class="empty">Creator not found.</div>';
+  var m = d.creatorMetrics[creatorId] || aggregate([]);
+
+  var tabs = ['overview', 'creatives', 'campaigns', 'trend', 'rights', 'library'];
+  var tabLabels = { overview: 'Overview', creatives: 'Creatives', campaigns: 'Campaigns', trend: 'Performance over time', rights: 'Rights', library: 'Content library' };
+  var tabNav = '<div class="subtabs">' + tabs.map(function (t) {
+    return '<button class="subtab' + (App.creatorDetailTab === t ? ' active' : '') + '" data-tab="' + t + '">' + tabLabels[t] + '</button>';
+  }).join('') + '</div>';
+
+  var backBtn = '<button class="link-btn" data-page="creators" onclick="setPage(\'creators\',{})">← All creators</button>';
+
+  var infoCard = '<div class="detail-card">' +
+    '<div class="avatar" style="background:' + creator.color + '22; color:' + creator.color + ';">' + escapeHtml(creator.name.split(' ').map(function (w) { return w[0]; }).join('')) + '</div>' +
+    '<div><div class="detail-name">' + escapeHtml(creator.name) + '</div>' +
+    '<div class="detail-meta">' + escapeHtml(creator.niche) + ' · ' + escapeHtml(creator.location) + ' · ' + fmtNum(creator.followers) + ' followers</div></div></div>';
+
+  var kpis = [
+    kpiCard('Spend', fmtCurrency(m.spend)), kpiCard('Revenue', fmtCurrency(m.revenue)), kpiCard('Purchases', fmtNum(m.purchases)),
+    kpiCard('CPA', fmtCurrency2(m.cpa)), kpiCard('ROAS', fmtX(m.roas)), kpiCard('CTR', fmtPct(m.ctr))
+  ].join('');
+
+  var body = '<div id="creatorTabBody"></div>';
+  return pageHeader(creator.name, 'Creator profile', backBtn) + infoCard + tabNav + kpis + body;
+}
+
+function mountCreatorDetail(container, creatorId) {
+  container.querySelectorAll('[data-tab]').forEach(function (btn) {
+    btn.addEventListener('click', function () { App.creatorDetailTab = btn.getAttribute('data-tab'); mountPage(); });
+  });
+  var body = document.getElementById('creatorTabBody');
+  var d = App.data;
+  var creatives = d.creatives.filter(function (cv) { return cv.creatorId === creatorId; });
+
+  if (App.creatorDetailTab === 'overview') {
+    var m = d.creatorMetrics[creatorId] || aggregate([]);
+    body.innerHTML = '<section><h2>Snapshot</h2><p class="sub">' + creatives.length + ' creatives across ' +
+      unique(creatives.map(function (c) { return c.campaignId; })).length + ' campaigns · CPC ' + fmtCurrency2(m.cpc) +
+      ' · Conversion rate ' + fmtPct1(m.cvr) + '</p></section>';
+  } else if (App.creatorDetailTab === 'creatives') {
+    var rows = creatives.map(function (cv) { return Object.assign({ id: cv.id, hookAngle: cv.hook + ' / ' + cv.angle, format: cv.format }, d.creativeMetrics[cv.id] || {}); });
+    var sorted = sortRows(rows, App.creativesSort, creativeMiniColumns());
+    body.innerHTML = '<section><h2>Creatives</h2>' + tableHTML(creativeMiniColumns(), sorted, App.creativesSort, 'id') + '</section>';
+    wireTable(body, App.creativesSort, function () { mountPage(); }, function (id) { setPage('creatives', { creativeId: id }); });
+  } else if (App.creatorDetailTab === 'campaigns') {
+    var campIds = unique(creatives.map(function (c) { return c.campaignId; }));
+    var rows2 = campIds.map(function (cid) {
+      var camp = d.campaigns.filter(function (c) { return c.id === cid; })[0];
+      var rows = d.dailyRows.filter(function (r) { return r.creatorId === creatorId && r.campaignId === cid; });
+      return Object.assign({ id: cid, name: camp ? camp.name : cid }, aggregate(rows));
+    });
+    body.innerHTML = '<section><h2>Campaigns</h2>' + tableHTML(campaignMiniColumns(), rows2, { key: 'spend', dir: 'desc' }, 'id') + '</section>';
+    body.querySelectorAll('.clickable-row').forEach(function (tr) {
+      tr.addEventListener('click', function () { setPage('campaigns', { campaignId: tr.getAttribute('data-row-id') }); });
+    });
+  } else if (App.creatorDetailTab === 'trend') {
+    var rows3 = d.dailyRows.filter(function (r) { return r.creatorId === creatorId; });
+    var byDate = groupSum(rows3, function (r) { return r.date; });
+    var series = Object.keys(byDate).sort().map(function (date) { return Object.assign({ date: date }, aggregate(byDate[date])); });
+    body.innerHTML = '<section><h2>Performance over time</h2><div class="chart-card"><div class="chart-body" style="height:280px;"><canvas id="creatorTrendChart" role="img" aria-label="Spend and revenue over time for this creator"></canvas></div></div></section>';
+    var colors = themeColors();
+    destroyChart('creatorTrend');
+    App.charts.creatorTrend = new Chart(document.getElementById('creatorTrendChart'), {
+      type: 'line',
+      data: { labels: series.map(function (r) { return fmtDateShort(r.date); }), datasets: [
+        { label: 'Spend', data: series.map(function (r) { return round2(r.spend); }), borderColor: colors.neg, backgroundColor: colors.neg + '22', borderWidth: 2, pointRadius: 0, tension: 0.25 },
+        { label: 'Revenue', data: series.map(function (r) { return round2(r.revenue); }), borderColor: colors.pos, backgroundColor: colors.pos + '22', borderWidth: 2, pointRadius: 0, tension: 0.25 }
+      ] },
+      options: chartOptsLine(colors)
+    });
+  } else if (App.creatorDetailTab === 'rights') {
+    var rights = d.rights.filter(function (r) { return r.creatorId === creatorId; }).map(function (r) {
+      return Object.assign({}, r, { status: rightsStatus(r.daysRemaining) });
+    });
+    body.innerHTML = '<section><h2>Rights</h2>' + tableHTML(rightsColumns(), rights, App.rightsSort, null, 'No rights records for this creator.') + '</section>';
+  } else if (App.creatorDetailTab === 'library') {
+    body.innerHTML = '<section><h2>Content library</h2>' + renderCreativeGrid(creatives) + '</section>';
+    wireLibraryClicks(body);
+  }
+}
+
+function unique(arr) { var seen = {}; return arr.filter(function (x) { if (seen[x]) return false; seen[x] = true; return true; }); }
+
+function creativeMiniColumns() {
+  return [
+    { key: 'id', label: 'Creative', align: 'left' },
+    { key: 'spend', label: 'Spend', format: function (r) { return fmtCurrency(r.spend); } },
+    { key: 'ctr', label: 'CTR', format: function (r) { return fmtPct(r.ctr); } },
+    { key: 'cpa', label: 'CPA', format: function (r) { return fmtCurrency2(r.cpa); } },
+    { key: 'roas', label: 'ROAS', format: function (r) { return fmtX(r.roas); } }
+  ];
+}
+function campaignMiniColumns() {
+  return [
+    { key: 'name', label: 'Campaign', align: 'left' },
+    { key: 'spend', label: 'Spend', format: function (r) { return fmtCurrency(r.spend); } },
+    { key: 'purchases', label: 'Purchases', format: function (r) { return fmtNum(r.purchases); } },
+    { key: 'cpa', label: 'CPA', format: function (r) { return fmtCurrency2(r.cpa); } },
+    { key: 'roas', label: 'ROAS', format: function (r) { return fmtX(r.roas); } }
+  ];
+}
+
+;
+PAGES.creatives = {
+  render: function () {
+    if (App.mode === 'empty') return pageHeader('Creatives', 'The core analytical layer \u2014 every ad creative, with hook, angle and format performance.') + noDataState('creative-level performance');
+    if (App.mode === 'csv') return pageHeader('Creatives', 'The core analytical layer \u2014 every ad creative, with hook, angle and format performance.') + csvModeState('Creative-level detail');
+    if (App.params.creativeId) return renderCreativeDetail(App.params.creativeId);
+
+    var d = App.data;
+    var viewToggle = '<div class="seg">' +
+      '<button class="seg-btn' + (App.creativesView === 'table' ? ' active' : '') + '" data-view="table">Table</button>' +
+      '<button class="seg-btn' + (App.creativesView === 'library' ? ' active' : '') + '" data-view="library">Library</button>' +
+      '</div>';
+
+    var filters = renderCreativeFilters(d);
+    var allRows = getFilteredCreatives(d);
+
+    var quickStats = renderCreativeQuickStats(d);
+
+    var body;
+    if (App.creativesView === 'library') {
+      body = renderCreativeGrid(allRows);
+    } else {
+      var sorted = sortRows(allRows, App.creativesSort, fullCreativeColumns());
+      body = tableHTML(fullCreativeColumns(), sorted, App.creativesSort, 'id', 'No creatives match these filters.');
+    }
+
+    return pageHeader('Creatives', 'The core analytical layer \u2014 every ad creative, with hook, angle and format performance.', viewToggle) +
+      quickStats + filters + body;
+  },
+  mount: function (container) {
+    if (!isFullMode()) return;
+    if (App.params.creativeId) { mountCreativeDetail(container, App.params.creativeId); return; }
+
+    container.querySelectorAll('.seg-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () { App.creativesView = btn.getAttribute('data-view'); mountPage(); });
+    });
+    wireCreativeFilters(container);
+    container.querySelectorAll('.stat-chip[data-sort]').forEach(function (chip) {
+      chip.addEventListener('click', function () {
+        App.creativesSort = { key: chip.getAttribute('data-sort'), dir: chip.getAttribute('data-dir') };
+        App.creativesView = 'table';
+        mountPage();
+      });
+    });
+    if (App.creativesView === 'library') {
+      wireLibraryClicks(container);
+    } else {
+      wireTable(container, App.creativesSort, function () { mountPage(); }, function (id) { setPage('creatives', { creativeId: id }); });
+    }
+  }
+};
+
+function getFilteredCreatives(d) {
+  var f = App.creativesFilter;
+  var rows = d.creatives.map(function (cv) {
+    var creator = d.creators.filter(function (c) { return c.id === cv.creatorId; })[0];
+    var campaign = d.campaigns.filter(function (c) { return c.id === cv.campaignId; })[0];
+    return Object.assign({
+      id: cv.id, creatorId: cv.creatorId, campaignId: cv.campaignId,
+      creatorName: creator ? creator.name : cv.creatorId, campaignName: campaign ? campaign.name : cv.campaignId,
+      hook: cv.hook, angle: cv.angle, format: cv.format, videoLength: cv.videoLength, cta: cv.cta, launchDate: cv.launchDate
+    }, d.creativeMetrics[cv.id] || aggregate([]));
+  });
+  if (f.creator) rows = rows.filter(function (r) { return r.creatorId === f.creator; });
+  if (f.campaign) rows = rows.filter(function (r) { return r.campaignId === f.campaign; });
+  if (f.hook) rows = rows.filter(function (r) { return r.hook === f.hook; });
+  if (f.angle) rows = rows.filter(function (r) { return r.angle === f.angle; });
+  if (f.format) rows = rows.filter(function (r) { return r.format === f.format; });
+  if (f.perf === 'top') rows = rows.filter(function (r) { return r.roas >= 4; });
+  if (f.perf === 'under') rows = rows.filter(function (r) { return r.roas < 2.5; });
+  return rows;
+}
+
+function renderCreativeFilters(d) {
+  var f = App.creativesFilter;
+  function opt(val, label, current) { return '<option value="' + escapeHtml(val) + '"' + (current === val ? ' selected' : '') + '>' + escapeHtml(label) + '</option>'; }
+  var creatorOpts = '<option value="">All creators</option>' + d.creators.map(function (c) { return opt(c.id, c.name, f.creator); }).join('');
+  var campaignOpts = '<option value="">All campaigns</option>' + d.campaigns.map(function (c) { return opt(c.id, c.name, f.campaign); }).join('');
+  var hookOpts = '<option value="">All hooks</option>' + HOOKS.map(function (h) { return opt(h, h, f.hook); }).join('');
+  var angleOpts = '<option value="">All angles</option>' + ANGLES.map(function (a) { return opt(a, a, f.angle); }).join('');
+  var formatOpts = '<option value="">All formats</option>' + FORMATS.map(function (fm) { return opt(fm, fm, f.format); }).join('');
+  var perfOpts = '<option value="">All performance</option>' + opt('top', 'Top performers (ROAS \u2265 4x)', f.perf) + opt('under', 'Underperformers (ROAS < 2.5x)', f.perf);
+
+  return '<div class="filter-row">' +
+    '<select id="filtCreator">' + creatorOpts + '</select>' +
+    '<select id="filtCampaign">' + campaignOpts + '</select>' +
+    '<select id="filtHook">' + hookOpts + '</select>' +
+    '<select id="filtAngle">' + angleOpts + '</select>' +
+    '<select id="filtFormat">' + formatOpts + '</select>' +
+    '<select id="filtPerf">' + perfOpts + '</select>' +
+    '<button id="filtReset">Reset</button>' +
+    '</div>';
+}
+
+function wireCreativeFilters(container) {
+  var map = { filtCreator: 'creator', filtCampaign: 'campaign', filtHook: 'hook', filtAngle: 'angle', filtFormat: 'format', filtPerf: 'perf' };
+  Object.keys(map).forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) el.addEventListener('change', function () { App.creativesFilter[map[id]] = el.value; mountPage(); });
+  });
+  var reset = document.getElementById('filtReset');
+  if (reset) reset.addEventListener('click', function () {
+    App.creativesFilter = { creator: '', campaign: '', hook: '', angle: '', format: '', perf: '' };
+    mountPage();
+  });
+}
+
+function renderCreativeQuickStats(d) {
+  var rows = d.creatives.map(function (cv) { return Object.assign({ id: cv.id }, d.creativeMetrics[cv.id] || aggregate([])); }).filter(function (r) { return r.spend > 30; });
+  if (!rows.length) return '';
+  var byRoas = rows.slice().sort(function (a, b) { return b.roas - a.roas; });
+  var byCpa = rows.slice().sort(function (a, b) { return a.cpa - b.cpa; });
+  var byCtr = rows.slice().sort(function (a, b) { return b.ctr - a.ctr; });
+  var worst = rows.slice().sort(function (a, b) { return a.roas - b.roas; });
+  var chips = [
+    { label: 'Top creative', val: byRoas[0].id, sub: fmtX(byRoas[0].roas) + ' ROAS', sort: 'roas', dir: 'desc' },
+    { label: 'Lowest CPA', val: byCpa[0].id, sub: fmtCurrency2(byCpa[0].cpa), sort: 'cpa', dir: 'asc' },
+    { label: 'Highest ROAS', val: byRoas[0].id, sub: fmtX(byRoas[0].roas), sort: 'roas', dir: 'desc' },
+    { label: 'Highest CTR', val: byCtr[0].id, sub: fmtPct(byCtr[0].ctr), sort: 'ctr', dir: 'desc' },
+    { label: 'Worst performer', val: worst[0].id, sub: fmtX(worst[0].roas) + ' ROAS', sort: 'roas', dir: 'asc' }
+  ];
+  return '<div class="chip-row">' + chips.map(function (c) {
+    return '<div class="stat-chip" data-sort="' + c.sort + '" data-dir="' + c.dir + '"><div class="chip-label">' + c.label + '</div><div class="chip-val">' + escapeHtml(c.val) + '</div><div class="chip-sub">' + c.sub + '</div></div>';
+  }).join('') + '</div>';
+}
+
+function fullCreativeColumns() {
+  return [
+    { key: 'id', label: 'Creative', align: 'left' },
+    { key: 'creatorName', label: 'Creator', align: 'left' },
+    { key: 'campaignName', label: 'Campaign', align: 'left' },
+    { key: 'hook', label: 'Hook', align: 'left' },
+    { key: 'angle', label: 'Angle', align: 'left' },
+    { key: 'format', label: 'Format', align: 'left' },
+    { key: 'spend', label: 'Spend', format: function (r) { return fmtCurrency(r.spend); } },
+    { key: 'impressions', label: 'Impr.', format: function (r) { return fmtNum(r.impressions); } },
+    { key: 'clicks', label: 'Clicks', format: function (r) { return fmtNum(r.clicks); } },
+    { key: 'ctr', label: 'CTR', format: function (r) { return fmtPct(r.ctr); } },
+    { key: 'cpc', label: 'CPC', format: function (r) { return fmtCurrency2(r.cpc); } },
+    { key: 'purchases', label: 'Purchases', format: function (r) { return fmtNum(r.purchases); } },
+    { key: 'cvr', label: 'Conv. rate', format: function (r) { return fmtPct1(r.cvr); } },
+    { key: 'cpa', label: 'CPA', format: function (r) { return fmtCurrency2(r.cpa); } },
+    { key: 'revenue', label: 'Revenue', format: function (r) { return fmtCurrency(r.revenue); } },
+    { key: 'roas', label: 'ROAS', format: function (r) { return fmtX(r.roas); } }
+  ];
+}
+
+function renderCreativeGrid(rows) {
+  if (!rows.length) return '<div class="empty">No creatives match these filters.</div>';
+  var d = App.data;
+  return '<div class="creative-grid">' + rows.map(function (r) {
+    var creator = d.creators.filter(function (c) { return c.id === r.creatorId; })[0];
+    var m = r.roas !== undefined ? r : Object.assign({}, d.creativeMetrics[r.id] || aggregate([]));
+    return '<div class="creative-card clickable-row" data-row-id="' + escapeHtml(r.id) + '">' +
+      thumb({ format: r.format }, creator) +
+      '<div class="cc-id">' + escapeHtml(r.id) + '</div>' +
+      '<div class="cc-creator">' + escapeHtml(r.creatorName || (creator ? creator.name : '')) + '</div>' +
+      '<div class="cc-hook">' + escapeHtml(r.hook) + ' \u00b7 ' + escapeHtml(r.angle) + '</div>' +
+      '<div class="cc-metrics"><span>' + fmtCurrency(m.spend) + ' spend</span><span>' + fmtCurrency2(m.cpa) + ' CPA</span><span>' + fmtX(m.roas) + ' ROAS</span></div>' +
+      '</div>';
+  }).join('') + '</div>';
+}
+
+function wireLibraryClicks(container) {
+  container.querySelectorAll('.clickable-row').forEach(function (card) {
+    card.addEventListener('click', function () { setPage('creatives', { creativeId: card.getAttribute('data-row-id') }); });
+  });
+}
+
+function renderCreativeDetail(creativeId) {
+  var d = App.data;
+  var cv = d.creatives.filter(function (c) { return c.id === creativeId; })[0];
+  if (!cv) return '<div class="empty">Creative not found.</div>';
+  var creator = d.creators.filter(function (c) { return c.id === cv.creatorId; })[0];
+  var campaign = d.campaigns.filter(function (c) { return c.id === cv.campaignId; })[0];
+  var m = d.creativeMetrics[creativeId] || aggregate([]);
+
+  var backBtn = '<button class="link-btn" onclick="setPage(\'creatives\',{})">\u2190 All creatives</button>';
+  var badges = [badge(cv.hook), badge(cv.angle), badge(cv.format), cv.videoLength ? badge(cv.videoLength + 's') : '', badge(cv.cta)].join(' ');
+  var links = '<a href="javascript:void(0)" class="link-inline" data-creator="' + cv.creatorId + '">' + escapeHtml(creator ? creator.name : '') + '</a> \u00b7 ' +
+    '<a href="javascript:void(0)" class="link-inline" data-campaign="' + cv.campaignId + '">' + escapeHtml(campaign ? campaign.name : '') + '</a>';
+
+  var kpis = [
+    kpiCard('Spend', fmtCurrency(m.spend)), kpiCard('Impressions', fmtNum(m.impressions)), kpiCard('Clicks', fmtNum(m.clicks)),
+    kpiCard('CTR', fmtPct(m.ctr)), kpiCard('CPC', fmtCurrency2(m.cpc)), kpiCard('Purchases', fmtNum(m.purchases)),
+    kpiCard('Conv. rate', fmtPct1(m.cvr)), kpiCard('CPA', fmtCurrency2(m.cpa)), kpiCard('Revenue', fmtCurrency(m.revenue)), kpiCard('ROAS', fmtX(m.roas))
+  ].join('');
+
+  var adsRows = d.ads.filter(function (a) { return a.creativeId === creativeId; }).map(function (a) {
+    return Object.assign({ id: a.id, placement: a.placement }, d.adMetrics[a.id] || aggregate([]));
+  });
+  var adsTable = tableHTML([
+    { key: 'id', label: 'Ad', align: 'left' }, { key: 'placement', label: 'Placement', align: 'left' },
+    { key: 'spend', label: 'Spend', format: function (r) { return fmtCurrency(r.spend); } },
+    { key: 'ctr', label: 'CTR', format: function (r) { return fmtPct(r.ctr); } },
+    { key: 'cpa', label: 'CPA', format: function (r) { return fmtCurrency2(r.cpa); } },
+    { key: 'roas', label: 'ROAS', format: function (r) { return fmtX(r.roas); } }
+  ], adsRows, { key: 'spend', dir: 'desc' }, null);
+
+  return pageHeader(creativeId, 'Creative detail', backBtn) +
+    '<div class="detail-card"><div>' + badges + '<div class="detail-meta" style="margin-top:8px;">' + links + '</div></div></div>' +
+    kpis +
+    '<section><h2>Performance over time</h2><div class="chart-card"><div class="chart-body" style="height:260px;"><canvas id="creativeTrendChart" role="img" aria-label="Spend and revenue over time for this creative"></canvas></div></div></section>' +
+    '<section><h2>Ads under this creative</h2>' + adsTable + '</section>';
+}
+
+function mountCreativeDetail(container, creativeId) {
+  container.querySelectorAll('[data-creator]').forEach(function (a) { a.addEventListener('click', function () { setPage('creators', { creatorId: a.getAttribute('data-creator') }); }); });
+  container.querySelectorAll('[data-campaign]').forEach(function (a) { a.addEventListener('click', function () { setPage('campaigns', { campaignId: a.getAttribute('data-campaign') }); }); });
+
+  var d = App.data;
+  var rows = d.dailyRows.filter(function (r) { return r.creativeId === creativeId; });
+  var byDate = groupSum(rows, function (r) { return r.date; });
+  var series = Object.keys(byDate).sort().map(function (date) { return Object.assign({ date: date }, aggregate(byDate[date])); });
+  var colors = themeColors();
+  var canvas = document.getElementById('creativeTrendChart');
+  if (canvas) {
+    App.charts.creativeTrend = new Chart(canvas, {
+      type: 'line',
+      data: { labels: series.map(function (r) { return fmtDateShort(r.date); }), datasets: [
+        { label: 'Spend', data: series.map(function (r) { return round2(r.spend); }), borderColor: colors.neg, backgroundColor: colors.neg + '22', borderWidth: 2, pointRadius: 0, tension: 0.25 },
+        { label: 'Revenue', data: series.map(function (r) { return round2(r.revenue); }), borderColor: colors.pos, backgroundColor: colors.pos + '22', borderWidth: 2, pointRadius: 0, tension: 0.25 }
+      ] },
+      options: chartOptsLine(colors)
+    });
+  }
+}
+;
+PAGES.campaigns = {
+  render: function () {
+    if (App.mode === 'empty') return pageHeader('Campaigns', 'Budget, spend and outcomes for every campaign.') + noDataState('your campaigns');
+    if (App.mode === 'csv') return pageHeader('Campaigns', 'Budget, spend and outcomes for every campaign.') + csvModeState('Campaign detail');
+    if (App.params.campaignId) return renderCampaignDetail(App.params.campaignId);
+
+    var d = App.data;
+    var rows = d.campaigns.map(function (c) {
+      var m = d.campaignMetrics[c.id] || aggregate([]);
+      var creativesInCamp = d.creatives.filter(function (cv) { return cv.campaignId === c.id; });
+      var creatorsInCamp = unique(creativesInCamp.map(function (cv) { return cv.creatorId; }));
+      return Object.assign({
+        id: c.id, name: c.name, objective: c.objective, budget: c.budget, status: c.status,
+        creatorCount: creatorsInCamp.length, creativeCount: creativesInCamp.length
+      }, m);
+    });
+    var sorted = sortRows(rows, App.campaignsSort, campaignColumns());
+    return pageHeader('Campaigns', 'Budget, spend and outcomes for every campaign.') + tableHTML(campaignColumns(), sorted, App.campaignsSort, 'id');
+  },
+  mount: function (container) {
+    if (!isFullMode()) return;
+    if (App.params.campaignId) { mountCampaignDetail(container, App.params.campaignId); return; }
+    wireTable(container, App.campaignsSort, function () { mountPage(); }, function (id) { setPage('campaigns', { campaignId: id }); });
+  }
+};
+
+function campaignColumns() {
+  return [
+    { key: 'name', label: 'Campaign', align: 'left' },
+    { key: 'objective', label: 'Objective', align: 'left' },
+    { key: 'budget', label: 'Budget', format: function (r) { return fmtCurrency(r.budget); } },
+    { key: 'spend', label: 'Spend', format: function (r) { return fmtCurrency(r.spend); } },
+    { key: 'revenue', label: 'Revenue', format: function (r) { return fmtCurrency(r.revenue); } },
+    { key: 'purchases', label: 'Purchases', format: function (r) { return fmtNum(r.purchases); } },
+    { key: 'cpa', label: 'CPA', format: function (r) { return fmtCurrency2(r.cpa); } },
+    { key: 'roas', label: 'ROAS', format: function (r) { return fmtX(r.roas); } },
+    { key: 'creatorCount', label: 'Creators', format: function (r) { return fmtNum(r.creatorCount); } },
+    { key: 'creativeCount', label: 'Creatives', format: function (r) { return fmtNum(r.creativeCount); } },
+    { key: 'status', label: 'Status', align: 'left', format: function (r) { return badge(r.status, r.status === 'Active' ? 'good' : (r.status === 'Paused' ? 'warn' : '')); } }
+  ];
+}
+
+function renderCampaignDetail(campaignId) {
+  var d = App.data;
+  var camp = d.campaigns.filter(function (c) { return c.id === campaignId; })[0];
+  if (!camp) return '<div class="empty">Campaign not found.</div>';
+  var m = d.campaignMetrics[campaignId] || aggregate([]);
+  var pctBudget = camp.budget ? Math.min(100, (m.spend / camp.budget) * 100) : 0;
+
+  var backBtn = '<button class="link-btn" onclick="setPage(\'campaigns\',{})">\u2190 All campaigns</button>';
+  var infoCard = '<div class="detail-card"><div><div class="detail-name">' + escapeHtml(camp.name) + '</div>' +
+    '<div class="detail-meta">' + escapeHtml(camp.objective) + ' \u00b7 ' + badge(camp.status, camp.status === 'Active' ? 'good' : 'warn') + '</div>' +
+    '<div class="budget-bar"><div class="budget-fill" style="width:' + pctBudget.toFixed(0) + '%;"></div></div>' +
+    '<div class="detail-meta">' + fmtCurrency(m.spend) + ' spent of ' + fmtCurrency(camp.budget) + ' budget (' + pctBudget.toFixed(0) + '%)</div>' +
+    '</div></div>';
+
+  var kpis = [
+    kpiCard('Spend', fmtCurrency(m.spend)), kpiCard('Revenue', fmtCurrency(m.revenue)), kpiCard('Purchases', fmtNum(m.purchases)),
+    kpiCard('CPA', fmtCurrency2(m.cpa)), kpiCard('ROAS', fmtX(m.roas)), kpiCard('CTR', fmtPct(m.ctr))
+  ].join('');
+
+  var creatives = d.creatives.filter(function (cv) { return cv.campaignId === campaignId; }).map(function (cv) {
+    var creator = d.creators.filter(function (c) { return c.id === cv.creatorId; })[0];
+    return Object.assign({ id: cv.id, creatorName: creator ? creator.name : cv.creatorId, hook: cv.hook }, d.creativeMetrics[cv.id] || aggregate([]));
+  });
+  var creativesTable = tableHTML([
+    { key: 'id', label: 'Creative', align: 'left' }, { key: 'creatorName', label: 'Creator', align: 'left' }, { key: 'hook', label: 'Hook', align: 'left' },
+    { key: 'spend', label: 'Spend', format: function (r) { return fmtCurrency(r.spend); } },
+    { key: 'cpa', label: 'CPA', format: function (r) { return fmtCurrency2(r.cpa); } },
+    { key: 'roas', label: 'ROAS', format: function (r) { return fmtX(r.roas); } }
+  ], creatives, { key: 'spend', dir: 'desc' }, 'id');
+
+  var creatorIds = unique(creatives.map(function (cv) { return cv.creatorId ? cv.creatorId : null; }));
+  var creatorRows = unique(d.creatives.filter(function (cv) { return cv.campaignId === campaignId; }).map(function (cv) { return cv.creatorId; }))
+    .map(function (cid) {
+      var creator = d.creators.filter(function (c) { return c.id === cid; })[0];
+      var rows = d.dailyRows.filter(function (r) { return r.campaignId === campaignId && r.creatorId === cid; });
+      return Object.assign({ id: cid, name: creator ? creator.name : cid }, aggregate(rows));
+    });
+  var creatorsTable = tableHTML(creatorColumns(), creatorRows, { key: 'spend', dir: 'desc' }, 'id');
+
+  return pageHeader(camp.name, 'Campaign detail', backBtn) + infoCard + kpis +
+    '<section><h2>Performance over time</h2><div class="chart-card"><div class="chart-body" style="height:260px;"><canvas id="campaignTrendChart" role="img" aria-label="Spend and revenue over time for this campaign"></canvas></div></div></section>' +
+    '<section><h2>Creatives in this campaign</h2>' + creativesTable + '</section>' +
+    '<section><h2>Creators in this campaign</h2>' + creatorsTable + '</section>';
+}
+
+function mountCampaignDetail(container, campaignId) {
+  var d = App.data;
+  container.querySelectorAll('.clickable-row').forEach(function (tr) {
+    var id = tr.getAttribute('data-row-id');
+    if (id && id.indexOf('cv') === 0) tr.addEventListener('click', function () { setPage('creatives', { creativeId: id }); });
+    else if (id) tr.addEventListener('click', function () { setPage('creators', { creatorId: id }); });
+  });
+  var rows = d.dailyRows.filter(function (r) { return r.campaignId === campaignId; });
+  var byDate = groupSum(rows, function (r) { return r.date; });
+  var series = Object.keys(byDate).sort().map(function (date) { return Object.assign({ date: date }, aggregate(byDate[date])); });
+  var colors = themeColors();
+  var canvas = document.getElementById('campaignTrendChart');
+  if (canvas) {
+    App.charts.campaignTrend = new Chart(canvas, {
+      type: 'line',
+      data: { labels: series.map(function (r) { return fmtDateShort(r.date); }), datasets: [
+        { label: 'Spend', data: series.map(function (r) { return round2(r.spend); }), borderColor: colors.neg, backgroundColor: colors.neg + '22', borderWidth: 2, pointRadius: 0, tension: 0.25 },
+        { label: 'Revenue', data: series.map(function (r) { return round2(r.revenue); }), borderColor: colors.pos, backgroundColor: colors.pos + '22', borderWidth: 2, pointRadius: 0, tension: 0.25 }
+      ] },
+      options: chartOptsLine(colors)
+    });
+  }
+}
+;
+PAGES.ads = {
+  render: function () {
+    if (App.mode === 'empty') return pageHeader('Ad performance', 'The lowest grain \u2014 every ad placement under every creative.') + noDataState('ad-level performance');
+    if (App.mode === 'csv') return pageHeader('Ad performance', 'The lowest grain \u2014 every ad placement under every creative.') + csvModeState('Ad-level detail');
+
+    var d = App.data;
+    var f = App.adsFilter;
+    var rows = d.ads.map(function (a) {
+      var creator = d.creators.filter(function (c) { return c.id === a.creatorId; })[0];
+      var campaign = d.campaigns.filter(function (c) { return c.id === a.campaignId; })[0];
+      return Object.assign({
+        id: a.id, creativeId: a.creativeId, creatorId: a.creatorId, campaignId: a.campaignId, placement: a.placement,
+        creatorName: creator ? creator.name : a.creatorId, campaignName: campaign ? campaign.name : a.campaignId
+      }, d.adMetrics[a.id] || aggregate([]));
+    });
+    if (f.creator) rows = rows.filter(function (r) { return r.creatorId === f.creator; });
+    if (f.campaign) rows = rows.filter(function (r) { return r.campaignId === f.campaign; });
+    if (f.placement) rows = rows.filter(function (r) { return r.placement === f.placement; });
+
+    function opt(val, label, cur) { return '<option value="' + escapeHtml(val) + '"' + (cur === val ? ' selected' : '') + '>' + escapeHtml(label) + '</option>'; }
+    var filters = '<div class="filter-row">' +
+      '<select id="adFiltCreator"><option value="">All creators</option>' + d.creators.map(function (c) { return opt(c.id, c.name, f.creator); }).join('') + '</select>' +
+      '<select id="adFiltCampaign"><option value="">All campaigns</option>' + d.campaigns.map(function (c) { return opt(c.id, c.name, f.campaign); }).join('') + '</select>' +
+      '<select id="adFiltPlacement"><option value="">All placements</option>' + PLACEMENTS.map(function (p) { return opt(p, p, f.placement); }).join('') + '</select>' +
+      '<button id="adFiltReset">Reset</button></div>';
+
+    var sorted = sortRows(rows, App.adsSort, adColumns());
+    return pageHeader('Ad performance', 'The lowest grain \u2014 every ad placement under every creative.') + filters +
+      tableHTML(adColumns(), sorted, App.adsSort, 'id', 'No ads match these filters.');
+  },
+  mount: function (container) {
+    if (!isFullMode()) return;
+    var map = { adFiltCreator: 'creator', adFiltCampaign: 'campaign', adFiltPlacement: 'placement' };
+    Object.keys(map).forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.addEventListener('change', function () { App.adsFilter[map[id]] = el.value; mountPage(); });
+    });
+    var reset = document.getElementById('adFiltReset');
+    if (reset) reset.addEventListener('click', function () { App.adsFilter = { creator: '', campaign: '', placement: '' }; mountPage(); });
+    wireTable(container, App.adsSort, function () { mountPage(); }, function (id) {
+      var ad = App.data.ads.filter(function (a) { return a.id === id; })[0];
+      if (ad) setPage('creatives', { creativeId: ad.creativeId });
+    });
+  }
+};
+
+function adColumns() {
+  return [
+    { key: 'id', label: 'Ad', align: 'left' },
+    { key: 'creativeId', label: 'Creative', align: 'left' },
+    { key: 'creatorName', label: 'Creator', align: 'left' },
+    { key: 'campaignName', label: 'Campaign', align: 'left' },
+    { key: 'placement', label: 'Placement', align: 'left' },
+    { key: 'spend', label: 'Spend', format: function (r) { return fmtCurrency(r.spend); } },
+    { key: 'impressions', label: 'Impr.', format: function (r) { return fmtNum(r.impressions); } },
+    { key: 'clicks', label: 'Clicks', format: function (r) { return fmtNum(r.clicks); } },
+    { key: 'ctr', label: 'CTR', format: function (r) { return fmtPct(r.ctr); } },
+    { key: 'cpc', label: 'CPC', format: function (r) { return fmtCurrency2(r.cpc); } },
+    { key: 'purchases', label: 'Purchases', format: function (r) { return fmtNum(r.purchases); } },
+    { key: 'cpa', label: 'CPA', format: function (r) { return fmtCurrency2(r.cpa); } },
+    { key: 'revenue', label: 'Revenue', format: function (r) { return fmtCurrency(r.revenue); } },
+    { key: 'roas', label: 'ROAS', format: function (r) { return fmtX(r.roas); } }
+  ];
+}
+;
+PAGES.intelligence = {
+  render: function () {
+    if (App.mode === 'empty') return pageHeader('Creative intelligence', 'Evidence-backed patterns calculated from the selected date range.') + noDataState('creative intelligence');
+    if (App.mode === 'csv') return pageHeader('Creative intelligence', 'Evidence-backed patterns calculated from the selected date range.') + csvModeState('Creative intelligence');
+
+    var d = App.data;
+    var evidence = d.evidenceInsights || [];
+    var cards = evidence.slice(0, 8).map(function (i) {
+      var metricLabel = i.metric === 'cpa' ? 'CPA' : (i.metric === 'roas' ? 'ROAS' : (i.metric === 'ctr' ? 'CTR' : i.metric.toUpperCase()));
+      var direction = i.metric === 'cpa' ? (i.delta < 0 ? 'lower' : 'higher') : (i.delta > 0 ? 'higher' : 'lower');
+      return '<div class="insight-card evidence-card">' +
+        '<div class="insight-cat">' + escapeHtml(i.category) + ' · ' + escapeHtml(i.quality || 'directional') + '</div>' +
+        '<div class="insight-text">' + escapeHtml(String(i.winner)) + '</div>' +
+        '<div class="insight-detail">' + Math.round(Math.abs(i.delta || 0)) + '% ' + direction + ' ' + metricLabel +
+        ' · ' + fmtCurrency(i.spend) + ' spend · ' + fmtNum(i.purchases) + ' purchases</div>' +
+        '<div class="evidence-bar"><span>Baseline ' + escapeHtml(metricLabel) + '</span><strong>' +
+        (i.metric === 'cpa' ? fmtCurrency2(i.baseline) : i.metric === 'ctr' ? fmtPct(i.baseline) : fmtX(i.baseline)) +
+        '</strong><span>Observed</span><strong>' +
+        (i.metric === 'cpa' ? fmtCurrency2(i.value) : i.metric === 'ctr' ? fmtPct(i.value) : fmtX(i.value)) +
+        '</strong></div>' +
+        '</div>';
+    }).join('');
+
+    var combos = bestCombos(d);
+    var combosTable = tableHTML([
+      { key: 'combo', label: 'Hook + angle + format', align: 'left' },
+      { key: 'n', label: 'Creatives', format: function (r) { return fmtNum(r.n); } },
+      { key: 'spend', label: 'Spend', format: function (r) { return fmtCurrency(r.spend); } },
+      { key: 'ctr', label: 'CTR', format: function (r) { return fmtPct(r.ctr); } },
+      { key: 'cpa', label: 'CPA', format: function (r) { return fmtCurrency2(r.cpa); } },
+      { key: 'roas', label: 'ROAS', format: function (r) { return fmtX(r.roas); } }
+    ], combos, { key: 'roas', dir: 'desc' }, null);
+
+    return pageHeader('Creative intelligence', 'Evidence-backed patterns calculated from the selected date range.') +
+      '<section><div class="insight-grid">' + (cards || '<div class="empty">Not enough spend or impressions to establish evidence-backed patterns.</div>') + '</div></section>' +
+      '<section><h2>Best performing combinations</h2><p class="sub">Only combinations above the minimum spend threshold are included.</p>' + combosTable + '</section>';
+  },
+  mount: function () {}
+};
+
+function bestCombos(d) {
+  var creativeById = {}; d.creatives.forEach(function (cv) { creativeById[cv.id] = cv; });
+  var buckets = groupSum(d.dailyRows, function (r) {
+    var cv = creativeById[r.creativeId];
+    return cv.hook + ' / ' + cv.angle + ' / ' + cv.format;
+  });
+  return Object.keys(buckets).map(function (k) {
+    var agg = aggregate(buckets[k]);
+    var n = unique(buckets[k].map(function (r) { return r.creativeId; })).length;
+    return Object.assign({ combo: k, n: n }, agg);
+  }).filter(function (r) { return r.spend > 150; }).sort(function (a, b) { return b.roas - a.roas; }).slice(0, 8);
+}
+
+;
+PAGES.rights = {
+  render: function () {
+    if (App.mode === 'empty') return pageHeader('Rights management', 'Usage rights and authorization status for every creative.') + noDataState('rights management');
+    if (App.mode === 'csv') return pageHeader('Rights management', 'Usage rights and authorization status for every creative.') + csvModeState('Rights management');
+
+    var d = App.data;
+    var creatorById = {}; d.creators.forEach(function (c) { creatorById[c.id] = c; });
+    var rows = d.rights.map(function (r) {
+      return Object.assign({}, r, {
+        creatorName: creatorById[r.creatorId] ? creatorById[r.creatorId].name : r.creatorId,
+        status: rightsStatus(r.daysRemaining)
+      });
+    });
+
+    var counts = { Expired: 0, 'Expiring within 7 days': 0, 'Expiring within 30 days': 0, Active: 0 };
+    rows.forEach(function (r) { counts[r.status] = (counts[r.status] || 0) + 1; });
+    var summary = '<div class="kpi-grid">' +
+      kpiCard('Expired', counts.Expired) + kpiCard('Expiring \u2264 7 days', counts['Expiring within 7 days']) +
+      kpiCard('Expiring \u2264 30 days', counts['Expiring within 30 days']) + kpiCard('Active', counts.Active) + '</div>';
+
+    var f = App.rightsFilter;
+    if (f.status) rows = rows.filter(function (r) { return r.status === f.status; });
+    function opt(val, label, cur) { return '<option value="' + escapeHtml(val) + '"' + (cur === val ? ' selected' : '') + '>' + escapeHtml(label) + '</option>'; }
+    var filters = '<div class="filter-row"><select id="rightsFiltStatus">' +
+      opt('', 'All statuses', f.status) + opt('Expired', 'Expired', f.status) + opt('Expiring within 7 days', 'Expiring within 7 days', f.status) +
+      opt('Expiring within 30 days', 'Expiring within 30 days', f.status) + opt('Active', 'Active', f.status) + '</select></div>';
+
+    var sorted = sortRows(rows, App.rightsSort, rightsColumns());
+    return pageHeader('Rights management', 'Usage rights and authorization status for every creative.') + summary + filters +
+      tableHTML(rightsColumns(), sorted, App.rightsSort, null, 'No rights records match this filter.');
+  },
+  mount: function (container) {
+    if (!isFullMode()) return;
+    var el = document.getElementById('rightsFiltStatus');
+    if (el) el.addEventListener('change', function () { App.rightsFilter.status = el.value; mountPage(); });
+    wireTable(container, App.rightsSort, function () { mountPage(); });
+  }
+};
+
+function rightsColumns() {
+  return [
+    { key: 'creatorName', label: 'Creator', align: 'left' },
+    { key: 'creativeId', label: 'Creative', align: 'left' },
+    { key: 'platform', label: 'Platform', align: 'left' },
+    { key: 'authType', label: 'Authorization', align: 'left' },
+    { key: 'startDate', label: 'Start date', align: 'left' },
+    { key: 'expiryDate', label: 'Expiry date', align: 'left' },
+    { key: 'daysRemaining', label: 'Days remaining', format: function (r) { return r.daysRemaining < 0 ? ('\u2212' + Math.abs(r.daysRemaining)) : r.daysRemaining; } },
+    { key: 'status', label: 'Status', align: 'left', format: function (r) { return statusBadge(r.status); } }
+  ];
+}
+;
+PAGES.reports = {
+  render: function () {
+    if (App.mode === 'empty') return pageHeader('Reports', 'A client-ready summary of performance, winners and recommendations.') + noDataState('report generation');
+    if (App.mode === 'csv') return pageHeader('Reports', 'A client-ready summary of performance, winners and recommendations.') + csvModeState('Full reports');
+
+    var actions = '<button id="btnGenReport" class="primary">Generate report</button> <button id="btnPrintReport">Print / save as PDF</button>';
+    return pageHeader('Reports', 'A client-ready summary of performance, winners and recommendations.', actions) +
+      '<div id="reportOutput"></div>';
+  },
+  mount: function (container) {
+    if (!isFullMode()) return;
+    var gen = document.getElementById('btnGenReport');
+    var out = document.getElementById('reportOutput');
+    function build() { out.innerHTML = buildReportHtml(App.data); }
+    build();
+    if (gen) gen.addEventListener('click', build);
+    var pr = document.getElementById('btnPrintReport');
+    if (pr) pr.addEventListener('click', function () { window.print(); });
+  }
+};
+
+function buildReportHtml(d) {
+  var o = d.overall;
+  var topCreators = d.creators.map(function (c) { return Object.assign({ id: c.id, name: c.name }, d.creatorMetrics[c.id] || aggregate([])); })
+    .sort(function (a, b) { return b.roas - a.roas; }).slice(0, 5);
+  var topCreatives = d.creatives.map(function (cv) { return Object.assign({ id: cv.id, hook: cv.hook, angle: cv.angle }, d.creativeMetrics[cv.id] || aggregate([])); })
+    .filter(function (c) { return c.spend > 50; }).sort(function (a, b) { return b.roas - a.roas; }).slice(0, 5);
+  var winningHooks = unique(topCreatives.map(function (c) { return c.hook; })).slice(0, 3);
+  var winningAngles = unique(topCreatives.map(function (c) { return c.angle; })).slice(0, 3);
+
+  var campaignRows = d.campaigns.map(function (c) { return Object.assign({ id: c.id, name: c.name, budget: c.budget }, d.campaignMetrics[c.id] || aggregate([])); });
+
+  var recs = [];
+  var highCpaCreatives = d.creatives.filter(function (cv) { var m = d.creativeMetrics[cv.id]; return m && m.spend > 100 && m.cpa > o.cpa * 1.3; });
+  if (highCpaCreatives.length) recs.push('Pause or refresh ' + highCpaCreatives.length + ' creative(s) running over 30% above blended CPA (
+</script>
+</body>
+</html> + Math.round(o.cpa * 1.3) + ').');
+  if (winningHooks.length) recs.push('Shift incremental budget toward ' + winningHooks.join(' and ').toLowerCase() + '-style hooks, which are driving the strongest ROAS.');
+  var expiring = d.rights.filter(function (r) { return r.daysRemaining <= 30; }).length;
+  if (expiring) recs.push('Renew or replace usage rights for ' + expiring + ' creative(s) expiring within 30 days to avoid a content gap.');
+  var overBudget = campaignRows.filter(function (c) { return c.spend > c.budget; });
+  if (overBudget.length) recs.push(overBudget.map(function (c) { return c.name; }).join(', ') + ' ' + (overBudget.length === 1 ? 'is' : 'are') + ' pacing over budget \u2014 review allocation.');
+  if (!recs.length) recs.push('Performance is within target ranges across all active campaigns \u2014 no urgent action needed.');
+
+  function rowsToHtml(cols, rows) { return tableHTML(cols, rows, { key: 'roas', dir: 'desc' }, null); }
+
+  return '<div class="report">' +
+    '<div class="report-head"><h2>Creator Performance Report</h2><p class="sub">Generated ' + escapeHtml(d.generatedAt) + ' \u00b7 Demo data</p></div>' +
+    '<section><h3>Campaign summary</h3>' + rowsToHtml(campaignColumnsForReport(), campaignRows) + '</section>' +
+    '<section><h3>Creator performance (top 5 by ROAS)</h3>' + rowsToHtml(creatorColumns(), topCreators) + '</section>' +
+    '<section><h3>Creative performance (top 5 by ROAS)</h3>' + rowsToHtml([
+      { key: 'id', label: 'Creative', align: 'left' }, { key: 'hook', label: 'Hook', align: 'left' }, { key: 'angle', label: 'Angle', align: 'left' },
+      { key: 'spend', label: 'Spend', format: function (r) { return fmtCurrency(r.spend); } },
+      { key: 'cpa', label: 'CPA', format: function (r) { return fmtCurrency2(r.cpa); } },
+      { key: 'roas', label: 'ROAS', format: function (r) { return fmtX(r.roas); } }
+    ], topCreatives) + '</section>' +
+    '<section><h3>Winning hooks &amp; angles</h3><p>' + winningHooks.map(function (h) { return badge(h, 'good'); }).join(' ') + ' &nbsp; ' + winningAngles.map(function (a) { return badge(a, 'good'); }).join(' ') + '</p></section>' +
+    '<section><h3>Performance trends</h3><p class="sub">Blended CPA is ' + fmtCurrency2(o.cpa) + ' and blended ROAS is ' + fmtX(o.roas) + ' across ' + fmtCurrency(o.spend) + ' of spend over the last 30 days.</p></section>' +
+    '<section><h3>Recommendations</h3><ul class="rec-list">' + recs.map(function (r) { return '<li>' + escapeHtml(r) + '</li>'; }).join('') + '</ul></section>' +
+    '</div>';
+}
+
+function campaignColumnsForReport() {
+  return [
+    { key: 'name', label: 'Campaign', align: 'left' },
+    { key: 'budget', label: 'Budget', format: function (r) { return fmtCurrency(r.budget); } },
+    { key: 'spend', label: 'Spend', format: function (r) { return fmtCurrency(r.spend); } },
+    { key: 'revenue', label: 'Revenue', format: function (r) { return fmtCurrency(r.revenue); } },
+    { key: 'purchases', label: 'Purchases', format: function (r) { return fmtNum(r.purchases); } },
+    { key: 'cpa', label: 'CPA', format: function (r) { return fmtCurrency2(r.cpa); } },
+    { key: 'roas', label: 'ROAS', format: function (r) { return fmtX(r.roas); } }
+  ];
+}
+;
+PAGES.settings = {
+  render: function () {
+    var modeLabel = App.mode === 'demo' ? 'Demo data (full hierarchy, in-browser)' :
+      (App.mode === 'supabase' ? 'Live Supabase project (full hierarchy)' :
+      (App.mode === 'csv' ? 'Custom CSV (flat creator data)' : 'No data loaded'));
+    var modeMeta = App.mode === 'demo' ? '8 creators \u00b7 40 creatives \u00b7 4 campaigns \u00b7 80 ads \u00b7 30 days of daily metrics, generated in your browser' :
+      (App.mode === 'supabase' ? App.data.creators.length + ' creators \u00b7 ' + App.data.creatives.length + ' creatives \u00b7 ' + App.data.campaigns.length + ' campaigns \u00b7 ' + App.data.ads.length + ' ads, read live from ' + App.supabaseUrl :
+      (App.mode === 'csv' ? App.data.creators.length + ' creators loaded from CSV' : 'Load sample data, connect Supabase, or upload a CSV from any page.'));
+
+    var sources = [
+      { name: 'Meta Marketing API', desc: 'Spend, impressions, clicks, ad-level performance' },
+      { name: 'TikTok Ads API', desc: 'Spend, impressions, clicks, ad-level performance' },
+      { name: 'Shopify', desc: 'Purchases and revenue for attribution' },
+      { name: 'Google Analytics', desc: 'On-site conversion and traffic data' }
+    ];
+    var sourcesHtml = sources.map(function (s) {
+      return '<div class="source-row"><div><div class="source-name">' + escapeHtml(s.name) + '</div><div class="source-desc">' + escapeHtml(s.desc) + '</div></div>' +
+        '<div><span class="tag">Not connected</span> <button disabled title="Connect this data source once API integration is built">Connect</button></div></div>';
+    }).join('');
+
+    var supabaseConnected = App.mode === 'supabase';
+    var supabaseSection = '<section><h2>Supabase</h2>' +
+      '<p class="sub">Reads the same creator \u2192 creative \u2192 campaign \u2192 ad \u2192 daily_metrics / rights tables this dashboard is modeled on, straight from your project (read-only, via the public anon/publishable key).</p>' +
+      (supabaseConnected
+        ? '<div class="detail-card"><div><div class="detail-name">Connected</div><div class="detail-meta">' + escapeHtml(App.supabaseUrl) + '</div></div></div>' +
+          '<div class="filter-row"><button id="btnSupaDisconnect">Disconnect</button><button id="btnSupaRefresh">Refresh data</button></div>'
+        : '<div class="filter-row" style="align-items:stretch;">' +
+          '<input id="supaUrl" type="text" placeholder="https://xxxxx.supabase.co" value="' + escapeHtml(App.supabaseUrl) + '" style="flex:1 1 260px; padding:7px 10px; border-radius:6px; border:1px solid var(--border); background:var(--surface); color:var(--text); font-size:12.5px;">' +
+          '<input id="supaKey" type="password" placeholder="anon / publishable key" value="' + escapeHtml(App.supabaseKey) + '" style="flex:1 1 220px; padding:7px 10px; border-radius:6px; border:1px solid var(--border); background:var(--surface); color:var(--text); font-size:12.5px;">' +
+          '<button id="btnSupaConnect" class="primary">Connect</button></div>' +
+          '<p class="foot-note" id="supaStatus"></p>') +
+      (App.mode === 'demo' ? '<p class="foot-note">Have an empty Supabase project? <button id="btnSupaPush" style="margin-left:4px;">Push this demo dataset to Supabase</button> once connected.</p>' : '') +
+      '</section>';
+
+    return pageHeader('Settings', 'App mode, theme, and data source connections.') +
+      '<section><h2>Data</h2><div class="detail-card"><div><div class="detail-name">' + escapeHtml(modeLabel) + '</div>' +
+      '<div class="detail-meta">' + modeMeta + '</div></div></div></section>' +
+      '<section><h2>Appearance</h2><div class="filter-row"><button id="themeLight">Light</button><button id="themeDark">Dark</button><button id="themeSystem">Match system</button></div></section>' +
+      supabaseSection +
+      '<section><h2>Other data source connections</h2><p class="sub">Not implemented yet. See the notes below for how live connections would slot in.</p>' + sourcesHtml + '</section>' +
+      '<section><h2>About</h2><p class="sub">Creator Performance dashboard \u2014 tracks the full path from creator \u2192 creative \u2192 campaign \u2192 ad \u2192 spend \u2192 impressions \u2192 clicks \u2192 purchases \u2192 revenue, with creatives as the primary analytical layer.</p></section>';
+  },
+  mount: function () {
+    var l = document.getElementById('themeLight'), dk = document.getElementById('themeDark'), s = document.getElementById('themeSystem');
+    if (l) l.addEventListener('click', function () { setTheme('light'); });
+    if (dk) dk.addEventListener('click', function () { setTheme('dark'); });
+    if (s) s.addEventListener('click', function () { setTheme(null); });
+
+    var connectBtn = document.getElementById('btnSupaConnect');
+    if (connectBtn) connectBtn.addEventListener('click', function () {
+      var url = document.getElementById('supaUrl').value.trim();
+      var key = document.getElementById('supaKey').value.trim();
+      var status = document.getElementById('supaStatus');
+      if (!url || !key) { status.textContent = 'Enter both the project URL and the anon/publishable key.'; return; }
+      status.textContent = 'Connecting\u2026';
+      connectSupabase(url, key, function (err) {
+        if (err) { var s2 = document.getElementById('supaStatus'); if (s2) s2.textContent = 'Could not connect: ' + err; }
+      });
+    });
+    var disconnectBtn = document.getElementById('btnSupaDisconnect');
+    if (disconnectBtn) disconnectBtn.addEventListener('click', disconnectSupabase);
+    var refreshBtn = document.getElementById('btnSupaRefresh');
+    if (refreshBtn) refreshBtn.addEventListener('click', function () {
+      connectSupabase(App.supabaseUrl, App.supabaseKey, function (err) {
+        if (err) alert('Could not refresh: ' + err);
+      });
+    });
+    var pushBtn = document.getElementById('btnSupaPush');
+    if (pushBtn) pushBtn.addEventListener('click', function () {
+      pushBtn.disabled = true; pushBtn.textContent = 'Pushing\u2026';
+      pushDemoDataToSupabase(function (err) {
+        pushBtn.disabled = false;
+        pushBtn.textContent = err ? 'Push failed \u2014 try again' : 'Pushed \u2713';
+      });
+    });
+  }
+};
+;
+function setTheme(mode) {
+  if (mode === 'light' || mode === 'dark') {
+    document.documentElement.setAttribute('data-theme', mode);
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+  }
+  try { window.localStorage.setItem('cpd-theme', mode || ''); } catch (e) {}
+  if (App.data) mountPage();
+}
+function loadTheme() {
+  try {
+    var t = window.localStorage.getItem('cpd-theme');
+    if (t) document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+}
+
+function setModeIndicator() {
+  var el = document.getElementById('modeIndicator');
+  if (App.mode === 'demo') { el.textContent = 'DEMO DATA'; el.style.display = 'inline-flex'; }
+  else if (App.mode === 'csv') { el.textContent = 'CUSTOM CSV'; el.style.display = 'inline-flex'; }
+  else if (App.mode === 'supabase') { el.textContent = 'LIVE \u00b7 SUPABASE'; el.style.display = 'inline-flex'; }
+  else { el.style.display = 'none'; }
+}
+
+function loadSampleData() {
+  var raw = generateDemoData();
+  App.rawData = enrichDemoData(raw);
+  App.data = App.rawData;
+  App.mode = 'demo';
+  App.params = {};
+  try { window.localStorage.setItem('cpd-mode', 'demo'); } catch (e) {}
+  setModeIndicator();
+  mountPage();
+}
+
+function clearData() {
+  App.rawData = null;
+  App.data = null;
+  App.mode = 'empty';
+  App.params = {};
+  try { window.localStorage.removeItem('cpd-mode'); } catch (e) {}
+  setModeIndicator();
+  mountPage();
+}
+
+function loadCsvData(rows) {
+  App.rawData = buildCsvData(rows);
+  App.data = App.rawData;
+  App.mode = 'csv';
+  App.params = {};
+  setModeIndicator();
+  mountPage();
+}
+
+function wireTopBar() {
+  document.getElementById('btnSample').addEventListener('click', loadSampleData);
+  document.getElementById('btnClear').addEventListener('click', clearData);
+  document.getElementById('btnUpload').addEventListener('click', function () { document.getElementById('fileInput').click(); });
+  document.getElementById('fileInput').addEventListener('change', function (e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    Papa.parse(file, {
+      header: true, skipEmptyLines: true,
+      complete: function (results) {
+        var rows = results.data.map(function (row) {
+          var norm = {};
+          Object.keys(row).forEach(function (k) { norm[k.trim().toLowerCase()] = row[k]; });
+          function pick(){ for (var i = 0; i < arguments.length; i++) { if (norm[arguments[i]] !== undefined) return norm[arguments[i]]; } return 0; }
+          return {
+            name: pick('creator', 'creator name', 'name') || 'Unnamed',
+            spend: parseFloat(pick('spend', 'spend ($)')) || 0,
+            impressions: parseFloat(pick('impressions')) || 0,
+            clicks: parseFloat(pick('clicks')) || 0,
+            conversions: parseFloat(pick('conversions', 'purchases')) || 0,
+            revenue: parseFloat(pick('revenue', 'revenue ($)')) || 0
+          };
+        }).filter(function (r) { return r.name && r.name !== 'Unnamed'; });
+        if (!rows.length) { alert('Could not find creator rows in that CSV. Expected columns like creator, spend, impressions, clicks, conversions, revenue.'); return; }
+        loadCsvData(rows);
+        e.target.value = '';
+      },
+      error: function () { alert('Could not read that CSV. Check the file and try again.'); }
+    });
+  });
+}
+
+// ================= Supabase =================
+function mapSupabaseData(raw) {
+  var creators = (raw.creators || []).map(function (c) {
+    return { id: c.id, name: c.name, followers: c.followers, niche: c.niche, location: c.location, color: c.color || '#2B5FD9' };
+  });
+  var campaigns = (raw.campaigns || []).map(function (c) {
+    return { id: c.id, name: c.name, objective: c.objective, budget: Number(c.budget) || 0, status: c.status, aov: Number(c.aov) || 0 };
+  });
+  var creatives = (raw.creatives || []).map(function (c) {
+    return {
+      id: c.id, creatorId: c.creator_id, campaignId: c.campaign_id, hook: c.hook, angle: c.angle,
+      format: c.format, cta: c.cta, videoLength: c.video_length, lengthBucket: c.length_bucket,
+      launchDate: c.launch_date ? new Date(c.launch_date + 'T00:00:00') : null
+    };
+  });
+  var ads = (raw.ads || []).map(function (a) {
+    return { id: a.id, creativeId: a.creative_id, creatorId: a.creator_id, campaignId: a.campaign_id, placement: a.placement };
+  });
+  var dailyRows = (raw.dailyMetrics || []).map(function (r) {
+    return {
+      date: r.date, adId: r.ad_id, creativeId: r.creative_id, creatorId: r.creator_id, campaignId: r.campaign_id,
+      spend: Number(r.spend) || 0, impressions: Number(r.impressions) || 0, clicks: Number(r.clicks) || 0,
+      purchases: Number(r.purchases) || 0, revenue: Number(r.revenue) || 0
+    };
+  });
+  var today = new Date(); today.setHours(0, 0, 0, 0);
+  var rights = (raw.rights || []).map(function (r) {
+    var expiry = new Date(r.expiry_date + 'T00:00:00');
+    var daysRemaining = Math.round((expiry - today) / 86400000);
+    return {
+      creativeId: r.creative_id, creatorId: r.creator_id, platform: r.platform, authType: r.auth_type,
+      startDate: r.start_date, expiryDate: r.expiry_date, daysRemaining: daysRemaining
+    };
+  });
+  return { creators: creators, campaigns: campaigns, creatives: creatives, ads: ads, dailyRows: dailyRows, rights: rights, generatedAt: fmtDate(today) };
+}
+
+function connectSupabase(url, key, callback) {
+  if (!window.supabase || !window.supabase.createClient) {
+    if (callback) callback('Supabase client library did not load.');
+    return;
+  }
+  var client;
+  try { client = window.supabase.createClient(url, key); } catch (e) { if (callback) callback(e.message); return; }
+
+  Promise.all([
+    client.from('creators').select('*'),
+    client.from('campaigns').select('*'),
+    client.from('creatives').select('*'),
+    client.from('ads').select('*'),
+    client.from('daily_metrics').select('*'),
+    client.from('rights').select('*')
+  ]).then(function (results) {
+    for (var i = 0; i < results.length; i++) {
+      if (results[i].error) throw new Error(results[i].error.message);
+    }
+    var raw = {
+      creators: results[0].data, campaigns: results[1].data, creatives: results[2].data,
+      ads: results[3].data, dailyMetrics: results[4].data, rights: results[5].data
+    };
+    if (!raw.creators || !raw.creators.length) throw new Error('Connected, but the creators table is empty. Push demo data or seed your tables first.');
+
+    App.rawData = enrichDemoData(mapSupabaseData(raw));
+    App.data = App.rawData;
+    App.mode = 'supabase';
+    App.supabaseUrl = url; App.supabaseKey = key; App.supabaseClient = client;
+    App.params = {};
+    try {
+      window.localStorage.setItem('cpd-supabase-url', url);
+      window.localStorage.setItem('cpd-supabase-key', key);
+      window.localStorage.setItem('cpd-mode', 'supabase');
+    } catch (e) {}
+    setModeIndicator();
+    mountPage();
+    if (callback) callback(null);
+  }).catch(function (err) {
+    if (callback) callback(err.message || String(err));
+  });
+}
+
+function disconnectSupabase() {
+  App.supabaseClient = null;
+  App.rawData = null;
+  App.data = null;
+  App.mode = 'empty';
+  App.params = {};
+  try {
+    window.localStorage.removeItem('cpd-supabase-url');
+    window.localStorage.removeItem('cpd-supabase-key');
+    window.localStorage.removeItem('cpd-mode');
+  } catch (e) {}
+  setModeIndicator();
+  mountPage();
+}
+
+function pushDemoDataToSupabase(callback) {
+  if (!App.supabaseClient) { if (callback) callback('Not connected.'); return; }
+  if (App.mode !== 'demo') { if (callback) callback('Load sample data first.'); return; }
+  var client = App.supabaseClient;
+  var d = App.data;
+
+  var creatorsRows = d.creators.map(function (c) { return { id: c.id, name: c.name, followers: c.followers, niche: c.niche, location: c.location, color: c.color }; });
+  var campaignsRows = d.campaigns.map(function (c) { return { id: c.id, name: c.name, objective: c.objective, budget: c.budget, status: c.status, aov: round2(c.aov) }; });
+  var creativesRows = d.creatives.map(function (c) {
+    return { id: c.id, creator_id: c.creatorId, campaign_id: c.campaignId, hook: c.hook, angle: c.angle, format: c.format, cta: c.cta, video_length: c.videoLength, length_bucket: c.lengthBucket, launch_date: fmtDate(c.launchDate) };
+  });
+  var adsRows = d.ads.map(function (a) { return { id: a.id, creative_id: a.creativeId, creator_id: a.creatorId, campaign_id: a.campaignId, placement: a.placement }; });
+  var dailyRows = d.dailyRows.map(function (r) {
+    return { date: r.date, ad_id: r.adId, creative_id: r.creativeId, creator_id: r.creatorId, campaign_id: r.campaignId, spend: r.spend, impressions: r.impressions, clicks: r.clicks, purchases: r.purchases, revenue: r.revenue };
+  });
+  var rightsRows = d.rights.map(function (r) {
+    return { creative_id: r.creativeId, creator_id: r.creatorId, platform: r.platform, auth_type: r.authType, start_date: r.startDate, expiry_date: r.expiryDate };
+  });
+
+  function chunk(arr, size) { var out = []; for (var i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size)); return out; }
+
+  client.from('creators').upsert(creatorsRows)
+    .then(function (r) { if (r.error) throw new Error(r.error.message); return client.from('campaigns').upsert(campaignsRows); })
+    .then(function (r) { if (r.error) throw new Error(r.error.message); return client.from('creatives').upsert(creativesRows); })
+    .then(function (r) { if (r.error) throw new Error(r.error.message); return client.from('ads').upsert(adsRows); })
+    .then(function (r) {
+      if (r.error) throw new Error(r.error.message);
+      var dailyChunks = chunk(dailyRows, 500);
+      return dailyChunks.reduce(function (p, c) {
+        return p.then(function () { return client.from('daily_metrics').insert(c); }).then(function (res) { if (res.error) throw new Error(res.error.message); });
+      }, Promise.resolve());
+    })
+    .then(function () { return client.from('rights').insert(rightsRows); })
+    .then(function (r) {
+      if (r.error) throw new Error(r.error.message);
+      if (callback) callback(null);
+    })
+    .catch(function (err) { if (callback) callback(err.message || String(err)); });
+}
+
+function tryAutoReconnectSupabase() {
+  try {
+    var mode = window.localStorage.getItem('cpd-mode');
+    if (mode !== 'supabase') return;
+    var url = window.localStorage.getItem('cpd-supabase-url');
+    var key = window.localStorage.getItem('cpd-supabase-key');
+    if (url && key) connectSupabase(url, key);
+  } catch (e) {}
+}
+
+(function boot() {
+  loadTheme();
+  wireTopBar();
+  setModeIndicator();
+  renderSidebar();
+  mountPage();
+  tryAutoReconnectSupabase();
+})();
+</script>
+</body>
+</html>
