@@ -20,6 +20,7 @@ create table campaigns (
   aov numeric
 );
 
+-- Creatives are the primary analytical layer: creator -> creative -> campaign
 create table creatives (
   id text primary key,
   creator_id text references creators(id) on delete cascade,
@@ -33,6 +34,7 @@ create table creatives (
   launch_date date
 );
 
+-- Ads are placements under a creative (e.g. Feed, Reels, Stories, Audience Network)
 create table ads (
   id text primary key,
   creative_id text references creatives(id) on delete cascade,
@@ -41,6 +43,7 @@ create table ads (
   placement text
 );
 
+-- One row per ad per day. Everything else (CTR, CPA, ROAS, etc.) aggregates up from here.
 create table daily_metrics (
   id bigint generated always as identity primary key,
   date date not null,
@@ -55,6 +58,7 @@ create table daily_metrics (
   revenue numeric not null default 0
 );
 
+-- Usage rights per creative
 create table rights (
   id bigint generated always as identity primary key,
   creative_id text references creatives(id) on delete cascade,
@@ -76,6 +80,10 @@ create index idx_daily_metrics_campaign on daily_metrics(campaign_id);
 create index idx_rights_creative on rights(creative_id);
 create index idx_rights_creator on rights(creator_id);
 
+-- Row level security: this backs a client-side dashboard that reads with the
+-- public anon/publishable key, so anonymous read access is allowed.
+-- No anon write policies exist on purpose — writes should go through the
+-- service role key or the Supabase dashboard, not the browser key.
 alter table creators enable row level security;
 alter table campaigns enable row level security;
 alter table creatives enable row level security;
