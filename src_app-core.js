@@ -49,6 +49,7 @@ var NAV_ITEMS = [
   { id: 'intelligence', label: 'Creative intelligence' },
   { id: 'recommendations', label: 'Recommendations' },
   { id: 'creativeOps', label: 'Creative operations' },
+  { id: 'creativeTesting', label: 'Creative testing' },
   { id: 'rights', label: 'Rights management' },
   { id: 'reports', label: 'Reports' },
   { id: 'settings', label: 'Settings' }
