@@ -55,22 +55,25 @@
   }
 
   function formHTML() {
+    var p = App.params && App.params.prefill ? App.params.prefill : {};
+    function prefill(name){ return escapeHtml(p[name] || ''); }
+
     var creatorOpts = '<option value="">Select creator</option>'+state.creators.map(function(c){return '<option value="'+esc(c.id)+'">'+esc(c.name)+'</option>';}).join('');
     var campaignOpts = '<option value="">Select campaign</option>'+state.campaigns.map(function(c){return '<option value="'+esc(c.id)+'">'+esc(c.name)+'</option>';}).join('');
     var creativeOpts = '<option value="">Select creative (optional)</option>'+state.creatives.map(function(c){return '<option value="'+esc(c.id)+'">'+esc(c.id)+' · '+esc(c.hook)+' · '+esc(c.format)+'</option>';}).join('');
     var adOpts = '<option value="">Select ad (optional)</option>'+state.ads.map(function(a){return '<option value="'+esc(a.id)+'">'+esc(a.id)+' · '+esc(a.placement)+'</option>';}).join('');
     return '<section class="ops-form-card"><div class="ops-section-head"><div><h2>New creative brief</h2><p class="sub">Turn a performance insight into an executable creator assignment.</p></div></div>' +
       '<form id="opsBriefForm" class="ops-form">' +
-      '<label>Brief title<input name="title" required placeholder="e.g. Social proof testimonial v2"></label>' +
+      '<label>Brief title<input name="title" required value="' + prefill('title') + '" placeholder="e.g. Social proof testimonial v2"></label>' +
       '<label>Creator<select name="creator_id">'+creatorOpts+'</select></label>' +
       '<label>Campaign<select name="campaign_id">'+campaignOpts+'</select></label>' +
       '<label>Creative<select name="creative_id">'+creativeOpts+'</select></label>' +
       '<label>Ad<select name="ad_id">'+adOpts+'</select></label>' +
       '<label>Platform<select name="platform"><option>Instagram</option><option>TikTok</option><option>YouTube</option></select></label>' +
-      '<label>Objective<input name="objective" placeholder="Acquire new customers"></label>' +
+      '<label>Objective<input name="objective" value="' + prefill('objective') + '" placeholder="Acquire new customers"></label>' +
       '<label>Due date<input name="due_date" type="date"></label>' +
-      '<label class="full">Hypothesis<textarea name="hypothesis" rows="2" placeholder="Why should this creative outperform?"></textarea></label>' +
-      '<label class="full">Creative direction / deliverables<textarea name="brief" rows="4" placeholder="Hook, talking points, shots, CTA, deliverables…"></textarea></label>' +
+      '<label class="full">Hypothesis<textarea name="hypothesis" rows="2" placeholder="Why should this creative outperform?">' + prefill('hypothesis') + '</textarea></label>' +
+      '<label class="full">Creative direction / deliverables<textarea name="brief" rows="4" placeholder="Hook, talking points, shots, CTA, deliverables…">' + prefill('brief') + '</textarea></label>' +
       '<div class="full ops-form-actions"><button class="primary" type="submit">Create brief</button><span id="opsFormMessage" class="ops-form-message"></span></div>' +
       '</form></section>';
   }
