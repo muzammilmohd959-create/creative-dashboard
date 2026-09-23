@@ -3,7 +3,7 @@
   var STATUS = ['Draft','Assigned','In Production','Submitted','Approved','Testing','Live','Completed'];
   var TEST_STATUS = ['Planned','Testing','Learning','Winner','Needs Refresh','Archived'];
   var CLIENT_ID = '00000000-0000-4000-8000-000000000001';
-  var state = { briefs: [], tests: [], creators: [], campaigns: [], loading: false };
+  var state = { briefs: [], tests: [], creators: [], campaigns: [], creatives: [], ads: [], loading: false };
 
   function client() { return window.AuthClient || null; }
   function esc(v) { return escapeHtml(v == null ? '' : v); }
@@ -57,11 +57,15 @@
   function formHTML() {
     var creatorOpts = '<option value="">Select creator</option>'+state.creators.map(function(c){return '<option value="'+esc(c.id)+'">'+esc(c.name)+'</option>';}).join('');
     var campaignOpts = '<option value="">Select campaign</option>'+state.campaigns.map(function(c){return '<option value="'+esc(c.id)+'">'+esc(c.name)+'</option>';}).join('');
+    var creativeOpts = '<option value="">Select creative (optional)</option>'+state.creatives.map(function(c){return '<option value="'+esc(c.id)+'">'+esc(c.id)+' · '+esc(c.hook)+' · '+esc(c.format)+'</option>';}).join('');
+    var adOpts = '<option value="">Select ad (optional)</option>'+state.ads.map(function(a){return '<option value="'+esc(a.id)+'">'+esc(a.id)+' · '+esc(a.placement)+'</option>';}).join('');
     return '<section class="ops-form-card"><div class="ops-section-head"><div><h2>New creative brief</h2><p class="sub">Turn a performance insight into an executable creator assignment.</p></div></div>' +
       '<form id="opsBriefForm" class="ops-form">' +
       '<label>Brief title<input name="title" required placeholder="e.g. Social proof testimonial v2"></label>' +
       '<label>Creator<select name="creator_id">'+creatorOpts+'</select></label>' +
       '<label>Campaign<select name="campaign_id">'+campaignOpts+'</select></label>' +
+      '<label>Creative<select name="creative_id">'+creativeOpts+'</select></label>' +
+      '<label>Ad<select name="ad_id">'+adOpts+'</select></label>' +
       '<label>Platform<select name="platform"><option>Instagram</option><option>TikTok</option><option>YouTube</option></select></label>' +
       '<label>Objective<input name="objective" placeholder="Acquire new customers"></label>' +
       '<label>Due date<input name="due_date" type="date"></label>' +
@@ -79,14 +83,18 @@
       c.from('clients').select('id,name').eq('id', CLIENT_ID).maybeSingle(),
       c.from('creators').select('id,name').eq('client_id', CLIENT_ID).order('name'),
       c.from('campaigns').select('id,name').eq('client_id', CLIENT_ID).order('name'),
+      c.from('creatives').select('id,hook,format').eq('client_id', CLIENT_ID).order('id'),
+      c.from('ads').select('id,placement').eq('client_id', CLIENT_ID).order('id'),
       c.from('creative_briefs').select('*').eq('client_id', CLIENT_ID).order('created_at',{ascending:false}),
       c.from('creative_tests').select('*').eq('client_id', CLIENT_ID).order('created_at',{ascending:false})
     ]).then(function(rs){
       rs.forEach(function(r){if(r.error) throw r.error;});
       state.creators = rs[1].data || [];
       state.campaigns = rs[2].data || [];
-      state.briefs = rs[3].data || [];
-      state.tests = rs[4].data || [];
+      state.creatives = rs[3].data || [];
+      state.ads = rs[4].data || [];
+      state.briefs = rs[5].data || [];
+      state.tests = rs[6].data || [];
       state.loading = false;
     });
   }
@@ -126,7 +134,9 @@
       brief:String(fd.get('brief')||'').trim()||null,
       due_date:fd.get('due_date')||null,
       status:'Draft',
-      test_status:'Planned'
+      test_status:'Planned',
+      creative_id:fd.get('creative_id')||null,
+      ad_id:fd.get('ad_id')||null
     };
     if(!row.title) return Promise.reject(new Error('Add a brief title.'));
     return c.auth.getUser().then(function(u){
