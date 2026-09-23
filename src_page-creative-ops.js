@@ -187,4 +187,74 @@
     },
     mount: function(){ load().then(render).catch(function(e){var c=document.getElementById('pageContent');if(c)c.innerHTML=pageHeader('Creative operations','Your production workspace.')+'<div class="empty big"><p><strong>Could not load Creative Operations.</strong></p><p>'+esc(e.message||e)+'</p></div>';}); }
   };
+
+  function loadTestingCenter() {
+    var c = client();
+    if (!c) return Promise.reject(new Error('Authentication client is not available.'));
+    return c.auth.getUser().then(function(u){
+      if (!u.data || !u.data.user) throw new Error('Please sign in again.');
+      return c.from('client_memberships').select('client_id,role').eq('user_id',u.data.user.id).limit(1).maybeSingle();
+    }).then(function(m){
+      if (m.error) throw m.error;
+      if (!m.data) throw new Error('No workspace membership found for this account.');
+      var cid = m.data.client_id;
+      return Promise.all([
+        c.from('creative_tests').select('*').eq('client_id',cid).order('created_at',{ascending:false}),
+        c.from('creative_briefs').select('id,title,creator_id,campaign_id,platform').eq('client_id',cid),
+        c.from('creatives').select('id,creator_id,campaign_id,hook,angle,format').eq('client_id',cid),
+        c.from('ads').select('id,creative_id,placement').eq('client_id',cid)
+      ]).then(function(rs){
+        rs.forEach(function(x){if(x.error) throw x.error;});
+        return { tests:rs[0].data||[], briefs:rs[1].data||[], creatives:rs[2].data||[], ads:rs[3].data||[] };
+      });
+    });
+  }
+
+  function renderTestingCenter(data) {
+    var tests=data.tests;
+    var byStatus={}; TEST_STATUS.forEach(function(s){byStatus[s]=tests.filter(function(t){return t.status===s;}).length;});
+    var cards=tests.map(function(t){
+      var b=data.briefs.filter(function(x){return x.id===t.creative_brief_id;})[0];
+      var cv=data.creatives.filter(function(x){return x.id===t.creative_id;})[0];
+      var m=(App.data && t.creative_id && App.data.creativeMetrics[t.creative_id]) || null;
+      var performance=m ? '<div class="test-metrics"><span>'+fmtCurrency(m.spend)+' spend</span><span>'+fmtNum(m.purchases)+' purchases</span><span>'+fmtCurrency2(m.cpa)+' CPA</span><span>'+fmtX(m.roas)+' ROAS</span></div>' : '<div class="test-no-data">No linked performance data yet</div>';
+      return '<article class="test-center-card">'+
+        '<div class="test-center-top"><span class="ops-id">'+esc(t.id)+'</span>'+badge(t.status,statusKind(t.status))+'</div>'+
+        '<h3>'+esc(b ? b.title : (cv ? cv.id : 'Creative test'))+'</h3>'+
+        '<p class="ops-meta">'+esc(cv ? (cv.hook+' · '+cv.angle+' · '+cv.format) : 'No creative linked')+'</p>'+
+        performance+
+        '<div class="test-center-foot"><span>'+esc(t.platform||'Instagram')+'</span><span>'+esc(t.launch_date||'No launch date')+'</span></div>'+
+        '<div class="ops-actions"><button class="btn-small test-center-advance" data-id="'+esc(t.id)+'">Advance →</button></div>'+
+      '</article>';
+    }).join('');
+    var summary=TEST_STATUS.map(function(s){return kpiCard(s,fmtNum(byStatus[s]));}).join('');
+    return pageHeader('Creative testing','Track hypotheses from planned test → learning → winner or refresh.')+
+      '<div class="ops-summary test-summary">'+summary+'</div>'+
+      '<section><div class="ops-section-head"><div><h2>Testing center</h2><p class="sub">Performance is linked to the creative when a test has a creative_id.</p></div></div>'+
+      (cards || '<div class="empty big"><p><strong>No creative tests yet.</strong></p><p>Create a brief in Creative operations, then create a test from that brief.</p></div>')+
+      '</section>';
+  }
+
+  PAGES.creativeTesting = {
+    render: function(){ return pageHeader('Creative testing','Loading your test workspace…')+'<div class="empty">Loading…</div>'; },
+    mount: function(){
+      loadTestingCenter().then(function(data){
+        var c=document.getElementById('pageContent');
+        if(c){c.innerHTML=renderTestingCenter(data); c.querySelectorAll('.test-center-advance').forEach(function(btn){
+          btn.addEventListener('click',function(){
+            var t=data.tests.filter(function(x){return x.id===btn.dataset.id;})[0]; if(!t)return;
+            var idx=TEST_STATUS.indexOf(t.status), next=TEST_STATUS[Math.min(idx+1,TEST_STATUS.length-1)];
+            if(next===t.status)return;
+            btn.disabled=true;
+            client().from('creative_tests').update({status:next,updated_at:new Date().toISOString()}).eq('id',t.id).then(function(r){
+              if(r.error) throw r.error; btn.textContent='Updated'; btn.disabled=true; loadTestingCenter().then(function(d){c.innerHTML=renderTestingCenter(d);});
+            }).catch(function(e){btn.disabled=false;alert(e.message||e);});
+          });
+        });}
+      }).catch(function(e){
+        var c=document.getElementById('pageContent');
+        if(c)c.innerHTML=pageHeader('Creative testing','Your test workspace.')+'<div class="empty big"><p><strong>Could not load Creative Testing.</strong></p><p>'+esc(e.message||e)+'</p></div>';
+      });
+    }
+  };
 })();
