@@ -15,7 +15,7 @@ PAGES.campaigns = {
       }, m);
     });
     var sorted = sortRows(rows, App.campaignsSort, campaignColumns());
-    return pageHeader('Campaigns', 'Budget, spend and outcomes for every campaign.') + tableHTML(campaignColumns(), sorted, App.campaignsSort, 'id');
+    return '<div class="data-kicker"><span>CAMPAIGN CONTROL</span><span>Budget → spend → outcome</span></div>' + pageHeader('Campaigns', 'Budget, spend and outcomes for every campaign.') + tableHTML(campaignColumns(), sorted, App.campaignsSort, 'id');
   },
   mount: function (container) {
     if (!isFullMode()) return;
