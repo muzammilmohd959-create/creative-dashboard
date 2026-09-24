@@ -1103,3 +1103,29 @@ section:nth-of-type(3){animation-delay:.10s}
 @media(max-width:1050px){.detail-kpi-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.detail-hero-main{grid-template-columns:1fr}.detail-hero-orbit{opacity:.45}}
 @media(max-width:650px){.detail-kicker{align-items:flex-start;flex-direction:column}.detail-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.detail-signal-grid,.detail-context-row{grid-template-columns:1fr}.campaign-hero-side{justify-items:start;border-left:0;border-top:1px solid var(--border);padding:14px 0 0}.creative-preview-shell{align-items:flex-start}.detail-hero{padding:16px}.detail-hero-copy h2{font-size:18px}}
 @media(prefers-reduced-motion:reduce){.detail-hero,.detail-kpi-grid .kpi,.detail-surface{animation:none!important}.detail-card,.detail-signal,.detail-context-row>div,.subtab{transition:none!important}}
+
+
+/* Motion + spatial interaction layer */
+#pageContent.page-enter{opacity:0;transform:translateY(10px) scale(.992);filter:blur(2px)}
+#pageContent.page-enter-active{opacity:1;transform:none;filter:none;transition:opacity .34s ease,transform .42s cubic-bezier(.2,.8,.2,1),filter .34s ease}
+.chart-card,.kpi,.intelligence-card,.rec-card,.pattern-card,.comparison-card,.compare-card,.scorecard-card,.test-center-card,.ops-card,.creative-card,.detail-surface{position:relative;isolation:isolate}
+.chart-card::after,.kpi::after,.intelligence-card::after,.rec-card::after,.pattern-card::after,.comparison-card::after,.compare-card::after,.scorecard-card::after,.test-center-card::after,.ops-card::after,.creative-card::after,.detail-surface::after{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:-1;
+  background:radial-gradient(240px circle at var(--mx,50%) var(--my,50%),rgba(167,139,250,.095),transparent 65%);
+  opacity:0;transition:opacity .22s ease;
+}
+.chart-card:hover::after,.kpi:hover::after,.intelligence-card:hover::after,.rec-card:hover::after,.pattern-card:hover::after,.comparison-card:hover::after,.compare-card:hover::after,.scorecard-card:hover::after,.test-center-card:hover::after,.ops-card:hover::after,.creative-card:hover::after,.detail-surface:hover::after{opacity:1}
+.kpi,.chart-card,.intelligence-card,.rec-card,.pattern-card,.comparison-card,.compare-card,.scorecard-card,.test-center-card,.ops-card,.creative-card{transition:transform .22s cubic-bezier(.2,.8,.2,1),border-color .22s ease,box-shadow .22s ease}
+.kpi:hover{transform:translateY(-3px)}
+.chart-card:hover{transform:translateY(-2px);box-shadow:0 18px 45px rgba(0,0,0,.18)}
+.nav-item{transition:transform .18s ease,background .18s ease,color .18s ease,border-color .18s ease}
+.nav-item:hover{transform:translateX(3px)}
+.primary,.btn,.btn-small,.link-btn{transition:transform .16s ease,box-shadow .2s ease,border-color .2s ease}
+.primary:hover,.btn:hover,.btn-small:hover{transform:translateY(-1px)}
+.global-date-range,.filter-row,.subtabs{animation:surfaceReveal .35s ease both}
+@keyframes surfaceReveal{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){
+  #pageContent.page-enter,#pageContent.page-enter-active{opacity:1;transform:none;filter:none;transition:none}
+  .chart-card,.kpi,.intelligence-card,.rec-card,.pattern-card,.comparison-card,.compare-card,.scorecard-card,.test-center-card,.ops-card,.creative-card,.nav-item,.primary,.btn,.btn-small,.link-btn{transition:none!important}
+  .chart-card:hover,.kpi:hover{transform:none}
+}
