@@ -47,6 +47,8 @@
     var rows=Object.keys(groups).map(function(k){var g=groups[k];g.cpa=g.purchases?g.spend/g.purchases:0;g.roas=g.spend?g.revenue/g.spend:0;return g;}).sort(function(a,b){return b.roas-a.roas;});
     return '<section class="validated-patterns"><div class="ops-section-head"><div><h2>Validated creative patterns</h2><p class="sub">Patterns derived only from tests marked Winner.</p></div></div><div class="pattern-grid">'+rows.map(function(g,idx){
       var strength=g.tests>=3?'Strong':g.tests===2?'Moderate':'Emerging';
+      var diversity=Object.keys(g.creators||{}).length;
+      var confidence=(g.tests>=3 && diversity>=2 && g.purchases>=100)?'High':(g.tests>=2 && g.purchases>=50)?'Medium':'Directional';
       return '<article class="pattern-card"><div class="rec-top"><span class="insight-cat">PATTERN · '+strength+'</span><span class="rec-index">P-'+String(idx+1).padStart(2,'0')+'</span></div><h2>'+esc(g.hook)+' / '+esc(g.angle)+' / '+esc(g.format)+'</h2><div class="pattern-stats"><span>'+g.tests+' winner'+(g.tests===1?'':'s')+'</span><span>'+fmtCurrency(g.spend)+' spend</span><span>'+fmtNum(g.purchases)+' purchases</span><span>'+fmtCurrency2(g.cpa)+' CPA</span><span>'+fmtX(g.roas)+' ROAS</span></div><p class="rec-action"><strong>Pattern:</strong> Preserve this hook + angle + format combination while testing a fresh execution.</p><button class="primary pattern-create" data-pattern="'+esc(g.hook+' / '+g.angle+' / '+g.format)+'" data-proof="'+esc(fmtCurrency(g.spend)+' spend · '+fmtNum(g.purchases)+' purchases · '+fmtCurrency2(g.cpa)+' CPA · '+fmtX(g.roas)+' ROAS')+'">Create next variation →</button></article>';
     }).join('')+'</div></section>';
   }
