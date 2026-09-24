@@ -2144,3 +2144,93 @@ table{
 @media(max-width:760px){
   .table-wrap tbody td.table-text{font-size:12.5px}
 }
+
+
+/* ================= DATA TABLE UI — STEP 2 ================= */
+.table-wrap{
+  position:relative;
+  isolation:isolate;
+  border-radius:16px;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.012)),
+    var(--surface);
+  box-shadow:0 18px 50px rgba(0,0,0,.12);
+}
+.table-wrap::before{
+  content:"";
+  position:absolute;
+  left:0;right:0;top:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(167,139,250,.5),transparent);
+  pointer-events:none;
+}
+.table-wrap table{
+  border-spacing:0;
+}
+.table-wrap thead th{
+  height:46px;
+  padding:0 14px;
+  vertical-align:middle;
+  background:rgba(255,255,255,.018);
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.table-wrap thead th:first-child{padding-left:18px}
+.table-wrap thead th:last-child{padding-right:18px}
+.table-wrap tbody tr{
+  position:relative;
+  animation:tableRowIn .42s cubic-bezier(.2,.8,.2,1) both;
+  animation-delay:calc(var(--row-index,0) * 45ms);
+}
+.table-wrap tbody td{
+  height:58px;
+  padding:0 14px;
+  border-bottom:1px solid rgba(255,255,255,.055);
+  transition:color .2s ease,background .2s ease;
+}
+.table-wrap tbody td:first-child{padding-left:18px}
+.table-wrap tbody td:last-child{padding-right:18px}
+.table-wrap tbody tr:last-child td{border-bottom:0}
+.table-wrap tbody tr.clickable-row:hover td{
+  background:rgba(139,92,246,.045);
+}
+.table-wrap tbody tr.clickable-row:hover td:first-child{
+  box-shadow:inset 2px 0 0 rgba(167,139,250,.75);
+}
+.table-wrap tbody td.table-primary{
+  font-weight:650;
+  color:#F1F2F6;
+}
+.table-wrap tbody td.table-primary::first-letter{}
+.table-wrap tbody td.table-status{
+  font-family:var(--sans);
+  font-size:11px;
+}
+.table-wrap tbody td.table-status .tag{
+  padding:5px 9px;
+  border-radius:999px;
+  border-color:rgba(255,255,255,.08);
+  background:rgba(255,255,255,.035);
+  font-weight:600;
+}
+.table-wrap tbody td.table-status .tag.good{
+  color:#7DE7CF;
+  background:rgba(53,214,176,.07);
+  border-color:rgba(53,214,176,.18);
+}
+.table-wrap tbody td.table-status .tag.warn{
+  color:#F4C76C;
+  background:rgba(240,184,91,.07);
+  border-color:rgba(240,184,91,.18);
+}
+.table-wrap tbody tr.clickable-row{
+  cursor:pointer;
+}
+.table-wrap tbody tr.clickable-row:active{
+  transform:scale(.998);
+}
+@keyframes tableRowIn{
+  from{opacity:0;transform:translateY(7px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@media(prefers-reduced-motion:reduce){
+  .table-wrap tbody tr{animation:none}
+}
