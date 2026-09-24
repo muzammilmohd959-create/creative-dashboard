@@ -212,11 +212,13 @@ function chartOptsHBar(colors, axis) {
 }
 
 function wireInteractiveSurfaces(container) {
-  container.querySelectorAll('.chart-card,.kpi,.intelligence-card,.rec-card,.pattern-card,.comparison-card,.compare-card,.scorecard-card,.test-center-card,.ops-card,.creative-card,.detail-surface').forEach(function(el){
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  container.querySelectorAll('.chart-card,.kpi,.intelligence-card,.rec-card,.pattern-card,.comparison-card,.compare-card,.scorecard-card,.test-center-card,.ops-card,.creative-card,.detail-surface,.overview-feature,.overview-flow,.overview-data-hero,.overview-hero-strip').forEach(function(el){
     if (el.dataset.interactiveBound) return;
     el.dataset.interactiveBound = '1';
+    el.classList.add('motion-surface');
     el.addEventListener('pointermove', function(e){
-      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      if (reduce) return;
       var r = el.getBoundingClientRect();
       el.style.setProperty('--mx', ((e.clientX-r.left)/r.width*100).toFixed(1)+'%');
       el.style.setProperty('--my', ((e.clientY-r.top)/r.height*100).toFixed(1)+'%');
@@ -224,5 +226,34 @@ function wireInteractiveSurfaces(container) {
     el.addEventListener('pointerleave', function(){
       el.style.removeProperty('--mx'); el.style.removeProperty('--my');
     });
+  });
+  if (!reduce && 'IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {threshold:0.08, rootMargin:'0px 0px -30px 0px'});
+    container.querySelectorAll('.chart-card,.kpi,.overview-feature,.overview-flow,.overview-data-hero,.overview-hero-strip,.ops-column,.ops-card,.test-center-card,.intelligence-card,.rec-card,.pattern-card,.scorecard-card,.comparison-card,.compare-card,.detail-surface').forEach(function(el){
+      if (!el.classList.contains('motion-reveal')) {
+        el.classList.add('motion-reveal');
+        observer.observe(el);
+      }
+    });
+  }
+  container.querySelectorAll('.primary,.link-btn,.overview-launch,.overview-secondary').forEach(function(btn){
+    if (btn.dataset.magneticBound) return;
+    btn.dataset.magneticBound='1';
+    btn.classList.add('magnetic');
+    btn.addEventListener('pointermove',function(e){
+      if(reduce) return;
+      var r=btn.getBoundingClientRect();
+      var x=(e.clientX-(r.left+r.width/2))/r.width*10;
+      var y=(e.clientY-(r.top+r.height/2))/r.height*8;
+      btn.style.transform='translate('+x.toFixed(1)+'px,'+y.toFixed(1)+'px)';
+    });
+    btn.addEventListener('pointerleave',function(){btn.style.transform='';});
   });
 }
