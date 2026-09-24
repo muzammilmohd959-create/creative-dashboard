@@ -17,13 +17,22 @@ function renderSidebar() {
     }).join('');
     return '<div class="nav-group"><div class="nav-group-label">' + group.label + '</div>' + items + '</div>';
   }).join('');
-  var settingsItem = NAV_ITEMS.find(function(n){ return n.id === 'settings'; });
-  if (settingsItem) {
-    var settingsActive = App.page === 'settings';
-    var settingsIdx = String(NAV_ITEMS.findIndex(function(n){ return n.id === 'settings'; }) + 1).padStart(2,'0');
-    html += '<div class="nav-settings"><button class="nav-item' + (settingsActive ? ' active' : '') + '" data-page="settings" aria-current="' + (settingsActive ? 'page' : 'false') + '"><span class="nav-index">' + settingsIdx + '</span><span class="nav-label">' + escapeHtml(settingsItem.label) + '</span><span class="nav-arrow">↗</span></button></div>';
+  var nav = document.getElementById('sidebarNav');
+  nav.innerHTML = html;
+  var sidebar = nav ? nav.closest('.sidebar') : null;
+  if (sidebar) {
+    var existingSettings = sidebar.querySelector('.nav-settings');
+    if (existingSettings) existingSettings.remove();
+    var settingsItem = NAV_ITEMS.find(function(n){ return n.id === 'settings'; });
+    if (settingsItem) {
+      var settingsActive = App.page === 'settings';
+      var settingsIdx = String(NAV_ITEMS.findIndex(function(n){ return n.id === 'settings'; }) + 1).padStart(2,'0');
+      var settingsWrap = document.createElement('div');
+      settingsWrap.className = 'nav-settings';
+      settingsWrap.innerHTML = '<button class="nav-item' + (settingsActive ? ' active' : '') + '" data-page="settings" aria-current="' + (settingsActive ? 'page' : 'false') + '"><span class="nav-index">' + settingsIdx + '</span><span class="nav-label">' + escapeHtml(settingsItem.label) + '</span><span class="nav-arrow">↗</span></button>';
+      sidebar.appendChild(settingsWrap);
+    }
   }
-  document.getElementById('sidebarNav').innerHTML = html;
   document.querySelectorAll('.nav-item').forEach(function (btn) {
     btn.addEventListener('click', function () {
       setPage(btn.getAttribute('data-page'), {});
