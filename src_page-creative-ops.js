@@ -106,6 +106,7 @@
     var c = document.getElementById('pageContent');
     if (!c) return;
     c.innerHTML = pageHeader('Creative operations', 'From recommendation → brief → creator production → testing.') + '<div class="ops-kicker"><span>PRODUCTION OS</span><span>Signal → brief → creator → test → decision</span></div>' +
+      '<section class="ops-command-hero"><div><span class="ops-eyebrow">CREATIVE PRODUCTION SYSTEM</span><h2>Move the winning signal into production.</h2><p>Every brief is an execution layer between intelligence and paid testing. Keep the hypothesis visible, assign the creator, and advance the work until the result becomes evidence.</p><div class="ops-flow-line"><span>SIGNAL</span><i>→</i><span>BRIEF</span><i>→</i><span>CREATOR</span><i>→</i><strong>TEST</strong></div></div><div class="ops-command-core"><div class="ops-core-ring r1"></div><div class="ops-core-ring r2"></div><div><span>ACTIVE</span><strong> + state.briefs.filter(function(b){return b.status !== 'Completed';}).length + </strong><small>open briefs</small></div></div></section>' +
       '<div class="ops-summary">' +
         kpiCard('Total briefs', fmtNum(state.briefs.length)) +
         kpiCard('In production', fmtNum(state.briefs.filter(function(b){return b.status==='In Production';}).length)) +
