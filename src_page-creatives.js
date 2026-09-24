@@ -23,8 +23,13 @@ PAGES.creatives = {
       body = tableHTML(fullCreativeColumns(), sorted, App.creativesSort, 'id', 'No creatives match these filters.');
     }
 
+    var libraryHero = '<section class="creative-library-hero">' +
+      '<div><span class="detail-eyebrow">CREATIVE LIBRARY</span><h2>Every execution has a fingerprint.</h2><p>Explore the hook, angle, format and paid outcome behind every piece of creator content. Switch to Library for a visual workspace or Table for dense analysis.</p></div>' +
+      '<div class="creative-library-orbit"><div class="cl-orbit o1"></div><div class="cl-orbit o2"></div><div class="cl-core"><span>CREATIVE</span><strong>DNA</strong></div><i></i><b></b><em></em></div>' +
+      '</section>';
     return pageHeader('Creatives', 'The core analytical layer \u2014 every ad creative, with hook, angle and format performance.', viewToggle) +
-      quickStats + filters + body;
+      '<div class="data-kicker"><span>CREATIVE LIBRARY</span><span>Fingerprint → distribution → outcome</span></div>' +
+      libraryHero + quickStats + filters + body;
   },
   mount: function (container) {
     if (!isFullMode()) return;
