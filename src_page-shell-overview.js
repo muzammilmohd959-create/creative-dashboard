@@ -137,6 +137,8 @@ PAGES.overview = {
   mount: function () {
     if (!isFullMode()) return;
     var d = App.data, colors = themeColors();
+    var topCreators = d.creators.map(function (c) { return Object.assign({ name: c.name }, d.creatorMetrics[c.id] || {}); }).sort(function (a,b) { return b.revenue-a.revenue; }).slice(0,5);
+    var topCreatives = d.creatives.map(function (cv) { return Object.assign({ label: cv.id }, d.creativeMetrics[cv.id] || {}); }).filter(function(c){return c.spend>50;}).sort(function(a,b){return b.roas-a.roas;}).slice(0,5);
     var labels = d.dateSeries.map(function (r) { return fmtDateShort(r.date); });
     App.charts.ovSpendRev = new Chart(document.getElementById('ovSpendRevChart'), {
       type: 'line',
