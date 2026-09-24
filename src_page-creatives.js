@@ -28,7 +28,7 @@ PAGES.creatives = {
       '<div class="creative-library-orbit"><div class="cl-orbit o1"></div><div class="cl-orbit o2"></div><div class="cl-core"><span>CREATIVE</span><strong>DNA</strong></div><i></i><b></b><em></em></div>' +
       '</section>';
     return pageHeader('Creatives', 'The core analytical layer \u2014 every ad creative, with hook, angle and format performance.', viewToggle) +
-      '<div class="data-kicker"><span>CREATIVE LIBRARY</span><span>Fingerprint → distribution → outcome</span></div>' +
+      '<div class="data-kicker"><span>CREATIVE LIBRARY</span><span>Click any creative to open its workspace</span></div>' +
       libraryHero + quickStats + filters + body;
   },
   mount: function (container) {
@@ -161,6 +161,7 @@ function renderCreativeGrid(rows) {
       '<div class="cc-creator">' + escapeHtml(r.creatorName || (creator ? creator.name : '')) + '</div>' +
       '<div class="cc-hook">' + escapeHtml(r.hook) + ' \u00b7 ' + escapeHtml(r.angle) + '</div>' +
       '<div class="cc-metrics"><span>' + fmtCurrency(m.spend) + ' spend</span><span>' + fmtCurrency2(m.cpa) + ' CPA</span><span>' + fmtX(m.roas) + ' ROAS</span></div>' +
+      '<div class="cc-workspace-cta"><span>CREATIVE WORKSPACE</span><b>Open workspace →</b></div>' +
       '</div>';
   }).join('') + '</div>';
 }
