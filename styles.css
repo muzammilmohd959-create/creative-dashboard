@@ -1733,3 +1733,33 @@ thead th{background:#F7F8FB}tbody tr.clickable-row:hover{background:#F5F3FC}
   .sidebar:after,.nav-item.active:after,.kpi:after{animation:none!important}
   .chart-card:hover{transform:none}
 }
+
+/* ================= LIVING INTERFACE PASS ================= */
+.motion-surface{--mx:50%;--my:50%}
+.motion-surface:after{
+  background:radial-gradient(180px circle at var(--mx) var(--my),rgba(167,139,250,.075),transparent 68%);
+  opacity:0;
+  transition:opacity .25s ease;
+}
+.motion-surface:hover:after{opacity:1}
+.motion-reveal{
+  opacity:0;
+  transform:translateY(22px) scale(.985);
+  filter:blur(2px);
+  transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1),filter .7s ease;
+}
+.motion-reveal.is-visible{opacity:1;transform:none;filter:none}
+.motion-reveal:nth-child(2){transition-delay:.05s}.motion-reveal:nth-child(3){transition-delay:.1s}.motion-reveal:nth-child(4){transition-delay:.15s}.motion-reveal:nth-child(5){transition-delay:.2s}
+.magnetic{transition:transform .18s cubic-bezier(.2,.8,.2,1),box-shadow .2s ease}
+.magnetic:hover{box-shadow:0 12px 28px rgba(118,82,232,.2)}
+.overview-feature,.overview-flow,.overview-data-hero,.overview-hero-strip{will-change:transform}
+@keyframes signalDrift{0%,100%{background-position:0 0,0 0}50%{background-position:24px 12px,-18px 8px}}
+.overview-hero,.overview-flow,.overview-data-hero,.overview-hero-strip,.intelligence-command,.pattern-command,.scorecard-command,.comparison-command,.test-command-hero,.ops-command-hero{
+  background-size:auto,auto,auto;
+  animation:signalDrift 16s ease-in-out infinite;
+}
+@media(prefers-reduced-motion:reduce){
+  .motion-reveal{opacity:1!important;transform:none!important;filter:none!important;transition:none!important}
+  .magnetic{transition:none!important}
+  .overview-hero,.overview-flow,.overview-data-hero,.overview-hero-strip,.intelligence-command,.pattern-command,.scorecard-command,.comparison-command,.test-command-hero,.ops-command-hero{animation:none!important}
+}
