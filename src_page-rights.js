@@ -14,7 +14,7 @@ PAGES.rights = {
 
     var counts = { Expired: 0, 'Expiring within 7 days': 0, 'Expiring within 30 days': 0, Active: 0 };
     rows.forEach(function (r) { counts[r.status] = (counts[r.status] || 0) + 1; });
-    var summary = '<div class="kpi-grid">' +
+    var summary = '<section class="rights-command"><div><span class="ops-eyebrow">RIGHTS CONTROL ENGINE</span><h2>Protect the creative supply chain.</h2><p>See which creator permissions are active, approaching expiry or already expired before they become a production blocker.</p><div class="recommendation-flow"><span>AUTHORIZE</span><i>→</i><strong>MONITOR</strong><i>→</i><span>RENEW</span></div></div><div class="control-orb"><span>ACTIVE</span><strong>'+counts.Active+'</strong><small>rights records</small></div></section><div class="kpi-grid">' +
       kpiCard('Expired', counts.Expired) + kpiCard('Expiring \u2264 7 days', counts['Expiring within 7 days']) +
       kpiCard('Expiring \u2264 30 days', counts['Expiring within 30 days']) + kpiCard('Active', counts.Active) + '</div>';
 
