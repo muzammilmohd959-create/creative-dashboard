@@ -33,7 +33,8 @@ PAGES.settings = {
       '</section>';
 
     return '<div class="data-kicker"><span>SYSTEM CONTROL</span><span>Data → integrations → workspace</span></div>' + pageHeader('Settings', 'App mode, theme, and data source connections.') +
-      '<section><h2>Data</h2><div class="detail-card"><div><div class="detail-name">' + escapeHtml(modeLabel) + '</div>' +
+      '<section class="settings-hero"><div><span class="ops-eyebrow">ARKFLUENCE SYSTEM CONTROL</span><h2>Configure the workspace behind the intelligence layer.</h2><p>Control the data mode, visual system and connected performance sources that power your creator → creative → media workflow.</p></div><div class="settings-orb"><span>WORKSPACE</span><strong>OS</strong><small>system control</small></div></section>' +
+      '<section><h2 class="settings-section-title">Workspace data</h2><div class="detail-card"><div><div class="detail-name">' + escapeHtml(modeLabel) + '</div>' +
       '<div class="detail-meta">' + modeMeta + '</div></div></div></section>' +
       '<section><h2>Appearance</h2><div class="filter-row"><button id="themeLight">Light</button><button id="themeDark">Dark</button><button id="themeSystem">Match system</button></div></section>' +
       supabaseSection +
