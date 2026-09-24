@@ -2032,3 +2032,29 @@ img,svg,canvas{max-width:100%}
   .main{min-width:0}
   .content{box-sizing:border-box}
 }
+
+
+/* ================= Premium KPI Intelligence Tiles ================= */
+.kpi-premium{position:relative;overflow:hidden;min-height:142px;padding:18px 18px 15px;border:1px solid rgba(167,139,250,.13);background:
+radial-gradient(circle at 88% 8%,rgba(139,92,246,.12),transparent 34%),
+linear-gradient(145deg,rgba(20,22,31,.98),rgba(11,13,19,.98));box-shadow:inset 0 1px 0 rgba(255,255,255,.025),0 14px 38px rgba(0,0,0,.12);transition:transform .28s cubic-bezier(.2,.7,.2,1),border-color .28s ease,box-shadow .28s ease}
+.kpi-premium:before{content:"";position:absolute;left:-20%;right:-20%;bottom:-58px;height:95px;background:radial-gradient(ellipse,rgba(118,82,232,.14),transparent 68%);filter:blur(8px);pointer-events:none}
+.kpi-premium:after{content:"";position:absolute;top:0;left:-60%;width:45%;height:1px;background:linear-gradient(90deg,transparent,#A996FF,transparent);box-shadow:0 0 18px rgba(169,150,255,.5);transition:left .65s ease}
+.kpi-premium:hover{transform:translateY(-5px);border-color:rgba(169,150,255,.34);box-shadow:0 22px 50px rgba(0,0,0,.22),0 0 34px rgba(118,82,232,.08)}
+.kpi-premium:hover:after{left:115%}
+.kpi-top{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.kpi-premium .label{font:700 8px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
+.kpi-icon{display:grid;place-items:center;width:27px;height:27px;border:1px solid rgba(169,150,255,.18);border-radius:9px;background:rgba(169,150,255,.06);color:#A996FF;font:600 13px var(--mono);box-shadow:0 0 20px rgba(118,82,232,.08)}
+.kpi-value-row{position:relative;z-index:2;display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin-top:15px}
+.kpi-premium .value{font-size:30px;font-weight:700;line-height:1;letter-spacing:-.055em;color:var(--text);text-shadow:0 0 22px rgba(255,255,255,.045)}
+.kpi-live{display:flex;align-items:center;gap:5px;padding:4px 6px;border:1px solid rgba(53,214,176,.14);border-radius:999px;color:#6de2c7;font:700 6px var(--mono);letter-spacing:.1em}
+.kpi-live i{width:5px;height:5px;border-radius:50%;background:#35D6B0;box-shadow:0 0 8px rgba(53,214,176,.75);animation:kpiLivePulse 1.8s ease-in-out infinite}
+.kpi-premium .kpi-sub{position:relative;z-index:2;margin-top:10px;font-size:9px;color:var(--muted)}
+.kpi-signal{position:relative;z-index:2;display:flex;align-items:flex-end;gap:3px;height:18px;margin-top:9px}
+.kpi-signal span{width:100%;height:5px;border-radius:2px;background:rgba(169,150,255,.12);transform-origin:bottom;transition:height .3s ease,background .3s ease}
+.kpi-signal span:nth-child(2){height:8px}.kpi-signal span:nth-child(3){height:6px}.kpi-signal span:nth-child(4){height:12px}.kpi-signal span:nth-child(5){height:9px}.kpi-signal span:nth-child(6){height:14px}.kpi-signal span:nth-child(7){height:11px}.kpi-signal span:nth-child(8){height:16px}
+.kpi-premium:hover .kpi-signal span{background:rgba(169,150,255,.28)}
+@keyframes kpiLivePulse{0%,100%{opacity:.55;transform:scale(.85)}50%{opacity:1;transform:scale(1)}}
+:root[data-theme="light"] .kpi-premium{background:linear-gradient(145deg,#fff,#f7f6fb);border-color:rgba(90,70,160,.13)}
+@media(max-width:760px){.kpi-premium{min-height:126px;padding:15px}.kpi-premium .value{font-size:24px}.kpi-live{display:none}}
+@media(prefers-reduced-motion:reduce){.kpi-premium,.kpi-premium:after{transition:none}.kpi-live i{animation:none}}
