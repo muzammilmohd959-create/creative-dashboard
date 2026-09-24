@@ -103,14 +103,14 @@ PAGES.overview = {
             '<h2>Turn creator content into a <em>measurable growth system.</em></h2>' +
             '<p>Connect creators, creatives, campaigns and paid-media outcomes in one interactive workspace. Start with the sample dataset or connect your own data to activate the intelligence layer.</p>' +
             '<div class="overview-hero-actions">' +
-              '<span class="ark-aura ark-aura-glow overview-launch-aura"><button class="primary overview-launch" onclick="document.getElementById(\'btnSample\').click()">Explore sample workspace <span>↗</span></button></span>' +
+              '<span class="aura aura-glow aura-lg overview-launch-aura"><button class="primary overview-launch" onclick="document.getElementById(\'btnSample\').click()">Explore sample workspace <span>↗</span></button></span>' +
               '<button class="overview-secondary" onclick="document.getElementById(\'fileInput\') && document.getElementById(\'fileInput\').click()">Upload your data</button>' +
             '</div>' +
             '<div class="overview-proof-row"><span><i></i> Creator network</span><span><i></i> Creative intelligence</span><span><i></i> Testing workflow</span></div>' +
           '</div>' +
           '<div class="overview-visual" aria-label="Creative performance system visualization">' +
             '<div class="overview-orbit orbit-one"></div><div class="overview-orbit orbit-two"></div>' +
-            '<div class="ark-aura ark-aura-dual overview-core-aura"><div class="overview-core"><span class="core-brand">ARKFLUENCE</span><strong>ARKFLUENCE</strong><small>CREATIVE SIGNAL ENGINE</small></div></div>' +
+            '<div class="aura aura-dual aura-md overview-core-aura"><div class="overview-core"><span class="core-brand">ARKFLUENCE</span><strong>ARKFLUENCE</strong><small>CREATIVE SIGNAL ENGINE</small></div></div>' +
             '<div class="overview-node node-a"><b>01</b><span>CREATORS</span><strong>Source</strong></div>' +
             '<div class="overview-node node-b"><b>02</b><span>CONTENT</span><strong>Test</strong></div>' +
             '<div class="overview-node node-c"><b>03</b><span>PERFORMANCE</span><strong>Learn</strong></div>' +
