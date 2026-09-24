@@ -242,7 +242,7 @@ function arkOverviewChartMotionPlugin() {
       ctx.fillStyle = g;
       ctx.fillRect(x - 70, area.top, 140, area.bottom - area.top);
       ctx.restore();
-      chart.draw();
+      if (!chart.$arkMotionFrame) chart.$arkMotionFrame = requestAnimationFrame(function(){ chart.$arkMotionFrame = null; chart.draw(); });
     }
   };
 }
