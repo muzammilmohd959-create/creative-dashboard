@@ -2020,3 +2020,15 @@ body{overflow:hidden}
 /* eliminate accidental page-width expansion from wide data surfaces */
 .table-wrap,.chart-wrap,.ops-board,.comparison-card,.scorecard-card,.explorer-section,.creative-workspace-hero,.creative-testing-timeline{max-width:100%;min-width:0}
 img,svg,canvas{max-width:100%}
+
+
+/* ================= Navigation / Workspace Final Shell Pass ================= */
+.nav-settings{display:block;flex:0 0 auto;margin:0 0 8px;padding:8px 0 0;border-top:1px solid var(--border);background:var(--sidebar-bg)}
+.nav-settings .nav-item{margin:0 14px;width:calc(100% - 28px)}
+#sidebarNav{padding-bottom:4px;scrollbar-width:none}
+#sidebarNav::-webkit-scrollbar{width:0;height:0}
+@media(min-width:761px){
+  .sidebar{box-sizing:border-box}
+  .main{min-width:0}
+  .content{box-sizing:border-box}
+}
