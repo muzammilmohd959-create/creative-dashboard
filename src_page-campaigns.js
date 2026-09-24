@@ -16,7 +16,7 @@ PAGES.campaigns = {
     });
     var sorted = sortRows(rows, App.campaignsSort, campaignColumns());
     var campaignHero = '<section class="campaign-control-hero"><div><span class="detail-eyebrow">CAMPAIGN CONTROL ROOM</span><h2>Budget is the input. Creative performance is the signal.</h2><p>Track allocation, creative mix and commercial outcome from the same operating surface.</p></div><div class="campaign-pulse"><div><span>CAMPAIGNS</span><strong>' + rows.length + '</strong></div><div><span>SPEND</span><strong>' + fmtCurrency(d.overall.spend) + '</strong></div><div><span>ROAS</span><strong>' + fmtX(d.overall.roas) + '</strong></div></div></section>';
-    return '<div class="data-kicker"><span>CAMPAIGN CONTROL</span><span>Budget → spend → outcome</span></div>' + pageHeader('Campaigns', 'Budget, spend and outcomes for every campaign.') + campaignHero + tableHTML(campaignColumns(), sorted, App.campaignsSort, 'id');
+    return '<div class="data-kicker"><span>CAMPAIGN CONTROL</span><span>Budget → spend → outcome</span></div>' + pageHeader('Campaigns', 'Budget, spend and outcomes for every campaign.') + campaignHero + tableHTML(campaignColumns(), sorted, App.campaignsSort, 'id', null, renderCampaignRowExpansion);
   },
   mount: function (container) {
     if (!isFullMode()) return;
@@ -24,6 +24,41 @@ PAGES.campaigns = {
     wireTable(container, App.campaignsSort, function () { mountPage(); }, function (id) { setPage('campaigns', { campaignId: id }); });
   }
 };
+
+
+function renderCampaignRowExpansion(row) {
+  var d = App.data;
+  var creatives = d.creatives.filter(function(cv){ return cv.campaignId === row.id; });
+  var creatorIds = unique(creatives.map(function(cv){ return cv.creatorId; }));
+  var creatorRows = creatorIds.map(function(cid){
+    var creator = d.creators.filter(function(x){ return x.id === cid; })[0];
+    var rows = d.dailyRows.filter(function(x){ return x.campaignId === row.id && x.creatorId === cid; });
+    return Object.assign({name: creator ? creator.name : cid}, aggregate(rows));
+  }).sort(function(a,b){ return (b.revenue||0)-(a.revenue||0); });
+  var topCreators = creatorRows.slice(0,3);
+  var maxRevenue = Math.max.apply(null, topCreators.map(function(x){return x.revenue||0;}).concat([1]));
+  var pctBudget = row.budget ? Math.min(100,(row.spend/row.budget)*100) : 0;
+
+  return '<div class="grid-insight-panel">' +
+    '<div class="grid-insight-main">' +
+      '<div class="grid-insight-eyebrow">CAMPAIGN SIGNAL</div>' +
+      '<div class="grid-insight-title">' + escapeHtml(row.name) + '<span>LIVE PERFORMANCE PROFILE</span></div>' +
+      '<div class="grid-insight-flow"><span>BUDGET</span><i>→</i><span>CREATIVE MIX</span><i>→</i><span>OUTCOME</span></div>' +
+    '</div>' +
+    '<div class="grid-insight-metrics">' +
+      '<div><span>Budget used</span><strong>' + pctBudget.toFixed(0) + '%</strong><small>' + fmtCurrency(row.spend) + ' / ' + fmtCurrency(row.budget) + '</small></div>' +
+      '<div><span>Revenue</span><strong>' + fmtCurrency(row.revenue) + '</strong><small>' + fmtX(row.roas) + ' ROAS</small></div>' +
+      '<div><span>Purchases</span><strong>' + fmtNum(row.purchases) + '</strong><small>' + fmtCurrency2(row.cpa) + ' CPA</small></div>' +
+    '</div>' +
+    '<div class="grid-insight-creators"><div class="grid-insight-section-label">TOP CREATOR SIGNALS</div>' +
+      (topCreators.length ? topCreators.map(function(x,i){
+        var pct = Math.max(5,Math.min(100,((x.revenue||0)/maxRevenue)*100));
+        return '<div class="grid-creator-signal"><span class="grid-rank">0'+(i+1)+'</span><strong>'+escapeHtml(x.name)+'</strong><span class="grid-creator-bar"><i style="width:'+pct.toFixed(1)+'%"></i></span><b>'+fmtCurrency(x.revenue)+'</b></div>';
+      }).join('') : '<div class="grid-empty-signal">No creator performance signal available.</div>') +
+    '</div>' +
+    '<div class="grid-insight-footer"><span>' + creatives.length + ' creatives</span><span>' + creatorIds.length + ' creators</span><button type="button" class="btn-small" onclick="setPage(\'campaigns\',{campaignId:\'' + escapeHtml(row.id) + '\'})">OPEN CAMPAIGN WORKSPACE →</button></div>' +
+  '</div>';
+}
 
 function campaignColumns() {
   return [
