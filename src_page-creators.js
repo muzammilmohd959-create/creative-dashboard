@@ -13,7 +13,7 @@ PAGES.creators = {
 
     var toggle = '<label class="chk"><input type="checkbox" id="toggleScore"' + (App.showInternalScore ? ' checked' : '') + '> Show internal score</label>';
 
-    return pageHeader('Creators', 'Every creator in your program, ranked by outcomes.', toggle) +
+    return '<div class="data-kicker"><span>CREATOR NETWORK</span><span>People → content → performance</span></div>' + pageHeader('Creators', 'Every creator in your program, ranked by outcomes.', toggle) +
       tableHTML(creatorColumns().concat(scoreCol), sorted, App.creatorsSort, 'id') +
       (App.showInternalScore ? '<p class="foot-note">*Internal score is an optional blended metric (60% ROAS, 40% CPA efficiency) for quick triage — not a primary KPI.</p>' : '');
   },
