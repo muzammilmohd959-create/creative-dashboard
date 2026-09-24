@@ -254,6 +254,8 @@
       var cv=data.creatives.filter(function(x){return x.id===t.creative_id;})[0];
       var metric=data.metrics[t.creative_id]||null;
       var sig=signal(metric);
+      var confidence = !metric || metric.spend<1000 || metric.purchases<30 ? 28 : Math.min(100, Math.round((Math.min(metric.spend/5000,1)*45)+(Math.min(metric.purchases/100,1)*55)));
+      var decisionStage = sig.label === 'Winner candidate' ? 'SCALE SIGNAL' : sig.label === 'Needs refresh' ? 'REFRESH SIGNAL' : sig.label === 'Learning' ? 'LEARNING' : 'COLLECT DATA';
       var performance=metric ?
         '<div class="test-metrics"><span>'+fmtCurrency(metric.spend)+' spend</span><span>'+fmtNum(metric.purchases)+' purchases</span><span>'+fmtCurrency2(metric.cpa)+' CPA</span><span>'+fmtX(metric.roas)+' ROAS</span></div>'+
         '<div class="test-signal '+(sig.kind||'')+'"><strong>'+esc(sig.label)+'</strong><span>'+esc(sig.text)+'</span></div>' :
@@ -274,7 +276,7 @@
 
     var summary=TEST_STATUS.map(function(s){return kpiCard(s,fmtNum(byStatus[s]));}).join('');
     return pageHeader('Creative testing','Track hypotheses from planned test → learning → winner or refresh.')+
-      '<div class="test-command-hero"><div><span class="ops-eyebrow">DECISION ENGINE</span><h2>Which creative earns the next move?</h2><p>Compare each linked test against the blended creative baseline and turn evidence into a clear testing decision.</p><div class="test-decision-flow"><span>SPEND</span><i>→</i><span>OUTCOME</span><i>→</i><strong>DECISION</strong></div></div><div class="test-command-orb"><span>TESTS</span><strong>'+fmtNum(tests.length)+'</strong><small>in evaluation</small></div></div>'+
+      '<div class="test-command-hero"><div><span class="ops-eyebrow">DECISION ENGINE</span><h2>Which creative earns the next move?</h2><p>Compare each linked test against the blended creative baseline and turn evidence into a clear testing decision.</p><div class="test-decision-flow"><span>SPEND</span><i>→</i><span>OUTCOME</span><i>→</i><strong>DECISION</strong></div></div><div class="test-command-orb"><span>TESTS</span><strong>'+fmtNum(tests.length)+'</strong><small>in evaluation</small><div class="test-orb-ring"></div></div></div>'+
       '<div class="ops-summary test-summary">'+summary+'</div>'+
       '<section><div class="ops-section-head"><div><span class="ops-eyebrow">EVIDENCE QUEUE</span><h2>Testing center</h2><p class="sub">Performance is linked to the creative when a test has a creative_id.</p></div></div>'+
       (cards || '<div class="empty big"><p><strong>No creative tests yet.</strong></p><p>Create a brief in Creative operations, then create a test from that brief.</p></div>')+
