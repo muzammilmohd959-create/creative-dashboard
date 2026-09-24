@@ -196,9 +196,11 @@ function renderCreativeDetail(creativeId) {
     { key: 'roas', label: 'ROAS', format: function (r) { return fmtX(r.roas); } }
   ], adsRows, { key: 'spend', dir: 'desc' }, null);
 
-  return pageHeader(creativeId, 'Creative detail', backBtn) +
-    '<div class="detail-card"><div>' + badges + '<div class="detail-meta" style="margin-top:8px;">' + links + '</div></div></div>' +
-    kpis +
+  return '<div class="detail-kicker"><span>CREATIVE WORKSPACE</span><span>Hook → angle → execution → outcome</span></div>' +
+    pageHeader(creativeId, 'Creative detail', backBtn) +
+    '<div class="detail-hero creative-detail-hero"><div class="detail-hero-main"><div class="creative-preview-shell">' + thumb(cv, creator) + '<div><span class="detail-eyebrow">CREATIVE SIGNAL</span><h2>' + escapeHtml(cv.hook) + '</h2><p>' + escapeHtml(cv.angle) + ' · ' + escapeHtml(cv.format) + (cv.videoLength ? ' · ' + escapeHtml(cv.videoLength + 's') : '') + '</p><div class="detail-badges">' + badges + '</div></div></div><div class="detail-hero-copy"><span class="detail-eyebrow">CONTEXT</span><p>' + links + '</p><p>Performance is evaluated across the selected date range. Use the trend and ad-level evidence below to understand the execution.</p></div></div></div>' +
+    '<div class="detail-kpi-grid">' + kpis + '</div>' +
+    '<div class="detail-surface detail-context-row"><div><span class="detail-eyebrow">EXECUTION</span><strong>' + escapeHtml(cv.cta || 'No CTA recorded') + '</strong><span>CTA</span></div><div><span class="detail-eyebrow">LAUNCHED</span><strong>' + escapeHtml(cv.launchDate || '—') + '</strong><span>Launch date</span></div><div><span class="detail-eyebrow">REVENUE</span><strong>' + fmtCurrency(m.revenue) + '</strong><span>Attributed revenue</span></div></div>' +
     '<section><h2>Performance over time</h2><div class="chart-card"><div class="chart-body" style="height:260px;"><canvas id="creativeTrendChart" role="img" aria-label="Spend and revenue over time for this creative"></canvas></div></div></section>' +
     '<section><h2>Ads under this creative</h2>' + adsTable + '</section>';
 }
