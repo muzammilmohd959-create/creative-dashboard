@@ -25,8 +25,8 @@ PAGES.ads = {
       '<button id="adFiltReset">Reset</button></div>';
 
     var sorted = sortRows(rows, App.adsSort, adColumns());
-    return pageHeader('Ad performance', 'The lowest grain \u2014 every ad placement under every creative.') + filters +
-      tableHTML(adColumns(), sorted, App.adsSort, 'id', 'No ads match these filters.');
+    var adHero = '<section class="ad-performance-hero"><div><span class="detail-eyebrow">DISTRIBUTION LAYER</span><h2>See exactly where creative performance is being bought.</h2><p>Placement-level evidence connects the creative fingerprint to paid distribution and downstream outcome.</p></div><div class="ad-scan"><i></i><span>PLACEMENT SIGNAL</span><strong>' + rows.length + '</strong><small>visible ads</small></div></section>';
+    return '<div class="data-kicker"><span>AD PERFORMANCE</span><span>Creative → placement → outcome</span></div>' + pageHeader('Ad performance', 'The lowest grain \u2014 every ad placement under every creative.') + adHero + filters + tableHTML(adColumns(), sorted, App.adsSort, 'id', 'No ads match these filters.');
   },
   mount: function (container) {
     if (!isFullMode()) return;
