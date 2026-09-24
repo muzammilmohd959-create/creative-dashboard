@@ -232,21 +232,84 @@ function arkOverviewChartMotionPlugin() {
       var area = chart.chartArea;
       if (!area) return;
       var ctx = chart.ctx;
-      var t = performance.now() / 1800;
-      var x = area.left + ((t % 1) * (area.right - area.left));
+      var now = performance.now();
+      var phase = (now % 4200) / 4200;
+      var datasets = chart.data.datasets || [];
+      var isBar = chart.config.type === 'bar';
       ctx.save();
-      var g = ctx.createLinearGradient(x - 70, 0, x + 70, 0);
-      g.addColorStop(0, 'rgba(169,150,255,0)');
-      g.addColorStop(.5, 'rgba(169,150,255,.10)');
-      g.addColorStop(1, 'rgba(169,150,255,0)');
-      ctx.fillStyle = g;
-      ctx.fillRect(x - 70, area.top, 140, area.bottom - area.top);
+
+      /* Aceternity-style tracing beam: a moving luminous sweep through the data field. */
+      var beamX = area.left + phase * (area.right - area.left);
+      var beam = ctx.createLinearGradient(beamX - 95, 0, beamX + 95, 0);
+      beam.addColorStop(0, 'rgba(169,150,255,0)');
+      beam.addColorStop(.42, 'rgba(169,150,255,.025)');
+      beam.addColorStop(.5, 'rgba(169,150,255,.16)');
+      beam.addColorStop(.58, 'rgba(169,150,255,.025)');
+      beam.addColorStop(1, 'rgba(169,150,255,0)');
+      ctx.fillStyle = beam;
+      ctx.fillRect(beamX - 95, area.top, 190, area.bottom - area.top);
+
+      if (isBar) {
+        var meta = chart.getDatasetMeta(0);
+        var bars = meta && meta.data ? meta.data : [];
+        if (bars.length) {
+          var active = Math.floor(phase * bars.length) % bars.length;
+          var bar = bars[active];
+          if (bar) {
+            var p = bar.getProps(['x','y','base','width'], true);
+            var pulse = .55 + Math.sin(now / 260) * .45;
+            ctx.shadowBlur = 22 * pulse;
+            ctx.shadowColor = 'rgba(118,82,232,.8)';
+            ctx.fillStyle = 'rgba(169,150,255,.18)';
+            ctx.fillRect(p.x - p.width / 2, p.y, p.width, p.base - p.y);
+            ctx.shadowBlur = 0;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, 3 + pulse * 2, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(255,255,255,' + (.55 + pulse * .3) + ')';
+            ctx.fill();
+          }
+        }
+      } else {
+        /* Path-following signal nodes: a real moving pulse over each plotted series. */
+        datasets.forEach(function(ds, di) {
+          var meta = chart.getDatasetMeta(di);
+          var points = meta && meta.data ? meta.data : [];
+          if (!points.length) return;
+          var pos = phase * (points.length - 1);
+          var idx = Math.floor(pos);
+          var next = Math.min(idx + 1, points.length - 1);
+          var mix = pos - idx;
+          var a = points[idx], b = points[next];
+          if (!a || !b) return;
+          var pa = a.getProps(['x','y'], true), pb = b.getProps(['x','y'], true);
+          var px = pa.x + (pb.x - pa.x) * mix;
+          var py = pa.y + (pb.y - pa.y) * mix;
+          var pulse = .6 + Math.sin(now / 220 + di) * .4;
+          var rgb = di === 0 ? '255,117,100' : '53,214,176';
+          ctx.beginPath();
+          ctx.arc(px, py, 11 + pulse * 7, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(' + rgb + ',' + (.045 + pulse * .035) + ')';
+          ctx.fill();
+          ctx.beginPath();
+          ctx.arc(px, py, 2.5 + pulse * 1.5, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(' + rgb + ',' + (.72 + pulse * .25) + ')';
+          ctx.shadowBlur = 18;
+          ctx.shadowColor = 'rgba(' + rgb + ',.8)';
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        });
+      }
       ctx.restore();
-      if (!chart.$arkMotionFrame) chart.$arkMotionFrame = requestAnimationFrame(function(){ chart.$arkMotionFrame = null; chart.draw(); });
+
+      if (!chart.$arkMotionFrame) {
+        chart.$arkMotionFrame = requestAnimationFrame(function(){
+          chart.$arkMotionFrame = null;
+          if (chart.canvas && chart.canvas.isConnected) chart.draw();
+        });
+      }
     }
   };
 }
-
 function chartOptsLine(colors, isBar) {
   return {
     responsive: true, maintainAspectRatio: false,
