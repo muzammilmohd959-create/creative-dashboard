@@ -296,6 +296,16 @@
               }).then(function(d2){c.innerHTML=renderTestingCenter(d2);}).catch(function(e){btn.disabled=false;alert(e.message||e);});
             });
           });
+          c.querySelectorAll('.test-decision').forEach(function(btn){
+            btn.addEventListener('click',function(){
+              var status=btn.dataset.status, id=btn.dataset.id;
+              btn.disabled=true;
+              client().from('creative_tests').update({status:status,updated_at:new Date().toISOString()}).eq('id',id).then(function(r){
+                if(r.error) throw r.error;
+                return loadTestingCenter();
+              }).then(function(d){c.innerHTML=renderTestingCenter(d);}).catch(function(e){btn.disabled=false;alert(e.message||e);});
+            });
+          });
           c.querySelectorAll('.test-center-advance').forEach(function(btn){
           btn.addEventListener('click',function(){
             var t=data.tests.filter(function(x){return x.id===btn.dataset.id;})[0]; if(!t)return;
