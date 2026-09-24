@@ -2872,3 +2872,23 @@ table{
   .overview-hero h1{font-size:33px!important}
   .kpi-grid,.metrics-grid,.ops-summary{grid-template-columns:1fr!important}
 }
+
+/* ================= ARKFLUENCE AURA EFFECT =================
+   Native CSS adaptation of daisyUI's Aura pattern: rotating conic
+   border light + blurred atmospheric layers. */
+.ark-aura{--aura-padding:.125rem;--aura-angle:0deg;position:relative;display:inline-block;padding:var(--aura-padding);border-radius:calc(var(--aura-padding) + var(--aura-radius,12px));color:#A996FF;background-image:conic-gradient(from var(--aura-angle),transparent 225deg,currentColor);animation:arkAura 6s linear infinite;isolation:isolate}
+.ark-aura:before,.ark-aura:after{content:"";position:absolute;z-index:-1;top:50%;left:50%;width:100%;height:100%;border-radius:inherit;transform:translate(-50%,-50%);background:inherit;opacity:.62;filter:blur(4px);pointer-events:none}
+.ark-aura:after{opacity:.25;filter:blur(16px)}
+.ark-aura>*{position:relative;z-index:1}
+.ark-aura-glow{animation:none;background:radial-gradient(closest-corner at center,currentColor 0%,transparent 90%)}
+.ark-aura-glow:before{animation:arkAuraGlow 6s ease-out infinite}
+.ark-aura-glow:after{animation:arkAuraGlowAfter 6s ease-out infinite}
+.ark-aura-dual{background-image:repeating-conic-gradient(from var(--aura-angle),transparent 0%,transparent 40%,currentColor 50%)}
+.ark-aura-teal{color:#35D6B0}
+.ark-aura-silver{color:#D8DCE5;background-image:repeating-conic-gradient(from var(--aura-angle),#313641,#E8EBF2,#7D8492,#EEF0F4,#4B5260,#313641 50%)}
+.ark-aura-sm{--aura-padding:.0625rem}.ark-aura-md{--aura-padding:.125rem}.ark-aura-lg{--aura-padding:.2rem}
+.overview-launch-aura{border-radius:12px}.overview-launch-aura .overview-launch{margin:0}
+.overview-core-aura{border-radius:50%;--aura-padding:1px;color:#A996FF}.overview-core-aura:before{opacity:.38;filter:blur(10px)}.overview-core-aura:after{opacity:.18;filter:blur(24px)}.overview-core-aura .overview-core{margin:0!important}
+@keyframes arkAura{to{--aura-angle:360deg;transform:translateZ(1px)}}@keyframes arkAuraGlow{20%,80%{opacity:.62;filter:blur(4px)}50%{opacity:.95;filter:blur(12px)}}@keyframes arkAuraGlowAfter{20%,80%{opacity:.22;filter:blur(16px)}50%{opacity:.5;filter:blur(24px)}}
+@media(prefers-reduced-motion:reduce){.ark-aura{animation-duration:24s}.ark-aura-glow:before,.ark-aura-glow:after{animation-duration:24s}}
+@media(max-width:760px){.overview-launch-aura{width:100%}.overview-launch-aura .overview-launch{width:100%}.overview-core-aura{margin:auto}}
