@@ -34,6 +34,23 @@
     });
   }
 
+  function patternHTML(items){
+    var winners=items.filter(function(x){return x.test.status==='Winner' && x.creative && x.metric;});
+    if(!winners.length) return '';
+    var groups={};
+    winners.forEach(function(x){
+      var cv=x.creative, m=x.metric, key=[cv.hook,cv.angle,cv.format].join(' | ');
+      var g=groups[key]||(groups[key]={hook:cv.hook,angle:cv.angle,format:cv.format,tests:0,spend:0,purchases:0,revenue:0,creators:{}});
+      g.tests++; g.spend+=m.spend; g.purchases+=m.purchases; g.revenue+=m.revenue;
+      if(x.brief && x.brief.creator_id) g.creators[x.brief.creator_id]=true;
+    });
+    var rows=Object.keys(groups).map(function(k){var g=groups[k];g.cpa=g.purchases?g.spend/g.purchases:0;g.roas=g.spend?g.revenue/g.spend:0;return g;}).sort(function(a,b){return b.roas-a.roas;});
+    return '<section class="validated-patterns"><div class="ops-section-head"><div><h2>Validated creative patterns</h2><p class="sub">Patterns derived only from tests marked Winner.</p></div></div><div class="pattern-grid">'+rows.map(function(g,idx){
+      var strength=g.tests>=3?'Strong':g.tests===2?'Moderate':'Emerging';
+      return '<article class="pattern-card"><div class="rec-top"><span class="insight-cat">PATTERN · '+strength+'</span><span class="rec-index">P-'+String(idx+1).padStart(2,'0')+'</span></div><h2>'+esc(g.hook)+' / '+esc(g.angle)+' / '+esc(g.format)+'</h2><div class="pattern-stats"><span>'+g.tests+' winner'+(g.tests===1?'':'s')+'</span><span>'+fmtCurrency(g.spend)+' spend</span><span>'+fmtNum(g.purchases)+' purchases</span><span>'+fmtCurrency2(g.cpa)+' CPA</span><span>'+fmtX(g.roas)+' ROAS</span></div><p class="rec-action"><strong>Pattern:</strong> Preserve this hook + angle + format combination while testing a fresh execution.</p><button class="primary pattern-create" data-pattern="'+esc(g.hook+' / '+g.angle+' / '+g.format)+'" data-proof="'+esc(fmtCurrency(g.spend)+' spend · '+fmtNum(g.purchases)+' purchases · '+fmtCurrency2(g.cpa)+' CPA · '+fmtX(g.roas)+' ROAS')+'">Create next variation →</button></article>';
+    }).join('')+'</div></section>';
+  }
+
   function feedbackHTML(items){
     if(!items.length) return '';
     var cards=items.map(function(x){
@@ -60,7 +77,7 @@
       return pageHeader('Recommendations','Evidence-backed actions for the next creative testing cycle.')+
         '<div class="rec-intro"><strong>'+fmtNum(evidence.length)+' evidence-backed opportunities</strong><span>Minimum spend and performance thresholds are applied by the intelligence engine.</span></div>'+
         '<section><div class="recommendation-grid">'+(cards||'<div class="empty">No evidence-backed recommendations yet.</div>')+'</div></section>'+
-        '<div id="testFeedbackMount"></div>';
+        '<div id="testFeedbackMount"></div><div id="patternMount"></div>';
     },
     mount: function(container){
       container.querySelectorAll('.rec-create').forEach(function(btn){
@@ -72,6 +89,13 @@
         var mount=document.getElementById('testFeedbackMount');
         if(!mount)return;
         mount.innerHTML=feedbackHTML(items);
+        var pm=document.getElementById('patternMount');
+        if(pm) pm.innerHTML=patternHTML(items);
+        container.querySelectorAll('.pattern-create').forEach(function(btn){
+          btn.addEventListener('click',function(){
+            setPage('creativeOps',{prefill:{title:'New variation · '+btn.dataset.pattern,objective:'Scale a validated creative pattern',hypothesis:'Validated winner pattern: '+btn.dataset.pattern+'. Evidence: '+btn.dataset.proof+'. Test a fresh execution while preserving the core pattern.',brief:'Preserve the validated hook, angle and format. Create a new creator-led variation with a different opening, visual treatment or CTA so the pattern can be tested without duplicating the original.',platform:'Instagram'}});
+          });
+        });
         mount.querySelectorAll('.feedback-create').forEach(function(btn){
           btn.addEventListener('click',function(){
             var status=btn.dataset.status;
