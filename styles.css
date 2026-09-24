@@ -2092,3 +2092,55 @@ linear-gradient(145deg,rgba(20,22,31,.98),rgba(11,13,19,.98));box-shadow:inset 0
   max-width:calc(100% - 16px);
   margin:0 8px 12px;
 }
+
+
+/* ================= PREMIUM TYPOGRAPHY ================= */
+:root{
+  --sans:'Space Grotesk','Inter',system-ui,sans-serif;
+}
+body{
+  letter-spacing:-.008em;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+table{
+  font-family:var(--sans);
+}
+.table-wrap thead th{
+  font-family:var(--sans);
+  font-weight:600;
+  letter-spacing:.11em;
+  font-size:9px;
+  color:#9EA7BA;
+}
+.table-wrap tbody td{
+  font-family:var(--sans);
+  font-size:13px;
+  font-weight:500;
+  letter-spacing:-.01em;
+}
+.table-wrap tbody td.table-num{
+  font-family:var(--mono);
+  font-size:12.5px;
+  font-weight:500;
+  letter-spacing:-.025em;
+  font-variant-numeric:tabular-nums;
+}
+.table-wrap tbody td.table-text{
+  font-family:var(--sans);
+  font-size:13px;
+  font-weight:550;
+  letter-spacing:-.012em;
+}
+.table-wrap tbody tr{
+  transition:background .18s ease,transform .18s ease;
+}
+.table-wrap tbody tr:hover td{
+  color:#F3F1FF;
+}
+.table-wrap tbody tr:hover td.table-num{
+  color:#CFC5FF;
+}
+@media(max-width:760px){
+  .table-wrap tbody td.table-text{font-size:12.5px}
+}
