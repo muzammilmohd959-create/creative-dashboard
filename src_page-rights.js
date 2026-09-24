@@ -1,6 +1,6 @@
 PAGES.rights = {
   render: function () {
-    if (App.mode === 'empty') return pageHeader('Rights management', 'Usage rights and authorization status for every creative.') + noDataState('rights management');
+    if (App.mode === 'empty') return '<div class="data-kicker"><span>RIGHTS CONTROL</span><span>Authorization → expiry → continuity</span></div>' + pageHeader('Rights management', 'Usage rights and authorization status for every creative.') + noDataState('rights management');
     if (App.mode === 'csv') return pageHeader('Rights management', 'Usage rights and authorization status for every creative.') + csvModeState('Rights management');
 
     var d = App.data;
