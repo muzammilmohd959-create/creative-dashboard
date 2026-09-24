@@ -266,7 +266,7 @@ function sortRows(rows, sortState, columns) {
   });
 }
 
-function tableHTML(columns, rows, sortState, rowIdKey, emptyMsg) {
+function tableHTML(columns, rows, sortState, rowIdKey, emptyMsg, expandRenderer) {
   if (!rows.length) return '<div class="empty">' + (emptyMsg || 'No data to show.') + '</div>';
 
   var metricKeys = ['budget','spend','revenue','purchases','cpa','roas','ctr','cpc','conversions'];
@@ -303,7 +303,7 @@ function tableHTML(columns, rows, sortState, rowIdKey, emptyMsg) {
       columns.map(function(col){
         return '<td class="' + (col.align === 'left' ? 'grid-cell-left' : 'grid-cell-right') + '" style="text-align:' + (col.align || 'right') + '">' + cellValue(r,col) + '</td>';
       }).join('') +
-      '<td class="grid-row-action"><span>↗</span></td></tr>';
+      '<td class="grid-row-action">' + (expandRenderer ? '<button type="button" class="grid-expand" aria-label="Expand row" aria-expanded="false">+</button>' : '<span>↗</span>') + '</td></tr>' + (expandRenderer ? '<tr class="grid-detail-row" data-detail-for="' + escapeHtml(rowIdKey ? r[rowIdKey] : i) + '" hidden><td colspan="' + (columns.length + 2) + '">' + expandRenderer(r) + '</td></tr>' : '');
   }).join('') + '</tbody>';
 
   return '<div class="table-wrap premium-grid"><table>' + thead + tbody + '</table></div>';
@@ -315,6 +315,20 @@ function wireTable(container, sortState, rerender, onRowClick) {
       if (sortState.key === key) sortState.dir = sortState.dir === 'asc' ? 'desc' : 'asc';
       else { sortState.key = key; sortState.dir = 'desc'; }
       rerender();
+    });
+  });
+  container.querySelectorAll('.grid-expand').forEach(function (btn) {
+    btn.addEventListener('click', function (event) {
+      event.stopPropagation();
+      var row = btn.closest('tr');
+      var id = row && row.getAttribute('data-row-id');
+      var detail = id ? container.querySelector('.grid-detail-row[data-detail-for="' + CSS.escape(id) + '"]') : null;
+      if (!detail) return;
+      var open = !detail.hidden;
+      detail.hidden = open;
+      btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+      btn.textContent = open ? '+' : '−';
+      if (row) row.classList.toggle('is-expanded', !open);
     });
   });
   if (onRowClick) {
