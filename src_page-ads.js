@@ -26,7 +26,7 @@ PAGES.ads = {
 
     var sorted = sortRows(rows, App.adsSort, adColumns());
     var adHero = '<section class="ad-performance-hero"><div><span class="detail-eyebrow">DISTRIBUTION LAYER</span><h2>See exactly where creative performance is being bought.</h2><p>Placement-level evidence connects the creative fingerprint to paid distribution and downstream outcome.</p></div><div class="ad-scan"><i></i><span>PLACEMENT SIGNAL</span><strong>' + rows.length + '</strong><small>visible ads</small></div></section>';
-    return '<div class="data-kicker"><span>AD PERFORMANCE</span><span>Creative → placement → outcome</span></div>' + pageHeader('Ad performance', 'The lowest grain \u2014 every ad placement under every creative.') + adHero + filters + tableHTML(adColumns(), sorted, App.adsSort, 'id', 'No ads match these filters.');
+    return '<div class="data-kicker"><span>AD PERFORMANCE</span><span>Creative → placement → outcome</span></div>' + pageHeader('Ad performance', 'The lowest grain \u2014 every ad placement under every creative.') + adHero + filters + tableHTML(adColumns(), sorted, App.adsSort, 'id', 'No ads match these filters.', renderAdRowExpansion);
   },
   mount: function (container) {
     if (!isFullMode()) return;
@@ -43,6 +43,11 @@ PAGES.ads = {
     });
   }
 };
+
+
+function renderAdRowExpansion(row) {
+  return '<div class="grid-insight-panel ad-insight-panel"><div class="grid-insight-main"><div class="grid-insight-eyebrow">PLACEMENT SIGNAL</div><div class="grid-insight-title">'+escapeHtml(row.id)+'<span>'+escapeHtml(row.placement)+' · '+escapeHtml(row.creatorName)+' · '+escapeHtml(row.campaignName)+'</span></div><div class="grid-insight-flow"><span>CREATIVE</span><i>→</i><span>PLACEMENT</span><i>→</i><span>OUTCOME</span></div></div><div class="grid-insight-metrics"><div><span>Spend</span><strong>'+fmtCurrency(row.spend)+'</strong><small>'+fmtNum(row.impressions)+' impressions</small></div><div><span>CTR</span><strong>'+fmtPct(row.ctr)+'</strong><small>'+fmtNum(row.clicks)+' clicks</small></div><div><span>ROAS</span><strong>'+fmtX(row.roas)+'</strong><small>'+fmtCurrency(row.revenue)+' revenue</small></div></div><div class="grid-insight-creators"><div class="grid-insight-section-label">AD SIGNAL</div><div class="grid-creator-signal"><span class="grid-rank">LIVE</span><strong>'+escapeHtml(row.creativeId)+'</strong><span class="grid-creator-bar"><i style="width:'+Math.max(8,Math.min(100,(row.roas/Math.max(1,4))*100)).toFixed(1)+'%"></i></span><b>'+fmtCurrency2(row.cpa)+' CPA</b></div></div><div class="grid-insight-footer"><span>'+escapeHtml(row.placement)+'</span><span>'+fmtNum(row.purchases)+' purchases</span><button type="button" class="btn-small" onclick="setPage(\'creatives\',{creativeId:\''+escapeHtml(row.creativeId)+'\'})">OPEN CREATIVE WORKSPACE →</button></div></div>';
+}
 
 function adColumns() {
   return [
