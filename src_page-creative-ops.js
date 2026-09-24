@@ -274,8 +274,9 @@
 
     var summary=TEST_STATUS.map(function(s){return kpiCard(s,fmtNum(byStatus[s]));}).join('');
     return pageHeader('Creative testing','Track hypotheses from planned test → learning → winner or refresh.')+
+      '<div class="test-command-hero"><div><span class="ops-eyebrow">DECISION ENGINE</span><h2>Which creative earns the next move?</h2><p>Compare each linked test against the blended creative baseline and turn evidence into a clear testing decision.</p><div class="test-decision-flow"><span>SPEND</span><i>→</i><span>OUTCOME</span><i>→</i><strong>DECISION</strong></div></div><div class="test-command-orb"><span>TESTS</span><strong>'+fmtNum(tests.length)+'</strong><small>in evaluation</small></div></div>'+
       '<div class="ops-summary test-summary">'+summary+'</div>'+
-      '<section><div class="ops-section-head"><div><h2>Testing center</h2><p class="sub">Performance is linked to the creative when a test has a creative_id.</p></div></div>'+
+      '<section><div class="ops-section-head"><div><span class="ops-eyebrow">EVIDENCE QUEUE</span><h2>Testing center</h2><p class="sub">Performance is linked to the creative when a test has a creative_id.</p></div></div>'+
       (cards || '<div class="empty big"><p><strong>No creative tests yet.</strong></p><p>Create a brief in Creative operations, then create a test from that brief.</p></div>')+
       '</section>';
   }
