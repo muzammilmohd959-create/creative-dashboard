@@ -272,11 +272,14 @@ function tableHTML(columns, rows, sortState, rowIdKey, emptyMsg) {
     var arrow = sortState && sortState.key === c.key ? (sortState.dir === 'asc' ? ' \u25B2' : ' \u25BC') : '';
     return '<th data-sort-key="' + c.key + '" style="text-align:' + (c.align || 'right') + '">' + escapeHtml(c.label) + '<span class="arrow">' + arrow + '</span></th>';
   }).join('') + '</tr></thead>';
-  var tbody = '<tbody>' + rows.map(function (r) {
+  var tbody = '<tbody>' + rows.map(function (r, i) {
     var rowAttr = rowIdKey ? ' data-row-id="' + escapeHtml(r[rowIdKey]) + '" class="clickable-row"' : '';
-    return '<tr' + rowAttr + '>' + columns.map(function (c) {
+    return '<tr' + rowAttr + ' style="--row-index:' + i + '">' + columns.map(function (c) {
       var val = c.format ? c.format(r) : escapeHtml(r[c.key]);
-      return '<td class="' + (c.align === 'left' ? 'table-text' : 'table-num') + '" style="text-align:' + (c.align || 'right') + '">' + val + '</td>';
+      var cls = c.align === 'left' ? 'table-text' : 'table-num';
+      if (c.key === 'status') cls += ' table-status';
+      if (c.key === 'name' || c.key === 'id') cls += ' table-primary';
+      return '<td class="' + cls + '" style="text-align:' + (c.align || 'right') + '">' + val + '</td>';
     }).join('') + '</tr>';
   }).join('') + '</tbody>';
   return '<div class="table-wrap"><table>' + thead + tbody + '</table></div>';
