@@ -16,7 +16,7 @@ PAGES.creators = {
     var creatorHero = '<section class="creator-network-hero"><div><span class="detail-eyebrow">CREATOR NETWORK</span><h2>People are the creative distribution layer.</h2><p>See who is producing content, where that content is being deployed, and how creator-level outcomes connect back to the performance system.</p><div class="creator-network-flow"><span>CREATOR</span><i>→</i><span>CONTENT</span><i>→</i><span>PAID</span><i>→</i><strong>OUTCOME</strong></div></div><div class="creator-network-visual"><div class="cn-ring r1"></div><div class="cn-ring r2"></div><div class="cn-core"><span>NETWORK</span><strong>' + rows.length + '</strong><small>creators</small></div><i></i><b></b><em></em></div></section>';
     var networkPulse = '<div class="network-pulse"><span>LIVE NETWORK</span><strong>' + rows.length + '</strong><small>active creator profiles</small></div>';
     return '<div class="data-kicker"><span>CREATOR NETWORK</span><span>People → content → performance</span></div>' + pageHeader('Creators', 'Every creator in your program, ranked by outcomes.', toggle) +
-      creatorHero + '<div class="creator-network-strip">' + networkPulse + '<div><span>CONTENT OUTPUT</span><strong>' + d.creatives.length + '</strong><small>tracked creatives</small></div><div><span>PAID DISTRIBUTION</span><strong>' + d.ads.length + '</strong><small>ad placements</small></div><div><span>OUTCOME SIGNAL</span><strong>' + fmtX(d.overall.roas) + '</strong><small>blended ROAS</small></div></div>' + tableHTML(creatorColumns().concat(scoreCol), sorted, App.creatorsSort, 'id') +
+      creatorHero + '<div class="creator-network-strip">' + networkPulse + '<div><span>CONTENT OUTPUT</span><strong>' + d.creatives.length + '</strong><small>tracked creatives</small></div><div><span>PAID DISTRIBUTION</span><strong>' + d.ads.length + '</strong><small>ad placements</small></div><div><span>OUTCOME SIGNAL</span><strong>' + fmtX(d.overall.roas) + '</strong><small>blended ROAS</small></div></div>' + tableHTML(creatorColumns().concat(scoreCol), sorted, App.creatorsSort, 'id', null, renderCreatorRowExpansion) +
       (App.showInternalScore ? '<p class="foot-note">*Internal score is an optional blended metric (60% ROAS, 40% CPA efficiency) for quick triage — not a primary KPI.</p>' : '');
   },
   mount: function (container) {
@@ -27,6 +27,21 @@ PAGES.creators = {
     if (cb) cb.addEventListener('change', function () { App.showInternalScore = cb.checked; mountPage(); });
   }
 };
+
+
+function renderCreatorRowExpansion(row) {
+  var d = App.data;
+  var creatives = d.creatives.filter(function(cv){ return cv.creatorId === row.id; });
+  var campaigns = unique(creatives.map(function(cv){ return cv.campaignId; }));
+  var topCreative = creatives.map(function(cv){
+    return Object.assign({id:cv.id,hook:cv.hook,format:cv.format}, d.creativeMetrics[cv.id] || aggregate([]));
+  }).sort(function(a,b){return (b.roas||0)-(a.roas||0);})[0];
+  return '<div class="grid-insight-panel creator-insight-panel">' +
+    '<div class="grid-insight-main"><div class="grid-insight-eyebrow">CREATOR SIGNAL</div><div class="grid-insight-title">'+escapeHtml(row.name)+'<span>CREATOR → CONTENT → PAID → OUTCOME</span></div><div class="grid-insight-flow"><span>'+creatives.length+' CREATIVES</span><i>→</i><span>'+campaigns.length+' CAMPAIGNS</span><i>→</i><span>'+fmtX(row.roas)+' ROAS</span></div></div>' +
+    '<div class="grid-insight-metrics"><div><span>Revenue</span><strong>'+fmtCurrency(row.revenue)+'</strong><small>'+fmtNum(row.purchases)+' purchases</small></div><div><span>Spend</span><strong>'+fmtCurrency(row.spend)+'</strong><small>'+fmtCurrency2(row.cpa)+' CPA</small></div><div><span>Best creative</span><strong>'+(topCreative ? fmtX(topCreative.roas) : '—')+'</strong><small>'+(topCreative ? escapeHtml(topCreative.id) : 'No signal')+'</small></div></div>' +
+    '<div class="grid-insight-creators"><div class="grid-insight-section-label">TOP CREATIVE SIGNAL</div>'+(topCreative ? '<div class="grid-creator-signal"><span class="grid-rank">01</span><strong>'+escapeHtml(topCreative.hook)+'</strong><span class="grid-creator-bar"><i style="width:'+Math.max(8,Math.min(100,(topCreative.roas/Math.max(1,row.roas))*100)).toFixed(1)+'%"></i></span><b>'+fmtX(topCreative.roas)+'</b></div>' : '<div class="grid-empty-signal">No creative signal available.</div>')+'</div>' +
+    '<div class="grid-insight-footer"><span>'+creatives.length+' creatives</span><span>'+campaigns.length+' campaigns</span><button type="button" class="btn-small" onclick="setPage(\'creators\',{creatorId:\''+escapeHtml(row.id)+'\'})">OPEN CREATOR WORKSPACE →</button></div></div>';
+}
 
 function creatorColumns() {
   return [
