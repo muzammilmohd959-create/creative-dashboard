@@ -1036,3 +1036,24 @@ section:nth-of-type(3){animation-delay:.10s}
   .ops-section-head-premium{align-items:flex-start}
   .test-metrics{grid-template-columns:1fr 1fr}
 }
+
+/* Data-surface finishing layer */
+.data-kicker{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:2px 0 10px;color:var(--muted);font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+.data-kicker span:first-child{color:var(--accent-2)}
+.data-kicker span:last-child{letter-spacing:.04em;font-weight:600;text-transform:none}
+.data-kicker+section,.data-kicker+.page-header{margin-top:0}
+.filter-row{position:relative}
+.filter-row select,.filter-row input{min-height:38px;transition:border-color .18s ease,box-shadow .18s ease,transform .18s ease}
+.filter-row select:focus,.filter-row input:focus{border-color:rgba(139,92,246,.65)!important;box-shadow:0 0 0 3px rgba(139,92,246,.1);outline:none}
+.table-wrap{border-radius:16px;overflow:hidden;border:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,.018),rgba(255,255,255,0))}
+.table-wrap table{margin:0}
+.table-wrap thead th{background:rgba(255,255,255,.025);font-size:10px;letter-spacing:.08em;text-transform:uppercase}
+.table-wrap tbody tr{transition:background .16s ease,transform .16s ease}
+.table-wrap tbody tr:hover{background:rgba(139,92,246,.045)}
+.creative-grid{gap:16px}
+.creative-card{border:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.012));border-radius:16px;overflow:hidden;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
+.creative-card:hover{transform:translateY(-3px);border-color:rgba(139,92,246,.45);box-shadow:0 16px 38px rgba(0,0,0,.25),0 0 26px rgba(139,92,246,.07)}
+.cc-metrics{border-top:1px solid var(--border);padding-top:10px;margin-top:12px}
+.stat-chip{transition:transform .18s ease,border-color .18s ease,background .18s ease}
+.stat-chip:hover{transform:translateY(-2px);border-color:rgba(139,92,246,.4);background:rgba(139,92,246,.055)}
+@media(max-width:760px){.data-kicker{align-items:flex-start;flex-direction:column;gap:5px}.data-kicker span:last-child{font-size:10px}.table-wrap{border-radius:12px}}
