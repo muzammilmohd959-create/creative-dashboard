@@ -79,7 +79,10 @@ function renderCampaignDetail(campaignId) {
     });
   var creatorsTable = tableHTML(creatorColumns(), creatorRows, { key: 'spend', dir: 'desc' }, 'id');
 
-  return pageHeader(camp.name, 'Campaign detail', backBtn) + infoCard + kpis +
+  return '<div class="detail-kicker"><span>CAMPAIGN WORKSPACE</span><span>Budget → creative mix → outcome</span></div>' +
+    pageHeader(camp.name, 'Campaign detail', backBtn) +
+    '<div class="detail-hero campaign-detail-hero">' + infoCard + '<div class="campaign-hero-side"><span class="detail-eyebrow">BUDGET PULSE</span><strong>' + pctBudget.toFixed(0) + '%</strong><span>of allocated budget used</span></div></div>' +
+    '<div class="detail-kpi-grid">' + kpis + '</div>' +
     '<section><h2>Performance over time</h2><div class="chart-card"><div class="chart-body" style="height:260px;"><canvas id="campaignTrendChart" role="img" aria-label="Spend and revenue over time for this campaign"></canvas></div></div></section>' +
     '<section><h2>Creatives in this campaign</h2>' + creativesTable + '</section>' +
     '<section><h2>Creators in this campaign</h2>' + creatorsTable + '</section>';
