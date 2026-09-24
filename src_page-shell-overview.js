@@ -189,7 +189,10 @@ function renderInsightsSummary(insights) {
 function chartOptsLine(colors, isBar) {
   return {
     responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { display: !isBar, position: 'top', align: 'end', labels: { color: colors.text, boxWidth: 10, font: { size: 11 } } } },
+    animation: { duration: 1100, easing: 'easeOutQuart', delay: function(ctx){ return ctx.type === 'data' ? ctx.dataIndex * 18 : 0; } },
+    transitions: { active: { animation: { duration: 220 } } },
+    interaction: { mode: 'index', intersect: false },
+    plugins: { legend: { display: !isBar, position: 'top', align: 'end', labels: { color: colors.text, boxWidth: 10, font: { size: 11 } } }, tooltip: { animation: { duration: 180 }, displayColors: true, padding: 10, cornerRadius: 8 } },
     scales: {
       x: { ticks: { color: colors.text, maxRotation: 0, autoSkip: true, font: { size: 10 } }, grid: { display: false } },
       y: { ticks: { color: colors.text, font: { size: 10 } }, grid: { color: colors.grid } }
