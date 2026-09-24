@@ -300,8 +300,23 @@ function wireTable(container, sortState, rerender, onRowClick) {
 
 // ================= KPI card helper =================
 function kpiCard(label, value, sub) {
-  return '<div class="kpi"><div class="label">' + escapeHtml(label) + '</div><div class="value">' + value + '</div>' +
-    (sub ? '<div class="kpi-sub">' + sub + '</div>' : '') + '</div>';
+  var icons = {
+    'Spend':'↗',
+    'Revenue':'◈',
+    'Purchases':'＋',
+    'CPA':'◎',
+    'ROAS':'✦',
+    'CTR':'⌁',
+    'CPC':'◇',
+    'Conversion rate':'↗'
+  };
+  var icon = icons[label] || '•';
+  return '<div class="kpi kpi-premium">' +
+    '<div class="kpi-top"><span class="label">' + escapeHtml(label) + '</span><span class="kpi-icon">' + icon + '</span></div>' +
+    '<div class="kpi-value-row"><div class="value">' + value + '</div><span class="kpi-live"><i></i> LIVE</span></div>' +
+    (sub ? '<div class="kpi-sub">' + escapeHtml(sub) + '</div>' : '') +
+    '<div class="kpi-signal"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>' +
+    '</div>';
 }
 
 function badge(text, kind) {
