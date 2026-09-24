@@ -13,8 +13,9 @@ PAGES.creators = {
 
     var toggle = '<label class="chk"><input type="checkbox" id="toggleScore"' + (App.showInternalScore ? ' checked' : '') + '> Show internal score</label>';
 
+    var creatorHero = '<section class="creator-network-hero"><div><span class="detail-eyebrow">CREATOR NETWORK</span><h2>People are the creative distribution layer.</h2><p>See who is producing content, where that content is being deployed, and how creator-level outcomes connect back to the performance system.</p><div class="creator-network-flow"><span>CREATOR</span><i>→</i><span>CONTENT</span><i>→</i><span>PAID</span><i>→</i><strong>OUTCOME</strong></div></div><div class="creator-network-visual"><div class="cn-ring r1"></div><div class="cn-ring r2"></div><div class="cn-core"><span>NETWORK</span><strong>' + rows.length + '</strong><small>creators</small></div><i></i><b></b><em></em></div></section>';
     return '<div class="data-kicker"><span>CREATOR NETWORK</span><span>People → content → performance</span></div>' + pageHeader('Creators', 'Every creator in your program, ranked by outcomes.', toggle) +
-      tableHTML(creatorColumns().concat(scoreCol), sorted, App.creatorsSort, 'id') +
+      creatorHero + tableHTML(creatorColumns().concat(scoreCol), sorted, App.creatorsSort, 'id') +
       (App.showInternalScore ? '<p class="foot-note">*Internal score is an optional blended metric (60% ROAS, 40% CPA efficiency) for quick triage — not a primary KPI.</p>' : '');
   },
   mount: function (container) {
