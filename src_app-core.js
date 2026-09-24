@@ -276,7 +276,7 @@ function tableHTML(columns, rows, sortState, rowIdKey, emptyMsg) {
     var rowAttr = rowIdKey ? ' data-row-id="' + escapeHtml(r[rowIdKey]) + '" class="clickable-row"' : '';
     return '<tr' + rowAttr + '>' + columns.map(function (c) {
       var val = c.format ? c.format(r) : escapeHtml(r[c.key]);
-      return '<td style="text-align:' + (c.align || 'right') + '">' + val + '</td>';
+      return '<td class="' + (c.align === 'left' ? 'table-text' : 'table-num') + '" style="text-align:' + (c.align || 'right') + '">' + val + '</td>';
     }).join('') + '</tr>';
   }).join('') + '</tbody>';
   return '<div class="table-wrap"><table>' + thead + tbody + '</table></div>';
