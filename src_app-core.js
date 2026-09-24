@@ -268,23 +268,41 @@ function sortRows(rows, sortState, columns) {
 
 function tableHTML(columns, rows, sortState, rowIdKey, emptyMsg) {
   if (!rows.length) return '<div class="empty">' + (emptyMsg || 'No data to show.') + '</div>';
-  var thead = '<thead><tr>' + columns.map(function (c) {
-    var arrow = sortState && sortState.key === c.key ? (sortState.dir === 'asc' ? ' \u25B2' : ' \u25BC') : '';
-    return '<th data-sort-key="' + c.key + '" style="text-align:' + (c.align || 'right') + '">' + escapeHtml(c.label) + '<span class="arrow">' + arrow + '</span></th>';
+
+  var thead = '<thead><tr>' + columns.map(function (c, ci) {
+    var arrow = sortState && sortState.key === c.key ? (sortState.dir === 'asc' ? ' ▲' : ' ▼') : '';
+    var cls = ci === 0 ? 'grid-head-primary' : (c.align === 'left' ? 'grid-head-text' : 'grid-head-num');
+    return '<th class="' + cls + '" data-sort-key="' + c.key + '" style="text-align:' + (c.align || 'right') + '">' +
+      '<span>' + escapeHtml(c.label) + '</span><span class="arrow">' + arrow + '</span></th>';
   }).join('') + '</tr></thead>';
+
   var tbody = '<tbody>' + rows.map(function (r, i) {
     var rowAttr = rowIdKey ? ' data-row-id="' + escapeHtml(r[rowIdKey]) + '" class="clickable-row"' : '';
-    return '<tr' + rowAttr + ' style="--row-index:' + i + '">' + columns.map(function (c) {
-      var val = c.format ? c.format(r) : escapeHtml(r[c.key]);
-      var cls = c.align === 'left' ? 'table-text' : 'table-num';
-      if (c.key === 'status') cls += ' table-status';
-      if (c.key === 'name' || c.key === 'id') cls += ' table-primary';
-      return '<td class="' + cls + '" style="text-align:' + (c.align || 'right') + '">' + val + '</td>';
-    }).join('') + '</tr>';
+    return '<tr' + rowAttr + ' style="--row-index:' + i + '">' +
+      '<td class="grid-row-marker"><span class="grid-row-number">' + String(i + 1).padStart(2,'0') + '</span></td>' +
+      columns.map(function (c, ci) {
+        var val = c.format ? c.format(r) : escapeHtml(r[c.key]);
+        var cls = c.align === 'left' ? 'table-text' : 'table-num';
+        if (c.key === 'status') cls += ' table-status';
+        if (c.key === 'name' || c.key === 'id') cls += ' table-primary';
+        if (ci === 0) cls += ' grid-entity';
+        if (['spend','revenue','purchases','cpa','roas'].indexOf(c.key) !== -1) cls += ' grid-metric';
+        return '<td class="' + cls + '" style="text-align:' + (c.align || 'right') + '">' + val + '</td>';
+      }).join('') +
+      '<td class="grid-row-action"><span>↗</span></td>' +
+      '</tr>';
   }).join('') + '</tbody>';
-  return '<div class="table-wrap"><table>' + thead + tbody + '</table></div>';
-}
 
+  return '<div class="table-wrap premium-grid"><table><thead><tr>' +
+    '<th class="grid-index-head"></th>' +
+    columns.map(function (c, ci) {
+      var arrow = sortState && sortState.key === c.key ? (sortState.dir === 'asc' ? ' ▲' : ' ▼') : '';
+      var cls = ci === 0 ? 'grid-head-primary' : (c.align === 'left' ? 'grid-head-text' : 'grid-head-num');
+      return '<th class="' + cls + '" data-sort-key="' + c.key + '" style="text-align:' + (c.align || 'right') + '">' +
+        '<span>' + escapeHtml(c.label) + '</span><span class="arrow">' + arrow + '</span></th>';
+    }).join('') +
+    '<th class="grid-action-head"></th></tr></thead>' + tbody + '</table></div>';
+}
 function wireTable(container, sortState, rerender, onRowClick) {
   container.querySelectorAll('[data-sort-key]').forEach(function (th) {
     th.addEventListener('click', function () {
