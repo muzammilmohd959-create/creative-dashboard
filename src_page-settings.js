@@ -32,7 +32,7 @@ PAGES.settings = {
       (App.mode === 'demo' ? '<p class="foot-note">Have an empty Supabase project? <button id="btnSupaPush" style="margin-left:4px;">Push this demo dataset to Supabase</button> once connected.</p>' : '') +
       '</section>';
 
-    return pageHeader('Settings', 'App mode, theme, and data source connections.') +
+    return '<div class="data-kicker"><span>SYSTEM CONTROL</span><span>Data → integrations → workspace</span></div>' + pageHeader('Settings', 'App mode, theme, and data source connections.') +
       '<section><h2>Data</h2><div class="detail-card"><div><div class="detail-name">' + escapeHtml(modeLabel) + '</div>' +
       '<div class="detail-meta">' + modeMeta + '</div></div></div></section>' +
       '<section><h2>Appearance</h2><div class="filter-row"><button id="themeLight">Light</button><button id="themeDark">Dark</button><button id="themeSystem">Match system</button></div></section>' +
