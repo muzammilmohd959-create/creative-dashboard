@@ -26,11 +26,21 @@ function renderSidebar() {
 }
 
 function setPage(page, params) {
+  var previous = App.page;
   App.page = page;
   App.params = params || {};
   renderSidebar();
-  mountPage();
-  window.scrollTo(0, 0);
+  var container = document.getElementById('pageContent');
+  if (container && previous !== page) {
+    container.classList.add('page-transition-out');
+    setTimeout(function(){
+      mountPage();
+      window.scrollTo({top:0,behavior:'smooth'});
+    }, 140);
+  } else {
+    mountPage();
+    window.scrollTo(0, 0);
+  }
 }
 
 var PAGES = {}; // filled in by each page module: { render: fn, mount: fn }
