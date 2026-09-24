@@ -110,7 +110,7 @@ PAGES.overview = {
           '</div>' +
           '<div class="overview-visual" aria-label="Creative performance system visualization">' +
             '<div class="overview-orbit orbit-one"></div><div class="overview-orbit orbit-two"></div>' +
-            '<div class="overview-core"><span class="core-brand">ARKFLUENCE</span><strong>ARKFLUENCE</strong><small>CREATIVE SIGNAL ENGINE</small></div>' +
+            '<div class="ark-aura ark-aura-dual overview-core-aura"><div class="overview-core"><span class="core-brand">ARKFLUENCE</span><strong>ARKFLUENCE</strong><small>CREATIVE SIGNAL ENGINE</small></div></div>' +
             '<div class="overview-node node-a"><b>01</b><span>CREATORS</span><strong>Source</strong></div>' +
             '<div class="overview-node node-b"><b>02</b><span>CONTENT</span><strong>Test</strong></div>' +
             '<div class="overview-node node-c"><b>03</b><span>PERFORMANCE</span><strong>Learn</strong></div>' +
