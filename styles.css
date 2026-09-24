@@ -2630,3 +2630,42 @@ table{
   .grid-insight-footer{flex-wrap:wrap}
   .grid-insight-footer .btn-small{margin-left:0;width:100%}
 }
+
+
+/* ================= SETTINGS NAV — ALWAYS VISIBLE =================
+   Keep Settings pinned to the bottom of the desktop workspace so it
+   never disappears below the scrollable navigation list. */
+@media(min-width:761px){
+  .sidebar{
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    height:100dvh;
+    min-height:0;
+    overflow:hidden!important;
+  }
+  #sidebarNav{
+    flex:1 1 auto;
+    min-height:0;
+    overflow-y:auto;
+    overflow-x:hidden;
+    padding-bottom:58px;
+  }
+  .nav-settings{
+    position:absolute!important;
+    left:13px;
+    right:13px;
+    bottom:10px;
+    z-index:20;
+    display:block;
+    margin:0!important;
+    padding:8px 0 0!important;
+    border-top:1px solid var(--border);
+    background:linear-gradient(180deg,transparent 0,var(--sidebar-bg) 18%);
+  }
+  .nav-settings .nav-item{
+    display:grid;
+    width:100%!important;
+    margin:0!important;
+  }
+}
