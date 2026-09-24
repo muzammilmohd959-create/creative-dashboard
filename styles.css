@@ -1812,3 +1812,27 @@ thead th{background:#F7F8FB}tbody tr.clickable-row:hover{background:#F5F3FC}
 
 /* ================= PAGE TRANSITION SIGNATURE ================= */
 #pageContent{position:relative;min-height:100%;isolation:isolate}#pageContent:before{content:"";position:fixed;z-index:40;top:0;left:0;width:0;height:2px;background:linear-gradient(90deg,#7652E8,#A996FF,#35D6B0);box-shadow:0 0 16px rgba(118,82,232,.55);pointer-events:none;opacity:0}#pageContent.page-transition-out:before{width:100%;opacity:1;transition:width .14s ease,opacity .1s ease}#pageContent.page-enter:before{width:100%;opacity:1}#pageContent.page-enter-active:before{width:0;opacity:0;transition:width .48s cubic-bezier(.2,.7,.2,1),opacity .12s ease .36s}.page-enter .page-head{animation:pageHeadIn .55s cubic-bezier(.2,.7,.2,1) .04s both}.page-enter .kpi:nth-child(1){animation:staggerIn .5s ease .08s both}.page-enter .kpi:nth-child(2){animation:staggerIn .5s ease .12s both}.page-enter .kpi:nth-child(3){animation:staggerIn .5s ease .16s both}.page-enter .kpi:nth-child(4){animation:staggerIn .5s ease .2s both}@keyframes pageHeadIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}@keyframes staggerIn{from{opacity:0;transform:translateY(12px) scale(.985)}to{opacity:1;transform:none}}@media(prefers-reduced-motion:reduce){#pageContent:before{display:none}.page-enter .page-head,.page-enter .kpi{animation:none!important}}
+
+
+/* ================= ARKFLUENCE Command Palette ================= */
+.command-palette-backdrop{position:fixed;inset:0;z-index:9999;display:flex;align-items:flex-start;justify-content:center;padding:13vh 20px 40px;background:rgba(3,4,8,.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);opacity:0;visibility:hidden;transition:opacity .2s ease,visibility .2s ease}
+.command-palette-backdrop.is-open{opacity:1;visibility:visible}
+.command-palette{width:min(680px,100%);overflow:hidden;border:1px solid rgba(167,139,250,.22);border-radius:18px;background:linear-gradient(180deg,rgba(19,21,29,.98),rgba(11,13,18,.99));box-shadow:0 32px 100px rgba(0,0,0,.52),0 0 60px rgba(118,82,232,.12);transform:translateY(-12px) scale(.985);transition:transform .25s cubic-bezier(.2,.7,.2,1)}
+.command-palette-backdrop.is-open .command-palette{transform:none}
+.command-palette-head{display:flex;align-items:center;gap:12px;padding:14px;border-bottom:1px solid var(--border)}
+.command-mark{display:grid;place-items:center;width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,#7652E8,#A996FF);color:#fff;font:800 9px var(--mono);letter-spacing:.08em;box-shadow:0 0 22px rgba(118,82,232,.28)}
+.command-palette-head input{flex:1;min-width:0;border:0!important;background:transparent!important;box-shadow:none!important;outline:0!important;color:var(--text);font:500 14px var(--sans)}
+.command-palette-head input::placeholder{color:var(--muted)}
+.command-palette kbd{padding:4px 7px;border:1px solid var(--border);border-radius:6px;background:var(--surface-2);color:var(--muted);font:600 8px var(--mono);letter-spacing:.06em}
+.command-palette-meta{display:flex;justify-content:space-between;gap:12px;padding:9px 15px;color:var(--muted);font:600 8px var(--mono);letter-spacing:.1em;text-transform:uppercase}
+.command-palette-results{max-height:390px;overflow:auto;padding:5px 8px 10px}
+.command-item{display:grid;grid-template-columns:36px 1fr 24px;align-items:center;width:100%;padding:11px 10px;border:1px solid transparent;border-radius:10px;background:transparent;color:var(--text);text-align:left;cursor:pointer;transition:background .15s ease,border-color .15s ease,transform .15s ease}
+.command-item:hover,.command-item.selected{background:rgba(118,82,232,.1);border-color:rgba(167,139,250,.14);transform:translateX(2px)}
+.command-item-index{color:var(--muted);font:700 8px var(--mono)}
+.command-item-label{font:600 12px var(--sans)}
+.command-item-arrow{color:var(--accent-2);text-align:right;font-size:14px}
+.command-empty{padding:32px 16px;text-align:center;color:var(--muted);font-size:12px}
+:root[data-theme="light"] .command-palette-backdrop{background:rgba(20,22,28,.28)}
+:root[data-theme="light"] .command-palette{background:rgba(255,255,255,.98);box-shadow:0 30px 90px rgba(24,30,42,.18),0 0 45px rgba(118,82,232,.1)}
+@media(max-width:640px){.command-palette-backdrop{padding:8vh 12px 24px}.command-palette-meta span:last-child{display:none}.command-palette-results{max-height:55vh}}
+@media(prefers-reduced-motion:reduce){.command-palette,.command-palette-backdrop,.command-item{transition:none!important}}
