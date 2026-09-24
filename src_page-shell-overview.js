@@ -1,8 +1,21 @@
 // ================= Shell =================
 function renderSidebar() {
-  var html = NAV_ITEMS.map(function (item) {
-    var active = App.page === item.id;
-    return '<button class="nav-item' + (active ? ' active' : '') + '" data-page="' + item.id + '">' + escapeHtml(item.label) + '</button>';
+  var groups = [
+    { label:'COMMAND', ids:['overview'] },
+    { label:'DATA', ids:['creators','creatives','campaigns','ads'] },
+    { label:'INTELLIGENCE', ids:['intelligence','patternExplorer','creativeScorecard','comparisonInsights','recommendations'] },
+    { label:'EXECUTION', ids:['creativeOps','creativeTesting'] },
+    { label:'CONTROL', ids:['rights','reports','settings'] }
+  ];
+  var html = groups.map(function(group){
+    var items = group.ids.map(function(id){
+      var item = NAV_ITEMS.find(function(n){ return n.id === id; });
+      if (!item) return '';
+      var active = App.page === item.id;
+      var idx = String(NAV_ITEMS.findIndex(function(n){ return n.id === item.id; }) + 1).padStart(2,'0');
+      return '<button class="nav-item' + (active ? ' active' : '') + '" data-page="' + item.id + '" aria-current="' + (active ? 'page' : 'false') + '"><span class="nav-index">' + idx + '</span><span class="nav-label">' + escapeHtml(item.label) + '</span><span class="nav-arrow">↗</span></button>';
+    }).join('');
+    return '<div class="nav-group"><div class="nav-group-label">' + group.label + '</div>' + items + '</div>';
   }).join('');
   document.getElementById('sidebarNav').innerHTML = html;
   document.querySelectorAll('.nav-item').forEach(function (btn) {
