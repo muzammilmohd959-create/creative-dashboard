@@ -42,7 +42,7 @@ function buildReportHtml(d) {
 
   function rowsToHtml(cols, rows) { return tableHTML(cols, rows, { key: 'roas', dir: 'desc' }, null); }
 
-  return '<div class="report">' +
+  return '<section class="reports-command"><div><span class="ops-eyebrow">CLIENT REPORTING ENGINE</span><h2>Turn performance data into a client-ready story.</h2><p>Generate a structured view of campaign performance, creative signals, rights exposure and next actions from the active dataset.</p><div class="recommendation-flow"><span>PERFORMANCE</span><i>→</i><span>EVIDENCE</span><i>→</i><strong>ACTION</strong></div></div><div class="control-orb"><span>REPORT</span><strong>OS</strong><small>ready to export</small></div></section><div class="report">' +
     '<div class="report-head"><h2>Creator Performance Report</h2><p class="sub">Generated ' + escapeHtml(d.generatedAt) + ' \u00b7 Demo data</p></div>' +
     '<section><h3>Campaign summary</h3>' + rowsToHtml(campaignColumnsForReport(), campaignRows) + '</section>' +
     '<section><h3>Creator performance (top 5 by ROAS)</h3>' + rowsToHtml(creatorColumns(), topCreators) + '</section>' +
