@@ -226,12 +226,17 @@ function renderCreativeDetail(creativeId) {
     '</div>' +
     '<div class="detail-context-row"><div><span class="detail-eyebrow">CREATOR</span><strong>' + escapeHtml(creator ? creator.name : '—') + '</strong><span>Source</span></div><div><span class="detail-eyebrow">CAMPAIGN</span><strong>' + escapeHtml(campaign ? campaign.name : '—') + '</strong><span>Distribution context</span></div><div><span class="detail-eyebrow">CPA VS BASELINE</span><strong>' + Math.abs(Math.round(cpaDelta)) + '% ' + (cpaDelta <= 0 ? 'lower' : 'higher') + '</strong><span>Observed difference</span></div></div>' +
     '<section><div class="detail-section-head"><div><span class="detail-eyebrow">PERFORMANCE TRAJECTORY</span><h2>Outcome over time</h2></div><span class="detail-count">' + fmtCurrency(m.spend) + ' spend</span></div><div class="chart-card detail-chart-shell"><div class="chart-body" style="height:290px;"><canvas id="creativeTrendChart" role="img" aria-label="Spend and revenue over time for this creative"></canvas></div></div></section>' +
-    '<section><div class="detail-section-head"><div><span class="detail-eyebrow">DISTRIBUTION</span><h2>Ads under this creative</h2></div><span class="detail-count">' + fmtNum(adsRows.length) + ' placements</span></div>' + adsTable + '</section>';
+    '<section><div class="detail-section-head"><div><span class="detail-eyebrow">DISTRIBUTION</span><h2>Ads under this creative</h2></div><span class="detail-count">' + fmtNum(adsRows.length) + ' placements</span></div>' + adsTable + '</section>' +
+    '<section class="creative-intelligence-panel"><div class="detail-section-head"><div><span class="detail-eyebrow">CREATIVE INTELLIGENCE</span><h2>What the system sees</h2><p class="sub">Observed signals across this execution, its attributes and the account baseline.</p></div><span class="detail-count">LIVE SIGNALS</span></div><div id="creativeIntelligenceSignals" class="creative-intelligence-grid"></div></section>' +
+    '<section class="creative-testing-history"><div class="detail-section-head"><div><span class="detail-eyebrow">TESTING HISTORY</span><h2>How this creative has been tested</h2><p class="sub">Production and testing states connected to this execution.</p></div><span id="creativeTestCount" class="detail-count">LOADING</span></div><div id="creativeTestingHistory" class="creative-testing-timeline"><div class="creative-history-loading">Reading test history…</div></div></section>';
 }
 
 function mountCreativeDetail(container, creativeId) {
   container.querySelectorAll('[data-creator]').forEach(function (a) { a.addEventListener('click', function () { setPage('creators', { creatorId: a.getAttribute('data-creator') }); }); });
   container.querySelectorAll('[data-campaign]').forEach(function (a) { a.addEventListener('click', function () { setPage('campaigns', { campaignId: a.getAttribute('data-campaign') }); }); });
+
+  renderCreativeIntelligence(creativeId);
+  loadCreativeTestingHistory(creativeId);
 
   var d = App.data;
   var rows = d.dailyRows.filter(function (r) { return r.creativeId === creativeId; });
@@ -249,4 +254,75 @@ function mountCreativeDetail(container, creativeId) {
       options: chartOptsLine(colors)
     });
   }
+}
+
+function renderCreativeIntelligence(creativeId) {
+  var root = document.getElementById('creativeIntelligenceSignals');
+  if (!root || !App.data) return;
+  var d = App.data;
+  var cv = d.creatives.filter(function(c){return c.id===creativeId;})[0];
+  var m = d.creativeMetrics[creativeId] || aggregate([]);
+  var baseline = d.overall || aggregate([]);
+  var roasDelta = baseline.roas ? ((m.roas-baseline.roas)/baseline.roas)*100 : 0;
+  var cpaDelta = baseline.cpa ? ((m.cpa-baseline.cpa)/baseline.cpa)*100 : 0;
+
+  var signals = [
+    {
+      type: roasDelta >= 5 ? 'POSITIVE' : roasDelta <= -5 ? 'NEGATIVE' : 'NEUTRAL',
+      label:'Performance signal',
+      value: fmtX(m.roas) + ' ROAS',
+      text: Math.abs(Math.round(roasDelta)) + '% ' + (roasDelta >= 0 ? 'above' : 'below') + ' the account ROAS baseline.'
+    },
+    {
+      type: cpaDelta <= -5 ? 'POSITIVE' : cpaDelta >= 5 ? 'NEGATIVE' : 'NEUTRAL',
+      label:'Efficiency signal',
+      value: fmtCurrency2(m.cpa) + ' CPA',
+      text: Math.abs(Math.round(cpaDelta)) + '% ' + (cpaDelta <= 0 ? 'below' : 'above') + ' the account CPA baseline.'
+    },
+    {
+      type:'ATTRIBUTE',
+      label:'Creative fingerprint',
+      value: (cv.hook || 'Hook') + ' · ' + (cv.angle || 'Angle'),
+      text:'Preserve the observable fingerprint while changing one execution variable in the next variation.'
+    }
+  ];
+  root.innerHTML = signals.map(function(x){
+    var cls=x.type==='POSITIVE'?'good':x.type==='NEGATIVE'?'bad':'neutral';
+    return '<article class="creative-intel-card '+cls+'"><div class="creative-intel-top"><span>'+escapeHtml(x.label)+'</span><b>'+escapeHtml(x.type)+'</b></div><strong>'+escapeHtml(x.value)+'</strong><p>'+escapeHtml(x.text)+'</p><i></i></article>';
+  }).join('');
+}
+
+function loadCreativeTestingHistory(creativeId) {
+  var root = document.getElementById('creativeTestingHistory');
+  var count = document.getElementById('creativeTestCount');
+  if (!root) return;
+  var c = window.AuthClient || null;
+  if (!c) {
+    root.innerHTML='<div class="creative-history-empty">Sign in to load testing history.</div>';
+    if(count) count.textContent='AUTH REQUIRED';
+    return;
+  }
+  Promise.all([
+    c.from('creative_tests').select('id,creative_id,creative_brief_id,status,platform,launch_date,created_at,updated_at').eq('creative_id',creativeId).order('created_at',{ascending:false}),
+    c.from('creative_briefs').select('id,title,status,test_status,hypothesis,due_date,created_at,updated_at').eq('creative_id',creativeId).order('created_at',{ascending:false})
+  ]).then(function(res){
+    var tests=res[0].data||[], briefs=res[1].data||[];
+    if(res[0].error) throw res[0].error;
+    var events=[];
+    tests.forEach(function(t){events.push({date:t.updated_at||t.created_at,type:'TEST',title:t.status||'Test',meta:(t.platform||'Instagram')+' · '+(t.launch_date||'No launch date'),status:t.status});});
+    briefs.forEach(function(b){events.push({date:b.updated_at||b.created_at,type:'BRIEF',title:b.title||'Creative brief',meta:(b.status||'Draft')+' · '+(b.test_status||'Planned'),status:b.test_status||b.status});});
+    events.sort(function(a,b){return String(b.date).localeCompare(String(a.date));});
+    if(count) count.textContent=events.length+' EVENTS';
+    if(!events.length){
+      root.innerHTML='<div class="creative-history-empty"><strong>No testing history yet.</strong><span>Move this creative into Creative Operations to start a measurable test.</span><button class="link-btn" onclick="setPage(\'creativeOps\',{})">Open Creative Operations →</button></div>';
+      return;
+    }
+    root.innerHTML=events.slice(0,8).map(function(e,i){
+      var kind=e.type==='TEST'?'TEST':'BRIEF';
+      return '<div class="creative-history-item"><div class="creative-history-line"><i></i>'+(i<events.length-1?'<b></b>':'')+'</div><div class="creative-history-content"><div class="creative-history-meta"><span>'+kind+'</span><time>'+escapeHtml(String(e.date).slice(0,10))+'</time></div><strong>'+escapeHtml(e.title)+'</strong><p>'+escapeHtml(e.meta)+'</p><em>'+escapeHtml(e.status||'Recorded')+'</em></div></div>';
+    }).join('');
+  }).catch(function(err){
+    root.innerHTML='<div class="creative-history-empty"><strong>Testing history unavailable.</strong><span>'+escapeHtml(err.message||'Could not load test history.')+'</span></div>';
+    if(count) count.textContent='UNAVAILABLE';
+  });
 }
