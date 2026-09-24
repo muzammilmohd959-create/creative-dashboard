@@ -173,10 +173,13 @@ function renderCreativeDetail(creativeId) {
   var creator = d.creators.filter(function (c) { return c.id === cv.creatorId; })[0];
   var campaign = d.campaigns.filter(function (c) { return c.id === cv.campaignId; })[0];
   var m = d.creativeMetrics[creativeId] || aggregate([]);
+  var baseline = d.overall || aggregate([]);
+  var roasDelta = baseline.roas ? ((m.roas - baseline.roas) / baseline.roas) * 100 : 0;
+  var cpaDelta = baseline.cpa ? ((m.cpa - baseline.cpa) / baseline.cpa) * 100 : 0;
 
-  var backBtn = '<button class="link-btn" onclick="setPage(\'creatives\',{})">\u2190 All creatives</button>';
+  var backBtn = '<button class="link-btn" onclick="setPage(\'creatives\',{})">← All creatives</button>';
   var badges = [badge(cv.hook), badge(cv.angle), badge(cv.format), cv.videoLength ? badge(cv.videoLength + 's') : '', badge(cv.cta)].join(' ');
-  var links = '<a href="javascript:void(0)" class="link-inline" data-creator="' + cv.creatorId + '">' + escapeHtml(creator ? creator.name : '') + '</a> \u00b7 ' +
+  var links = '<a href="javascript:void(0)" class="link-inline" data-creator="' + cv.creatorId + '">' + escapeHtml(creator ? creator.name : '') + '</a> · ' +
     '<a href="javascript:void(0)" class="link-inline" data-campaign="' + cv.campaignId + '">' + escapeHtml(campaign ? campaign.name : '') + '</a>';
 
   var kpis = [
@@ -196,13 +199,29 @@ function renderCreativeDetail(creativeId) {
     { key: 'roas', label: 'ROAS', format: function (r) { return fmtX(r.roas); } }
   ], adsRows, { key: 'spend', dir: 'desc' }, null);
 
+  var signalClass = roasDelta >= 5 ? 'positive' : roasDelta <= -5 ? 'negative' : 'neutral';
+  var signalLabel = roasDelta >= 5 ? 'Above baseline' : roasDelta <= -5 ? 'Below baseline' : 'Near baseline';
+
   return '<div class="detail-kicker"><span>CREATIVE WORKSPACE</span><span>Hook → angle → execution → outcome</span></div>' +
     pageHeader(creativeId, 'Creative detail', backBtn) +
-    '<div class="detail-hero creative-detail-hero"><div class="detail-hero-main"><div class="creative-preview-shell">' + thumb(cv, creator) + '<div><span class="detail-eyebrow">CREATIVE SIGNAL</span><h2>' + escapeHtml(cv.hook) + '</h2><p>' + escapeHtml(cv.angle) + ' · ' + escapeHtml(cv.format) + (cv.videoLength ? ' · ' + escapeHtml(cv.videoLength + 's') : '') + '</p><div class="detail-badges">' + badges + '</div></div></div><div class="detail-hero-copy"><span class="detail-eyebrow">CONTEXT</span><p>' + links + '</p><p>Performance is evaluated across the selected date range. Use the trend and ad-level evidence below to understand the execution.</p></div></div></div>' +
+    '<div class="creative-workspace-hero">' +
+      '<div class="creative-workspace-main">' +
+        '<div class="creative-visual-stage"><div class="creative-visual-ring r1"></div><div class="creative-visual-ring r2"></div><div class="creative-visual-core">' + thumb(cv, creator) + '<span>CREATIVE</span><strong>' + escapeHtml(cv.format || 'CONTENT') + '</strong></div><div class="creative-visual-dot d1"></div><div class="creative-visual-dot d2"></div><div class="creative-visual-dot d3"></div></div>' +
+        '<div class="creative-workspace-copy"><span class="detail-eyebrow">CREATIVE SIGNAL</span><h2>' + escapeHtml(cv.hook) + '</h2><p class="creative-workspace-angle">' + escapeHtml(cv.angle) + ' · ' + escapeHtml(cv.format) + (cv.videoLength ? ' · ' + escapeHtml(cv.videoLength + 's') : '') + '</p><div class="detail-badges">' + badges + '</div><p class="creative-context-line">' + links + '</p><p class="creative-workspace-description">A single execution viewed across its creative fingerprint, paid distribution and observed outcome. Use the evidence below to decide what should be preserved or changed in the next variation.</p></div>' +
+      '</div>' +
+      '<div class="creative-signal-panel">' +
+        '<span class="detail-eyebrow">PERFORMANCE SIGNAL</span><div class="creative-signal-value ' + signalClass + '">' + fmtX(m.roas) + '<small>ROAS</small></div><strong>' + signalLabel + '</strong><p>ROAS is ' + Math.abs(Math.round(roasDelta)) + '% ' + (roasDelta >= 0 ? 'above' : 'below') + ' the account baseline.</p>' +
+        '<div class="creative-signal-bars"><div><span>ROAS</span><i><b style="width:' + Math.min(100, Math.max(8, m.roas / Math.max(baseline.roas || 1, 1) * 60)) + '%"></b></i></div><div><span>CTR</span><i><b style="width:' + Math.min(100, Math.max(8, m.ctr * 500)) + '%"></b></i></div><div><span>CVR</span><i><b style="width:' + Math.min(100, Math.max(8, m.cvr * 500)) + '%"></b></i></div></div>' +
+      '</div>' +
+    '</div>' +
     '<div class="detail-kpi-grid">' + kpis + '</div>' +
-    '<div class="detail-surface detail-context-row"><div><span class="detail-eyebrow">EXECUTION</span><strong>' + escapeHtml(cv.cta || 'No CTA recorded') + '</strong><span>CTA</span></div><div><span class="detail-eyebrow">LAUNCHED</span><strong>' + escapeHtml(cv.launchDate || '—') + '</strong><span>Launch date</span></div><div><span class="detail-eyebrow">REVENUE</span><strong>' + fmtCurrency(m.revenue) + '</strong><span>Attributed revenue</span></div></div>' +
-    '<section><h2>Performance over time</h2><div class="chart-card"><div class="chart-body" style="height:260px;"><canvas id="creativeTrendChart" role="img" aria-label="Spend and revenue over time for this creative"></canvas></div></div></section>' +
-    '<section><h2>Ads under this creative</h2>' + adsTable + '</section>';
+    '<div class="creative-fingerprint">' +
+      '<div class="creative-fingerprint-head"><div><span class="detail-eyebrow">CREATIVE FINGERPRINT</span><h2>What makes this execution this execution.</h2></div><span class="detail-count">5 attributes</span></div>' +
+      '<div class="fingerprint-grid"><div><span>HOOK</span><strong>' + escapeHtml(cv.hook || '—') + '</strong></div><div><span>ANGLE</span><strong>' + escapeHtml(cv.angle || '—') + '</strong></div><div><span>FORMAT</span><strong>' + escapeHtml(cv.format || '—') + '</strong></div><div><span>CTA</span><strong>' + escapeHtml(cv.cta || '—') + '</strong></div><div><span>LENGTH</span><strong>' + escapeHtml(cv.videoLength ? cv.videoLength + 's' : '—') + '</strong></div></div>' +
+    '</div>' +
+    '<div class="detail-context-row"><div><span class="detail-eyebrow">CREATOR</span><strong>' + escapeHtml(creator ? creator.name : '—') + '</strong><span>Source</span></div><div><span class="detail-eyebrow">CAMPAIGN</span><strong>' + escapeHtml(campaign ? campaign.name : '—') + '</strong><span>Distribution context</span></div><div><span class="detail-eyebrow">CPA VS BASELINE</span><strong>' + Math.abs(Math.round(cpaDelta)) + '% ' + (cpaDelta <= 0 ? 'lower' : 'higher') + '</strong><span>Observed difference</span></div></div>' +
+    '<section><div class="detail-section-head"><div><span class="detail-eyebrow">PERFORMANCE TRAJECTORY</span><h2>Outcome over time</h2></div><span class="detail-count">' + fmtCurrency(m.spend) + ' spend</span></div><div class="chart-card detail-chart-shell"><div class="chart-body" style="height:290px;"><canvas id="creativeTrendChart" role="img" aria-label="Spend and revenue over time for this creative"></canvas></div></div></section>' +
+    '<section><div class="detail-section-head"><div><span class="detail-eyebrow">DISTRIBUTION</span><h2>Ads under this creative</h2></div><span class="detail-count">' + fmtNum(adsRows.length) + ' placements</span></div>' + adsTable + '</section>';
 }
 
 function mountCreativeDetail(container, creativeId) {
