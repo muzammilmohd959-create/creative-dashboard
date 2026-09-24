@@ -1861,3 +1861,20 @@ thead th{background:#F7F8FB}tbody tr.clickable-row:hover{background:#F5F3FC}
 @keyframes intelSignalTravel{0%{transform:translateX(0);opacity:0}12%{opacity:1}82%{opacity:1}100%{transform:translateX(calc(100% - 18px));opacity:0}}
 @media(prefers-reduced-motion:reduce){.intel-flow .intel-node,.intel-pulse{animation:none!important}.intel-signal-card,.intel-node{transition:none!important}}
 :root[data-theme="light"] .intel-map-shell{background:radial-gradient(circle at var(--flow-x,50%) var(--flow-y,50%),rgba(118,82,232,.08),transparent 30%),linear-gradient(145deg,#fff,#f6f7fa)}
+
+/* ================= Creative Testing Decision Cockpit ================= */
+.test-center-card{position:relative;overflow:hidden}
+.test-center-card:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 85% 8%,rgba(118,82,232,.11),transparent 30%);opacity:0;transition:opacity .25s ease;pointer-events:none}
+.test-center-card:hover:before{opacity:1}
+.test-confidence{position:relative;margin-top:14px;padding-top:12px;border-top:1px solid var(--border)}
+.test-confidence>div:first-child{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;color:var(--muted);font:600 8px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+.test-confidence strong{color:var(--text);font-size:10px}
+.confidence-track{height:4px!important;overflow:hidden;border-radius:99px;background:var(--surface-3,#242936)}
+.confidence-track i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#7652E8,#A996FF,#35D6B0);box-shadow:0 0 12px rgba(169,150,255,.4);transition:width .7s cubic-bezier(.2,.7,.2,1)}
+.test-decision-stage{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding:7px 9px;border:1px solid rgba(167,139,250,.12);border-radius:8px;background:rgba(118,82,232,.045);color:var(--muted);font:700 8px var(--mono);letter-spacing:.1em}
+.test-decision-stage i{color:var(--accent-2);font-style:normal;font-size:13px}
+.test-command-orb{position:relative}
+.test-orb-ring{position:absolute;inset:-12px;border:1px solid rgba(167,139,250,.14);border-radius:50%;animation:testOrbSpin 12s linear infinite}
+.test-orb-ring:after{content:"";position:absolute;top:-3px;left:50%;width:6px;height:6px;border-radius:50%;background:#A996FF;box-shadow:0 0 14px rgba(169,150,255,.8)}
+@keyframes testOrbSpin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.test-orb-ring{animation:none}.confidence-track i{transition:none}.test-center-card:before{transition:none}}
