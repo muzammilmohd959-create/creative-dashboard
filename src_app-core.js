@@ -47,6 +47,7 @@ var NAV_ITEMS = [
   { id: 'campaigns', label: 'Campaigns' },
   { id: 'ads', label: 'Ad performance' },
   { id: 'intelligence', label: 'Creative intelligence' },
+  { id: 'patternExplorer', label: 'Pattern explorer' },
   { id: 'recommendations', label: 'Recommendations' },
   { id: 'creativeOps', label: 'Creative operations' },
   { id: 'creativeTesting', label: 'Creative testing' },
