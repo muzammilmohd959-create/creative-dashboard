@@ -54,15 +54,23 @@ PAGES.overview = {
     if (App.mode === 'empty') return pageHeader('Overview', 'Account-wide performance across every creator, creative and campaign.') + noDataState('your account overview');
     var d = App.data, o = d.overall;
     var kpis = [
-      kpiCard('Spend', fmtCurrency(o.spend)),
-      kpiCard('Revenue', fmtCurrency(o.revenue)),
-      kpiCard('Purchases', fmtNum(o.purchases)),
-      kpiCard('CPA', fmtCurrency2(o.cpa)),
-      kpiCard('ROAS', fmtX(o.roas)),
-      kpiCard('CTR', fmtPct(o.ctr)),
-      kpiCard('CPC', fmtCurrency2(o.cpc)),
-      kpiCard('Conversion rate', fmtPct1(o.cvr))
+      kpiCard('Spend', fmtCurrency(o.spend), 'Total media spend'),
+      kpiCard('Revenue', fmtCurrency(o.revenue), 'Attributed revenue'),
+      kpiCard('Purchases', fmtNum(o.purchases), 'Conversions'),
+      kpiCard('CPA', fmtCurrency2(o.cpa), 'Cost per purchase'),
+      kpiCard('ROAS', fmtX(o.roas), 'Return on ad spend'),
+      kpiCard('CTR', fmtPct(o.ctr), 'Click-through rate'),
+      kpiCard('CPC', fmtCurrency2(o.cpc), 'Cost per click'),
+      kpiCard('Conversion rate', fmtPct1(o.cvr), 'Click → purchase')
     ].join('');
+
+    var signal = (d.evidenceInsights || [])[0];
+    var signalHtml = signal
+      ? '<section class="overview-signal"><div><span class="insight-cat">LEADING SIGNAL</span><h2>' + escapeHtml(String(signal.winner)) + '</h2><p>' +
+        Math.round(Math.abs(signal.delta || 0)) + '% ' + (signal.metric === 'cpa' ? (signal.delta < 0 ? 'lower CPA' : 'higher CPA') : (signal.delta > 0 ? 'higher ' + String(signal.metric).toUpperCase() : 'lower ' + String(signal.metric).toUpperCase())) +
+        ' than baseline · ' + fmtCurrency(signal.spend) + ' spend · ' + fmtNum(signal.purchases) + ' purchases.</p></div>' +
+        '<button class="primary" onclick="setPage(\'intelligence\',{})">Explore intelligence →</button></section>'
+      : '';
 
     var body;
     if (App.mode === 'csv') {
@@ -86,7 +94,7 @@ PAGES.overview = {
         '<div class="chart-card"><div class="chart-title">Creative intelligence summary</div>' + renderInsightsSummary(d.insights) + '</div>' +
         '</div></section>';
     }
-    return pageHeader('Overview', 'Account-wide performance across every creator, creative and campaign.') + kpis + body;
+    return pageHeader('Overview', 'Your creative performance command center — what is happening, what is working, and what to do next.') + '<div class="overview-kicker"><span>PERFORMANCE OS</span><span>Selected range · '+(App.dateRangeLabel || 'Active')+'</span></div>' + kpis + signalHtml + body;
   },
   mount: function () {
     if (!isFullMode()) return;
