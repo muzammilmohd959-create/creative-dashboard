@@ -5,7 +5,7 @@ function renderSidebar() {
     { label:'DATA', ids:['creators','creatives','campaigns','ads'] },
     { label:'INTELLIGENCE', ids:['intelligence','patternExplorer','creativeScorecard','comparisonInsights','recommendations'] },
     { label:'EXECUTION', ids:['creativeOps','creativeTesting'] },
-    { label:'CONTROL', ids:['rights','reports','settings'] }
+    { label:'CONTROL', ids:['rights','reports'] }
   ];
   var html = groups.map(function(group){
     var items = group.ids.map(function(id){
@@ -17,6 +17,12 @@ function renderSidebar() {
     }).join('');
     return '<div class="nav-group"><div class="nav-group-label">' + group.label + '</div>' + items + '</div>';
   }).join('');
+  var settingsItem = NAV_ITEMS.find(function(n){ return n.id === 'settings'; });
+  if (settingsItem) {
+    var settingsActive = App.page === 'settings';
+    var settingsIdx = String(NAV_ITEMS.findIndex(function(n){ return n.id === 'settings'; }) + 1).padStart(2,'0');
+    html += '<div class="nav-settings"><button class="nav-item' + (settingsActive ? ' active' : '') + '" data-page="settings" aria-current="' + (settingsActive ? 'page' : 'false') + '"><span class="nav-index">' + settingsIdx + '</span><span class="nav-label">' + escapeHtml(settingsItem.label) + '</span><span class="nav-arrow">↗</span></button></div>';
+  }
   document.getElementById('sidebarNav').innerHTML = html;
   document.querySelectorAll('.nav-item').forEach(function (btn) {
     btn.addEventListener('click', function () {
