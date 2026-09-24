@@ -280,3 +280,67 @@ function wireInteractiveSurfaces(container) {
     btn.addEventListener('pointerleave',function(){btn.style.transform='';});
   });
 }
+
+
+// ================= Command palette =================
+var commandPaletteBound = false;
+function commandPaletteItems() {
+  return NAV_ITEMS.map(function(n, i){ return { id:n.id, label:n.label, index:String(i+1).padStart(2,'0')}; });
+}
+function openCommandPalette() {
+  var existing = document.getElementById('arkCommandPalette');
+  if (!existing) {
+    existing = document.createElement('div');
+    existing.id = 'arkCommandPalette';
+    existing.className = 'command-palette-backdrop';
+    existing.innerHTML = '<div class="command-palette" role="dialog" aria-modal="true" aria-label="ARKFLUENCE command palette">' +
+      '<div class="command-palette-head"><span class="command-mark">ARK</span><input id="arkCommandInput" autocomplete="off" placeholder="Jump to a workspace..." aria-label="Search workspace" /><kbd>ESC</kbd></div>' +
+      '<div class="command-palette-meta"><span>Navigate</span><span><kbd>↑↓</kbd> select <kbd>↵</kbd> open</span></div>' +
+      '<div id="arkCommandResults" class="command-palette-results"></div>' +
+      '</div>';
+    document.body.appendChild(existing);
+    existing.addEventListener('click', function(e){ if(e.target === existing) closeCommandPalette(); });
+    var input = document.getElementById('arkCommandInput');
+    input.addEventListener('input', renderCommandResults);
+    input.addEventListener('keydown', commandPaletteKeydown);
+  }
+  existing.classList.add('is-open');
+  var input = document.getElementById('arkCommandInput');
+  input.value = '';
+  renderCommandResults();
+  setTimeout(function(){ input.focus(); }, 20);
+}
+function closeCommandPalette() {
+  var el = document.getElementById('arkCommandPalette');
+  if (el) el.classList.remove('is-open');
+}
+function renderCommandResults() {
+  var input = document.getElementById('arkCommandInput');
+  var box = document.getElementById('arkCommandResults');
+  if (!input || !box) return;
+  var q = input.value.trim().toLowerCase();
+  var items = commandPaletteItems().filter(function(n){ return !q || n.label.toLowerCase().indexOf(q) !== -1; });
+  if (!items.length) { box.innerHTML = '<div class="command-empty">No workspace matches <strong>' + escapeHtml(q) + '</strong>.</div>'; return; }
+  box.innerHTML = items.map(function(n,i){ return '<button class="command-item' + (i===0?' selected':'') + '" data-command-page="' + n.id + '"><span class="command-item-index">' + n.index + '</span><span class="command-item-label">' + escapeHtml(n.label) + '</span><span class="command-item-arrow">↗</span></button>'; }).join('');
+  box.querySelectorAll('.command-item').forEach(function(btn){ btn.addEventListener('click', function(){ closeCommandPalette(); setPage(btn.getAttribute('data-command-page'), {}); }); });
+}
+function commandPaletteKeydown(e) {
+  var box = document.getElementById('arkCommandResults');
+  var items = box ? Array.prototype.slice.call(box.querySelectorAll('.command-item')) : [];
+  var selected = box ? box.querySelector('.command-item.selected') : null;
+  var idx = selected ? items.indexOf(selected) : 0;
+  if (e.key === 'Escape') { e.preventDefault(); closeCommandPalette(); }
+  else if (e.key === 'ArrowDown' && items.length) { e.preventDefault(); idx = (idx + 1) % items.length; items.forEach(function(x){x.classList.remove('selected')}); items[idx].classList.add('selected'); items[idx].scrollIntoView({block:'nearest'}); }
+  else if (e.key === 'ArrowUp' && items.length) { e.preventDefault(); idx = (idx - 1 + items.length) % items.length; items.forEach(function(x){x.classList.remove('selected')}); items[idx].classList.add('selected'); items[idx].scrollIntoView({block:'nearest'}); }
+  else if (e.key === 'Enter' && selected) { e.preventDefault(); closeCommandPalette(); setPage(selected.getAttribute('data-command-page'), {}); }
+}
+function wireCommandPalette() {
+  if (commandPaletteBound) return;
+  commandPaletteBound = true;
+  document.addEventListener('keydown', function(e){
+    var mod = e.ctrlKey || e.metaKey;
+    if (mod && e.key.toLowerCase() === 'k') { e.preventDefault(); openCommandPalette(); }
+    if (e.key === 'Escape') closeCommandPalette();
+  });
+}
+wireCommandPalette();
