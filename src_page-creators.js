@@ -70,7 +70,11 @@ function renderCreatorDetail(creatorId) {
   ].join('');
 
   var body = '<div id="creatorTabBody"></div>';
-  return pageHeader(creator.name, 'Creator profile', backBtn) + infoCard + tabNav + kpis + body;
+  return '<div class="detail-kicker"><span>CREATOR WORKSPACE</span><span>Profile → content → performance</span></div>' +
+    '<div class="detail-hero creator-detail-hero">' +
+      '<div class="detail-hero-main">' + infoCard + '<div class="detail-hero-copy"><span class="detail-eyebrow">CREATOR PERFORMANCE</span><h2>One creator. One performance story.</h2><p>Explore content, campaign contribution, trend and rights without leaving the creator workspace.</p></div></div>' +
+      '<div class="detail-hero-orbit" aria-hidden="true"><span></span><i></i><b></b></div>' +
+    '</div>' + tabNav + '<div class="detail-kpi-grid">' + kpis + '</div>' + body;
 }
 
 function mountCreatorDetail(container, creatorId) {
@@ -83,7 +87,7 @@ function mountCreatorDetail(container, creatorId) {
 
   if (App.creatorDetailTab === 'overview') {
     var m = d.creatorMetrics[creatorId] || aggregate([]);
-    body.innerHTML = '<section><h2>Snapshot</h2><p class="sub">' + creatives.length + ' creatives across ' +
+    body.innerHTML = '<section class="detail-surface"><div class="detail-section-head"><div><span class="detail-eyebrow">SNAPSHOT</span><h2>Performance at a glance</h2></div><span class="detail-count">' + creatives.length + ' creatives</span></div><p class="sub">' + creatives.length + ' creatives across '
       unique(creatives.map(function (c) { return c.campaignId; })).length + ' campaigns · CPC ' + fmtCurrency2(m.cpc) +
       ' · Conversion rate ' + fmtPct1(m.cvr) + '</p></section>';
   } else if (App.creatorDetailTab === 'creatives') {
