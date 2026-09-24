@@ -313,10 +313,39 @@ function arkOverviewChartMotionPlugin() {
 function chartOptsLine(colors, isBar) {
   return {
     responsive: true, maintainAspectRatio: false,
-    animation: { duration: 1500, easing: 'easeOutQuart', delay: function(ctx){ return ctx.type === 'data' ? ctx.dataIndex * 28 : 0; } },
-    transitions: { active: { animation: { duration: 280 } }, resize: { animation: { duration: 500 } } },
+
+    /*
+     * DATA ARRIVAL ANIMATION
+     * The chart does not simply fade in. Every value physically grows from
+     * the zero baseline to its real value, staggered across the series.
+     */
+    animation: {
+      duration: 1700,
+      easing: 'easeOutCubic',
+      delay: function(ctx){
+        return ctx.type === 'data' ? ctx.dataIndex * 42 : 0;
+      }
+    },
+    animations: {
+      y: {
+        from: function(ctx){
+          var scale = ctx.chart && ctx.chart.scales ? ctx.chart.scales.y : null;
+          return scale ? scale.getPixelForValue(0) : undefined;
+        },
+        duration: 1500,
+        easing: 'easeOutCubic'
+      }
+    },
+
+    transitions: {
+      active: { animation: { duration: 280 } },
+      resize: { animation: { duration: 500 } }
+    },
     interaction: { mode: 'index', intersect: false },
-    plugins: { legend: { display: !isBar, position: 'top', align: 'end', labels: { color: colors.text, boxWidth: 10, font: { size: 11 } } }, tooltip: { animation: { duration: 180 }, displayColors: true, padding: 10, cornerRadius: 8 } },
+    plugins: {
+      legend: { display: !isBar, position: 'top', align: 'end', labels: { color: colors.text, boxWidth: 10, font: { size: 11 } } },
+      tooltip: { animation: { duration: 180 }, displayColors: true, padding: 10, cornerRadius: 8 }
+    },
     scales: {
       x: { ticks: { color: colors.text, maxRotation: 0, autoSkip: true, font: { size: 10 } }, grid: { display: false } },
       y: { ticks: { color: colors.text, font: { size: 10 } }, grid: { color: colors.grid } }
@@ -325,8 +354,29 @@ function chartOptsLine(colors, isBar) {
 }
 function chartOptsHBar(colors, axis) {
   var indexAxis = axis === 'x' ? 'x' : 'y';
+  var fromAxis = indexAxis === 'y' ? 'x' : 'y';
   return {
     indexAxis: indexAxis, responsive: true, maintainAspectRatio: false,
+
+    /* Bars physically grow from zero to their actual measured value. */
+    animation: {
+      duration: 1500,
+      easing: 'easeOutCubic',
+      delay: function(ctx){
+        return ctx.type === 'data' ? ctx.dataIndex * 70 : 0;
+      }
+    },
+    animations: {
+      [fromAxis]: {
+        from: function(ctx){
+          var scale = ctx.chart && ctx.chart.scales ? ctx.chart.scales[fromAxis] : null;
+          return scale ? scale.getPixelForValue(0) : undefined;
+        },
+        duration: 1350,
+        easing: 'easeOutCubic'
+      }
+    },
+
     plugins: { legend: { display: false } },
     scales: {
       x: { ticks: { color: colors.text, font: { size: 10 } }, grid: { color: colors.grid } },
