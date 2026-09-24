@@ -15,7 +15,8 @@ PAGES.campaigns = {
       }, m);
     });
     var sorted = sortRows(rows, App.campaignsSort, campaignColumns());
-    return '<div class="data-kicker"><span>CAMPAIGN CONTROL</span><span>Budget → spend → outcome</span></div>' + pageHeader('Campaigns', 'Budget, spend and outcomes for every campaign.') + tableHTML(campaignColumns(), sorted, App.campaignsSort, 'id');
+    var campaignHero = '<section class="campaign-control-hero"><div><span class="detail-eyebrow">CAMPAIGN CONTROL ROOM</span><h2>Budget is the input. Creative performance is the signal.</h2><p>Track allocation, creative mix and commercial outcome from the same operating surface.</p></div><div class="campaign-pulse"><div><span>CAMPAIGNS</span><strong>' + rows.length + '</strong></div><div><span>SPEND</span><strong>' + fmtCurrency(d.overall.spend) + '</strong></div><div><span>ROAS</span><strong>' + fmtX(d.overall.roas) + '</strong></div></div></section>';
+    return '<div class="data-kicker"><span>CAMPAIGN CONTROL</span><span>Budget → spend → outcome</span></div>' + pageHeader('Campaigns', 'Budget, spend and outcomes for every campaign.') + campaignHero + tableHTML(campaignColumns(), sorted, App.campaignsSort, 'id');
   },
   mount: function (container) {
     if (!isFullMode()) return;
