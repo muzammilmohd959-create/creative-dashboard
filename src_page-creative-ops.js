@@ -273,7 +273,19 @@
     mount: function(){
       loadTestingCenter().then(function(data){
         var c=document.getElementById('pageContent');
-        if(c){c.innerHTML=renderTestingCenter(data); c.querySelectorAll('.test-center-advance').forEach(function(btn){
+        if(c){c.innerHTML=renderTestingCenter(data);
+          c.querySelectorAll('.test-link').forEach(function(btn){
+            btn.addEventListener('click',function(){
+              var sel=c.querySelector('.test-link-select[data-id="'+btn.dataset.id+'"]');
+              if(!sel || !sel.value) return;
+              btn.disabled=true;
+              client().from('creative_tests').update({creative_id:sel.value,updated_at:new Date().toISOString()}).eq('id',btn.dataset.id).then(function(r){
+                if(r.error) throw r.error;
+                return loadTestingCenter();
+              }).then(function(d2){c.innerHTML=renderTestingCenter(d2);}).catch(function(e){btn.disabled=false;alert(e.message||e);});
+            });
+          });
+          c.querySelectorAll('.test-center-advance').forEach(function(btn){
           btn.addEventListener('click',function(){
             var t=data.tests.filter(function(x){return x.id===btn.dataset.id;})[0]; if(!t)return;
             var idx=TEST_STATUS.indexOf(t.status), next=TEST_STATUS[Math.min(idx+1,TEST_STATUS.length-1)];
