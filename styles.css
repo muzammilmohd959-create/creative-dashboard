@@ -2402,3 +2402,48 @@ table{
 @media(max-width:760px){
   .premium-grid{border-radius:14px}
 }
+
+
+/* ================= LIVE METRIC CELLS ================= */
+.premium-grid .grid-cell-left,
+.premium-grid .grid-cell-right{position:relative}
+.premium-grid .grid-metric-wrap{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  justify-content:center;
+  gap:6px;
+  min-width:76px;
+}
+.premium-grid .grid-metric-wrap .table-num{
+  display:block;
+  line-height:1;
+}
+.premium-grid .grid-microbar{
+  display:block;
+  width:54px;
+  height:2px;
+  overflow:hidden;
+  border-radius:999px;
+  background:rgba(255,255,255,.055);
+}
+.premium-grid .grid-microbar i{
+  display:block;
+  height:100%;
+  border-radius:inherit;
+  background:linear-gradient(90deg,rgba(139,92,246,.35),#A996FF);
+  box-shadow:0 0 9px rgba(139,92,246,.32);
+  transform-origin:left center;
+  animation:metricBarIn .9s cubic-bezier(.2,.8,.2,1) both;
+  animation-delay:calc(var(--row-index,0) * 55ms + 180ms);
+}
+.premium-grid tbody tr:hover .grid-microbar{
+  background:rgba(255,255,255,.08);
+}
+.premium-grid tbody tr:hover .grid-microbar i{
+  box-shadow:0 0 13px rgba(169,150,255,.55);
+}
+@keyframes metricBarIn{
+  from{transform:scaleX(0);opacity:0}
+  to{transform:scaleX(1);opacity:1}
+}
