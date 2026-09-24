@@ -28,8 +28,13 @@ function mountPage() {
   var container = document.getElementById('pageContent');
   var mod = PAGES[App.page];
   if (!mod) { container.innerHTML = '<div class="empty">Page not found.</div>'; return; }
+  container.classList.remove('page-enter','page-enter-active');
+  void container.offsetWidth;
+  container.classList.add('page-enter');
   container.innerHTML = mod.render();
+  requestAnimationFrame(function () { container.classList.add('page-enter-active'); });
   if (mod.mount) mod.mount(container);
+  wireInteractiveSurfaces(container);
 }
 
 function noDataState(what) {
@@ -178,4 +183,20 @@ function chartOptsHBar(colors, axis) {
       y: { ticks: { color: colors.text, font: { size: 10 } }, grid: { display: false } }
     }
   };
+}
+
+function wireInteractiveSurfaces(container) {
+  container.querySelectorAll('.chart-card,.kpi,.intelligence-card,.rec-card,.pattern-card,.comparison-card,.compare-card,.scorecard-card,.test-center-card,.ops-card,.creative-card,.detail-surface').forEach(function(el){
+    if (el.dataset.interactiveBound) return;
+    el.dataset.interactiveBound = '1';
+    el.addEventListener('pointermove', function(e){
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var r = el.getBoundingClientRect();
+      el.style.setProperty('--mx', ((e.clientX-r.left)/r.width*100).toFixed(1)+'%');
+      el.style.setProperty('--my', ((e.clientY-r.top)/r.height*100).toFixed(1)+'%');
+    });
+    el.addEventListener('pointerleave', function(){
+      el.style.removeProperty('--mx'); el.style.removeProperty('--my');
+    });
+  });
 }
