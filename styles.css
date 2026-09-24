@@ -2669,3 +2669,206 @@ table{
     margin:0!important;
   }
 }
+
+
+/* ================= MOBILE NAVIGATION — COMPACT WORKSPACE ================= */
+@media(max-width:760px){
+  html,body{overflow-x:hidden!important}
+  .app-shell{width:100%;min-width:0}
+  .sidebar{
+    width:100%!important;
+    flex:none!important;
+    min-height:0!important;
+    height:auto!important;
+    padding:10px 12px 8px!important;
+    display:block!important;
+    overflow:visible!important;
+    position:sticky!important;
+    top:0;
+    z-index:100;
+    border-right:0;
+    border-bottom:1px solid var(--border);
+    background:color-mix(in srgb,var(--sidebar-bg) 94%,transparent);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+  }
+
+  .sidebar .brand{
+    display:flex;
+    align-items:center;
+    min-height:34px;
+    padding:0 4px 8px!important;
+    font-size:15px;
+  }
+  .sidebar .brand:after{display:none!important}
+  .sidebar .mode-badge{
+    position:absolute;
+    top:14px;
+    right:12px;
+    margin:0!important;
+    width:max-content!important;
+    max-width:46%;
+    white-space:nowrap;
+  }
+
+  #sidebarNav{
+    display:flex!important;
+    flex-direction:row!important;
+    align-items:center;
+    gap:7px!important;
+    width:100%;
+    min-height:0!important;
+    max-height:none!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    padding:0 0 3px!important;
+    scrollbar-width:none!important;
+    -webkit-overflow-scrolling:touch;
+  }
+  #sidebarNav::-webkit-scrollbar{display:none!important}
+  .nav-group{
+    display:flex!important;
+    flex-direction:row!important;
+    align-items:center;
+    gap:6px!important;
+    min-width:max-content!important;
+  }
+  .nav-group-label{display:none!important}
+  .nav-item{
+    min-height:34px!important;
+    height:34px;
+    width:auto!important;
+    min-width:max-content;
+    grid-template-columns:auto auto!important;
+    gap:7px!important;
+    padding:0 11px!important;
+    border-radius:9px!important;
+    white-space:nowrap;
+  }
+  .nav-item .nav-index{display:none}
+  .nav-item .nav-label{font-size:11px!important;font-weight:600!important}
+  .nav-item .nav-arrow{display:none}
+  .nav-item:hover{transform:none!important}
+  .nav-item.active{box-shadow:0 5px 18px rgba(118,82,232,.10)!important}
+
+  .nav-settings{
+    display:inline-flex!important;
+    position:static!important;
+    margin:7px 0 0!important;
+    padding:7px 0 0!important;
+    border-top:1px solid var(--border);
+    background:transparent!important;
+    width:100%;
+  }
+  .nav-settings .nav-item{
+    width:auto!important;
+    min-width:max-content!important;
+    margin:0!important;
+  }
+
+  .main{
+    width:100%;
+    min-width:0!important;
+    height:auto!important;
+    overflow:visible!important;
+  }
+  .topbar{
+    position:sticky!important;
+    top:0;
+    min-height:58px!important;
+    padding:8px 12px!important;
+    z-index:90;
+  }
+  .topbar-left{min-width:0;flex:1}
+  .topbar-actions{
+    width:100%;
+    max-width:100%;
+    gap:6px!important;
+    overflow-x:auto!important;
+    scrollbar-width:none;
+    -webkit-overflow-scrolling:touch;
+    padding-bottom:1px;
+  }
+  .topbar-actions::-webkit-scrollbar{display:none}
+  .topbar-actions button{
+    flex:0 0 auto;
+    min-height:36px;
+    padding:0 11px!important;
+    font-size:11px!important;
+  }
+
+  .content{
+    width:100%!important;
+    max-width:100%!important;
+    box-sizing:border-box;
+    overflow:visible!important;
+    padding:16px 12px 40px!important;
+  }
+  #pageContent{width:100%!important;max-width:100%!important}
+  .page-head{
+    gap:10px!important;
+    margin-bottom:16px!important;
+  }
+  .page-head h1{font-size:25px!important;line-height:1.05!important}
+  .page-head p{font-size:11px!important;line-height:1.5!important}
+
+  .overview-hero,
+  .intelligence-command,.pattern-command,
+  .scorecard-command,.comparison-command,
+  .campaign-control-hero,.ad-performance-hero,
+  .ops-command-hero,.recommendation-command,
+  .rights-command,.reports-command,
+  .settings-hero{
+    grid-template-columns:1fr!important;
+    padding:18px!important;
+    border-radius:16px!important;
+    gap:16px!important;
+  }
+
+  .overview-hero{min-height:0!important}
+  .overview-hero h1{font-size:38px!important;line-height:.98!important}
+  .overview-hero p{font-size:11px!important}
+  .overview-hero .overview-core{transform:scale(.78);margin:-18px auto -10px!important}
+
+  .kpi-grid,
+  .metrics-grid,
+  .ops-summary{
+    grid-template-columns:1fr 1fr!important;
+    gap:8px!important;
+  }
+  .kpi{min-width:0!important;padding:14px!important}
+  .kpi .value{font-size:22px!important}
+
+  .table-wrap{width:100%;overflow-x:auto!important;-webkit-overflow-scrolling:touch}
+  .premium-grid{min-width:680px}
+  .chart-card{padding:14px!important}
+  .chart-card canvas{max-height:250px!important}
+
+  .fingerprint-grid,
+  .creative-intelligence-grid{grid-template-columns:1fr!important}
+  .creative-workspace-hero{grid-template-columns:1fr!important}
+  .creative-signal-panel{border-left:0!important;border-top:1px solid rgba(167,139,250,.12)}
+
+  .ops-form{grid-template-columns:1fr!important}
+  .ops-form .full{grid-column:auto!important}
+  .ops-board{grid-template-columns:repeat(8,220px)!important;overflow-x:auto!important}
+  .subtabs{overflow-x:auto!important;white-space:nowrap}
+  .subtabs button{flex:0 0 auto}
+
+  .detail-hero{padding:16px!important}
+  .detail-hero h1{font-size:28px!important}
+
+  .command-palette-backdrop{padding:6vh 10px 20px}
+  .command-palette{border-radius:14px}
+}
+
+@media(max-width:420px){
+  .sidebar{padding-left:9px!important;padding-right:9px!important}
+  .sidebar .brand{font-size:14px}
+  .nav-item{padding:0 9px!important}
+  .nav-item .nav-label{font-size:10px!important}
+  .topbar-actions button{padding:0 9px!important}
+  .content{padding-left:10px!important;padding-right:10px!important}
+  .overview-hero h1{font-size:33px!important}
+  .kpi-grid,.metrics-grid,.ops-summary{grid-template-columns:1fr!important}
+}
