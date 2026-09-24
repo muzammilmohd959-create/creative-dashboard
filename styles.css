@@ -1878,3 +1878,28 @@ thead th{background:#F7F8FB}tbody tr.clickable-row:hover{background:#F5F3FC}
 .test-orb-ring:after{content:"";position:absolute;top:-3px;left:50%;width:6px;height:6px;border-radius:50%;background:#A996FF;box-shadow:0 0 14px rgba(169,150,255,.8)}
 @keyframes testOrbSpin{to{transform:rotate(360deg)}}
 @media(prefers-reduced-motion:reduce){.test-orb-ring{animation:none}.confidence-track i{transition:none}.test-center-card:before{transition:none}}
+
+
+/* ================= Creator Workspace OS ================= */
+.creator-detail-hero{position:relative;overflow:hidden;background:radial-gradient(circle at 82% 35%,rgba(118,82,232,.12),transparent 32%),linear-gradient(145deg,rgba(18,20,29,.96),rgba(8,10,15,.98));border-color:rgba(167,139,250,.18)}
+.creator-detail-hero:after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 25%,rgba(255,255,255,.025) 50%,transparent 75%);transform:translateX(-100%);animation:creatorSweep 7s ease-in-out infinite;pointer-events:none}
+.detail-hero-main{position:relative;z-index:2}
+.creator-workspace-status{display:flex;justify-content:space-between;gap:12px;margin:12px 0 18px;padding:8px 11px;border:1px solid var(--border);border-radius:9px;background:rgba(118,82,232,.035);color:var(--muted);font:700 8px var(--mono);letter-spacing:.1em;text-transform:uppercase}
+.creator-workspace-status span:first-child{color:var(--text)}
+.creator-workspace-status i{display:inline-block;width:6px;height:6px;margin-right:7px;border-radius:50%;background:#35D6B0;box-shadow:0 0 10px rgba(53,214,176,.7);animation:creatorStatus 2s ease-in-out infinite}
+.detail-hero-orbit{filter:drop-shadow(0 0 24px rgba(118,82,232,.16));animation:creatorOrbitFloat 5s ease-in-out infinite}
+.detail-hero-orbit:after{content:"";position:absolute;inset:18%;border:1px dashed rgba(167,139,250,.18);border-radius:50%;animation:creatorOrbitSpin 16s linear infinite}
+.detail-hero-orbit em{position:absolute;top:8%;right:18%;width:7px;height:7px;border-radius:50%;background:#35D6B0;box-shadow:0 0 16px rgba(53,214,176,.75);animation:creatorOrbPulse 2.2s ease-in-out infinite}
+.creator-detail-hero .detail-card{position:relative;z-index:3;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-color:rgba(167,139,250,.18);box-shadow:0 18px 50px rgba(0,0,0,.18)}
+.creator-detail-hero .avatar{box-shadow:0 0 28px rgba(118,82,232,.14),inset 0 0 20px rgba(255,255,255,.025)}
+.creator-detail-hero .detail-name{letter-spacing:-.035em}
+.creator-detail-hero .detail-eyebrow{color:#A996FF}
+.creator-workspace-status + #creatorTabBody{position:relative}
+.creator-workspace-status + #creatorTabBody:before{content:"";position:absolute;left:0;top:-9px;width:34%;height:1px;background:linear-gradient(90deg,#7652E8,transparent);opacity:.55}
+@keyframes creatorSweep{0%,65%{transform:translateX(-100%)}82%,100%{transform:translateX(100%)}}
+@keyframes creatorOrbitFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes creatorOrbitSpin{to{transform:rotate(360deg)}}
+@keyframes creatorStatus{50%{opacity:.4;transform:scale(.75)}}
+@keyframes creatorOrbPulse{50%{transform:scale(1.5);opacity:.55}}
+@media(max-width:700px){.creator-workspace-status{flex-direction:column}.creator-detail-hero:after{display:none}}
+@media(prefers-reduced-motion:reduce){.creator-detail-hero:after,.detail-hero-orbit,.detail-hero-orbit:after,.creator-workspace-status i,.detail-hero-orbit em{animation:none!important}}
