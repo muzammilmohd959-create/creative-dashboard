@@ -213,12 +213,21 @@
       var cid = m.data.client_id;
       return Promise.all([
         c.from('creative_tests').select('*').eq('client_id',cid).order('created_at',{ascending:false}),
-        c.from('creative_briefs').select('id,title,creator_id,campaign_id,platform').eq('client_id',cid),
+        c.from('creative_briefs').select('id,title,creator_id,campaign_id,platform,creative_id,ad_id').eq('client_id',cid),
         c.from('creatives').select('id,creator_id,campaign_id,hook,angle,format').eq('client_id',cid),
-        c.from('ads').select('id,creative_id,placement').eq('client_id',cid)
+        c.from('ads').select('id,creative_id,placement').eq('client_id',cid),
+        c.from('daily_metrics').select('creative_id,spend,clicks,purchases,revenue').eq('client_id',cid)
       ]).then(function(rs){
         rs.forEach(function(x){if(x.error) throw x.error;});
-        return { tests:rs[0].data||[], briefs:rs[1].data||[], creatives:rs[2].data||[], ads:rs[3].data||[] };
+        var metrics={};
+        (rs[4].data||[]).forEach(function(row){
+          var x=metrics[row.creative_id]||(metrics[row.creative_id]={spend:0,clicks:0,purchases:0,revenue:0});
+          x.spend+=Number(row.spend)||0; x.clicks+=Number(row.clicks)||0; x.purchases+=Number(row.purchases)||0; x.revenue+=Number(row.revenue)||0;
+        });
+        Object.keys(metrics).forEach(function(id){
+          var x=metrics[id]; x.cpa=x.purchases?x.spend/x.purchases:0; x.roas=x.spend?x.revenue/x.spend:0;
+        });
+        return {tests:rs[0].data||[],briefs:rs[1].data||[],creatives:rs[2].data||[],ads:rs[3].data||[],metrics:metrics};
       });
     });
   }
@@ -229,8 +238,19 @@
     var cards=tests.map(function(t){
       var b=data.briefs.filter(function(x){return x.id===t.creative_brief_id;})[0];
       var cv=data.creatives.filter(function(x){return x.id===t.creative_id;})[0];
-      var m=(App.data && t.creative_id && App.data.creativeMetrics[t.creative_id]) || null;
-      var performance=m ? '<div class="test-metrics"><span>'+fmtCurrency(m.spend)+' spend</span><span>'+fmtNum(m.purchases)+' purchases</span><span>'+fmtCurrency2(m.cpa)+' CPA</span><span>'+fmtX(m.roas)+' ROAS</span></div>' : '<div class="test-no-data">No linked performance data yet</div>';
+      var metric=data.metrics[t.creative_id]||null;
+      var performance=metric ? '<div class="test-metrics"><span>'+fmtCurrency(metric.spend)+' spend</span><span>'+fmtNum(metric.purchases)+' purchases</span><span>'+fmtCurrency2(metric.cpa)+' CPA</span><span>'+fmtX(metric.roas)+' ROAS</span></div>' : '<div class="test-no-data">No linked performance data yet</div>';
+      var link=!cv ? '<div class="test-link-row"><select class="test-link-select" data-id="'+esc(t.id)+'"><option value="">Link a creative…</option>'+data.creatives.map(function(x){return '<option value="'+esc(x.id)+'">'+esc(x.id)+' · '+esc(x.hook)+' · '+esc(x.format)+'</option>';}).join('')+'</select><button class="btn-small test-link" data-id="'+esc(t.id)+'">Link</button></div>' : '';
+      return '<article class="test-center-card">'+
+        '<div class="test-center-top"><span class="ops-id">'+esc(t.id)+'</span>'+badge(t.status,statusKind(t.status))+'</div>'+
+        '<h3>'+esc(b ? b.title : (cv ? cv.id : 'Creative test'))+'</h3>'+
+        '<p class="ops-meta">'+esc(cv ? (cv.hook+' · '+cv.angle+' · '+cv.format) : 'No creative linked')+'</p>'+
+        link+performance+
+        '<div class="test-center-foot"><span>'+esc(t.platform||'Instagram')+'</span><span>'+esc(t.launch_date||'No launch date')+'</span></div>'+
+        '<div class="ops-actions"><button class="btn-small test-center-advance" data-id="'+esc(t.id)+'">Advance →</button></div>'+
+      '</article>';
+    }).join('');
+';
       return '<article class="test-center-card">'+
         '<div class="test-center-top"><span class="ops-id">'+esc(t.id)+'</span>'+badge(t.status,statusKind(t.status))+'</div>'+
         '<h3>'+esc(b ? b.title : (cv ? cv.id : 'Creative test'))+'</h3>'+
