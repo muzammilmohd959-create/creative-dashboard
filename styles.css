@@ -1772,3 +1772,9 @@ thead th{background:#F7F8FB}tbody tr.clickable-row:hover{background:#F5F3FC}
 .source-row,.report section{transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}.source-row:hover{transform:translateX(3px);border-color:#c9bef2;box-shadow:0 10px 24px rgba(40,34,65,.055)}.report{box-shadow:0 16px 40px rgba(40,34,65,.045)}.report section{padding:18px 0;border-bottom:1px solid var(--border)}.report section:last-child{border-bottom:0}.report section:hover{transform:translateX(2px)}
 :root[data-theme="dark"] .rights-command,:root[data-theme="dark"] .reports-command{border-color:#302a48;background:radial-gradient(500px 220px at 0 0,rgba(118,82,232,.17),transparent 68%),linear-gradient(135deg,#12151d,#0d1016);box-shadow:0 20px 55px rgba(0,0,0,.26)}:root[data-theme="dark"] .rights-command h2,:root[data-theme="dark"] .reports-command h2{color:#f0f1f5}:root[data-theme="dark"] .rights-command p,:root[data-theme="dark"] .reports-command p{color:#929aaa}:root[data-theme="dark"] .control-orb{background:radial-gradient(circle,rgba(155,124,255,.2),#0b0e14 64%);border-color:#4b3f70;box-shadow:0 0 45px rgba(118,82,232,.14)}:root[data-theme="dark"] .control-orb:before{border-color:#3a3155}
 @media(max-width:760px){.rights-command,.reports-command{grid-template-columns:1fr;padding:20px}.rights-command h2,.reports-command h2{font-size:25px}.control-orb{transform:scale(.82);margin:-8px auto -14px}}
+
+/* ================= ARKFLUENCE CORE BRAND FIX ================= */
+.overview-core .core-brand{display:none}
+.overview-core strong{font-size:22px!important;letter-spacing:-.07em!important;white-space:nowrap;line-height:1;color:#F2F3F7;text-shadow:0 0 18px rgba(167,139,250,.16)}
+:root[data-theme="light"] .overview-core strong{color:#171922}
+@media(max-width:760px){.overview-core strong{font-size:19px!important}}
