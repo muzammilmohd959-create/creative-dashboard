@@ -12,6 +12,32 @@
     var pct=((av-bv)/bv)*100, stronger=higher?av>bv:av<bv;
     return '<div class="score-signal '+(stronger?'positive':'neutral')+'"><strong>'+escapeHtml(label)+'</strong><span>'+format(av)+' vs '+format(bv)+' · '+(pct>=0?'+':'')+pct.toFixed(1)+'%</span></div>';
   }
+  function differenceInsights(a,b){
+    var out=[];
+    var attrs=[['hook','Hook'],['angle','Angle'],['format','Format'],['cta','CTA'],['lengthBucket','Length']];
+    attrs.forEach(function(x){
+      var av=a.creative[x[0]]||'—', bv=b.creative[x[0]]||'—';
+      if(av!==bv) out.push({label:x[1],a:av,b:bv});
+    });
+    var perf=[];
+    function add(key,label,higher){
+      var av=Number(a[key]),bv=Number(b[key]); if(!isFinite(av)||!isFinite(bv)||!bv)return;
+      var pct=((av-bv)/bv)*100;
+      if(Math.abs(pct)>=5) perf.push({label:label,a:av,b:bv,pct:pct,higher:higher});
+    }
+    add('roas','ROAS',true); add('cpa','CPA',false); add('ctr','CTR',true); add('cvr','CVR',true); add('purchases','Purchases',true);
+    return {attrs:out,perf:perf};
+  }
+  function comparisonInsights(a,b){
+    var x=differenceInsights(a,b), html='<section class="score-compare"><h2>Observable creative differences</h2>';
+    if(!x.attrs.length) html+='<p class="sub">The selected creatives share the tracked creative attributes.</p>';
+    else x.attrs.forEach(function(v){html+='<div class="score-signal neutral"><strong>'+escapeHtml(v.label)+'</strong><span>'+escapeHtml(v.a)+' vs '+escapeHtml(v.b)+'</span></div>';});
+    html+='</section><section class="score-compare"><h2>Performance signals</h2>';
+    if(!x.perf.length) html+='<p class="sub">No material difference of 5%+ was detected in the selected metrics.</p>';
+    else x.perf.forEach(function(v){var dir=v.pct>0?'higher':'lower';html+='<div class="score-signal '+(v.higher?(v.pct>0?'positive':'neutral'):(v.pct<0?'positive':'neutral'))+'"><strong>'+escapeHtml(v.label)+'</strong><span>Creative A is '+Math.abs(v.pct).toFixed(1)+'% '+dir+' than B</span></div>';});
+    html+='</section>';
+    return html;
+  }
   function renderScorecard(){
     if(!isFullMode())return pageHeader('Creative scorecard','Compare creatives using the active date range.')+noDataState('creative scorecard');
     var d=applyDateRange(App.data), all=(d.creatives||[]).map(function(c){return metricFor(d,c.id);}).sort(function(a,b){return b.spend-a.spend;});
@@ -23,7 +49,7 @@
     if(cards.length<2)return pageHeader('Creative scorecard','Compare creatives using the active date range.')+renderGlobalDateRange()+head+'<div class="empty">Select at least two creatives.</div>';
     var cols=cards.map(function(x){return '<div class="scorecard-card"><div class="score-title"><strong>'+escapeHtml(x.id)+'</strong><span>'+escapeHtml(x.creator.name||'Unknown creator')+'</span></div><div class="score-kpis"><div><small>Spend</small><b>'+fmtCurrency(x.spend)+'</b></div><div><small>Purchases</small><b>'+fmtNum(x.purchases)+'</b></div><div><small>CPA</small><b>'+fmtCurrency2(x.cpa)+'</b></div><div><small>ROAS</small><b>'+fmtX(x.roas)+'</b></div></div><div class="score-meta"><span>Hook: '+escapeHtml(x.creative.hook||'—')+'</span><span>Angle: '+escapeHtml(x.creative.angle||'—')+'</span><span>Format: '+escapeHtml(x.creative.format||'—')+'</span><span>CTA: '+escapeHtml(x.creative.cta||'—')+'</span></div></div>';}).join('');
     var a=cards[0], b=cards[1];
-    var compare='<section class="score-compare"><h2>Performance differences</h2>'+signal(a,b,'roas',true,'ROAS',fmtX)+signal(a,b,'cpa',false,'CPA',fmtCurrency2)+signal(a,b,'ctr',true,'CTR',fmtPct)+signal(a,b,'cvr',true,'CVR',fmtPct)+signal(a,b,'purchases',true,'Purchases',fmtNum)+'</section>';
+    var compare='<section class="score-compare"><h2>Performance differences</h2>'+signal(a,b,'roas',true,'ROAS',fmtX)+signal(a,b,'cpa',false,'CPA',fmtCurrency2)+signal(a,b,'ctr',true,'CTR',fmtPct)+signal(a,b,'cvr',true,'CVR',fmtPct)+signal(a,b,'purchases',true,'Purchases',fmtNum)+'</section>'+comparisonInsights(a,b);
     return pageHeader('Creative scorecard','Compare creative performance and isolate the observable differences between executions.')+renderGlobalDateRange()+head+'<div class="scorecard-grid">'+cols+'</div>'+compare+'<div class="explorer-note"><strong>Interpretation guardrail.</strong> This scorecard describes observed differences in the selected date range. It does not establish that one creative attribute caused the performance difference.</div>';
   }
   function mountScorecard(container){
