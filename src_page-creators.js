@@ -71,11 +71,11 @@ function renderCreatorDetail(creatorId) {
     kpiCard('CPA', fmtCurrency2(m.cpa)), kpiCard('ROAS', fmtX(m.roas)), kpiCard('CTR', fmtPct(m.ctr))
   ].join('');
 
-  var body = '<div id="creatorTabBody"></div>';
+  var body = '<div class="creator-workspace-status"><span><i></i> WORKSPACE ACTIVE</span><span>CREATOR → CONTENT → PERFORMANCE</span></div><div id="creatorTabBody"></div>';
   return '<div class="detail-kicker"><span>CREATOR WORKSPACE</span><span>Profile → content → performance</span></div>' +
     '<div class="detail-hero creator-detail-hero">' +
       '<div class="detail-hero-main">' + infoCard + '<div class="detail-hero-copy"><span class="detail-eyebrow">CREATOR PERFORMANCE</span><h2>One creator. One performance story.</h2><p>Explore content, campaign contribution, trend and rights without leaving the creator workspace.</p></div></div>' +
-      '<div class="detail-hero-orbit" aria-hidden="true"><span></span><i></i><b></b></div>' +
+      '<div class="detail-hero-orbit" aria-hidden="true"><span></span><i></i><b></b><em></em></div>' +
     '</div>' + tabNav + '<div class="detail-kpi-grid">' + kpis + '</div>' + body;
 }
 
