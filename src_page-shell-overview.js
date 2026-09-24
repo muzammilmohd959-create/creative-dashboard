@@ -184,22 +184,22 @@ PAGES.overview = {
         { label: 'Spend', data: d.dateSeries.map(function (r) { return round2(r.spend); }), borderColor: colors.neg, backgroundColor: colors.neg + '22', borderWidth: 2, pointRadius: 0, tension: 0.25 },
         { label: 'Revenue', data: d.dateSeries.map(function (r) { return round2(r.revenue); }), borderColor: colors.pos, backgroundColor: colors.pos + '22', borderWidth: 2, pointRadius: 0, tension: 0.25 }
       ]},
-      options: chartOptsLine(colors)
+      options: chartOptsLine(colors), plugins: [arkOverviewChartMotionPlugin()]
     });
     App.charts.ovPurchases = new Chart(document.getElementById('ovPurchasesChart'), {
       type: 'bar',
       data: { labels: labels, datasets: [{ label: 'Purchases', data: d.dateSeries.map(function (r) { return r.purchases; }), backgroundColor: colors.accent, borderRadius: 3, maxBarThickness: 16 }] },
-      options: chartOptsLine(colors, true)
+      options: chartOptsLine(colors, true), plugins: [arkOverviewChartMotionPlugin()]
     });
     App.charts.ovTopCreators = new Chart(document.getElementById('ovTopCreators'), {
       type: 'bar',
       data: { labels: topCreators.map(function (c) { return c.name; }), datasets: [{ label: 'Revenue', data: topCreators.map(function (c) { return round2(c.revenue); }), backgroundColor: colors.pos, borderRadius: 4, maxBarThickness: 22 }] },
-      options: chartOptsHBar(colors)
+      options: chartOptsHBar(colors), plugins: [arkOverviewChartMotionPlugin()]
     });
     App.charts.ovTopCreatives = new Chart(document.getElementById('ovTopCreatives'), {
       type: 'bar',
       data: { labels: topCreatives.map(function (c) { return c.label; }), datasets: [{ label: 'ROAS', data: topCreatives.map(function (c) { return round2(c.roas); }), backgroundColor: colors.accent, borderRadius: 4, maxBarThickness: 22 }] },
-      options: chartOptsHBar(colors, 'x')
+      options: chartOptsHBar(colors, 'x'), plugins: [arkOverviewChartMotionPlugin()]
     });
   }
 };
@@ -224,11 +224,34 @@ function renderInsightsSummary(insights) {
   }).join('') + '</ul><button class="link-btn" data-page="intelligence" onclick="setPage(\'intelligence\',{})">View all insights \u2192</button>';
 }
 
+function arkOverviewChartMotionPlugin() {
+  return {
+    id: 'arkOverviewChartMotion',
+    afterDraw: function(chart) {
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var area = chart.chartArea;
+      if (!area) return;
+      var ctx = chart.ctx;
+      var t = performance.now() / 1800;
+      var x = area.left + ((t % 1) * (area.right - area.left));
+      ctx.save();
+      var g = ctx.createLinearGradient(x - 70, 0, x + 70, 0);
+      g.addColorStop(0, 'rgba(169,150,255,0)');
+      g.addColorStop(.5, 'rgba(169,150,255,.10)');
+      g.addColorStop(1, 'rgba(169,150,255,0)');
+      ctx.fillStyle = g;
+      ctx.fillRect(x - 70, area.top, 140, area.bottom - area.top);
+      ctx.restore();
+      chart.draw();
+    }
+  };
+}
+
 function chartOptsLine(colors, isBar) {
   return {
     responsive: true, maintainAspectRatio: false,
-    animation: { duration: 1100, easing: 'easeOutQuart', delay: function(ctx){ return ctx.type === 'data' ? ctx.dataIndex * 18 : 0; } },
-    transitions: { active: { animation: { duration: 220 } } },
+    animation: { duration: 1500, easing: 'easeOutQuart', delay: function(ctx){ return ctx.type === 'data' ? ctx.dataIndex * 28 : 0; } },
+    transitions: { active: { animation: { duration: 280 } }, resize: { animation: { duration: 500 } } },
     interaction: { mode: 'index', intersect: false },
     plugins: { legend: { display: !isBar, position: 'top', align: 'end', labels: { color: colors.text, boxWidth: 10, font: { size: 11 } } }, tooltip: { animation: { duration: 180 }, displayColors: true, padding: 10, cornerRadius: 8 } },
     scales: {
