@@ -2234,3 +2234,171 @@ table{
 @media(prefers-reduced-motion:reduce){
   .table-wrap tbody tr{animation:none}
 }
+
+
+/* ================= PREMIUM DATA GRID — COMMAND CENTER ================= */
+.premium-grid{
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.085);
+  border-radius:18px;
+  background:
+    radial-gradient(700px 220px at 18% -20%,rgba(139,92,246,.08),transparent 65%),
+    linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.008)),
+    var(--surface);
+  box-shadow:0 22px 70px rgba(0,0,0,.20);
+}
+.premium-grid table{
+  min-width:900px;
+  border-collapse:separate;
+  border-spacing:0;
+}
+.premium-grid thead th{
+  height:50px;
+  padding:0 15px;
+  background:rgba(10,12,18,.38);
+  border-bottom:1px solid rgba(255,255,255,.075);
+  color:#7F8798;
+  font-size:8.5px;
+  font-weight:700;
+  letter-spacing:.14em;
+  vertical-align:middle;
+}
+.premium-grid thead th[data-sort-key]{
+  cursor:pointer;
+  transition:color .18s ease,background .18s ease;
+}
+.premium-grid thead th[data-sort-key]:hover{
+  color:#C7BEFF;
+  background:rgba(139,92,246,.045);
+}
+.premium-grid .grid-head-primary{
+  color:#B5BDCC;
+}
+.premium-grid .grid-head-num{
+  font-family:var(--mono);
+  font-size:8px;
+}
+.premium-grid .grid-index-head{
+  width:42px;
+  padding:0;
+}
+.premium-grid .grid-action-head{
+  width:42px;
+  padding:0;
+}
+.premium-grid tbody tr{
+  position:relative;
+  animation:premiumGridIn .48s cubic-bezier(.2,.8,.2,1) both;
+  animation-delay:calc(var(--row-index,0) * 55ms);
+}
+.premium-grid tbody td{
+  height:66px;
+  padding:0 15px;
+  border-bottom:1px solid rgba(255,255,255,.048);
+  background:transparent;
+  transition:background .2s ease,color .2s ease,transform .2s ease;
+}
+.premium-grid tbody tr:last-child td{border-bottom:0}
+.premium-grid tbody tr:hover td{
+  background:linear-gradient(90deg,rgba(139,92,246,.045),rgba(139,92,246,.012));
+}
+.premium-grid tbody tr:hover .grid-row-marker{
+  color:#A996FF;
+}
+.premium-grid tbody tr:hover .grid-row-action{
+  color:#C8BFFF;
+  opacity:1;
+  transform:translateX(0);
+}
+.premium-grid .grid-row-marker{
+  width:42px;
+  padding:0;
+  text-align:center!important;
+  color:#4F5666;
+  font:9px var(--mono);
+}
+.premium-grid .grid-row-number{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:24px;
+  height:24px;
+  border:1px solid rgba(255,255,255,.055);
+  border-radius:7px;
+  background:rgba(255,255,255,.018);
+}
+.premium-grid .grid-entity{
+  min-width:145px;
+  color:#F0F1F5;
+  font-family:var(--sans)!important;
+  font-size:13px!important;
+  font-weight:650!important;
+  letter-spacing:-.015em;
+}
+.premium-grid .grid-entity::after{
+  content:"";
+  display:inline-block;
+  width:5px;
+  height:5px;
+  margin:0 0 2px 8px;
+  border-radius:50%;
+  background:#8B5CF6;
+  opacity:.45;
+  box-shadow:0 0 12px rgba(139,92,246,.55);
+}
+.premium-grid .grid-metric{
+  color:#E5E7EC;
+  font-weight:550;
+}
+.premium-grid tbody tr:hover .grid-metric{
+  color:#F0EEFF;
+}
+.premium-grid .table-num{
+  font-variant-numeric:tabular-nums;
+}
+.premium-grid .table-status{
+  white-space:nowrap;
+}
+.premium-grid .table-status .tag{
+  min-width:64px;
+  text-align:center;
+  padding:5px 10px!important;
+  font-size:9px!important;
+  letter-spacing:.03em;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.025);
+}
+.premium-grid .grid-row-action{
+  width:42px;
+  padding:0;
+  text-align:center!important;
+  color:#596171;
+  opacity:.45;
+  transform:translateX(-3px);
+  font-size:15px;
+  transition:opacity .2s ease,transform .2s ease,color .2s ease;
+}
+.premium-grid tbody tr:hover .grid-row-action span{
+  display:inline-flex;
+  width:27px;
+  height:27px;
+  align-items:center;
+  justify-content:center;
+  border-radius:8px;
+  background:rgba(139,92,246,.10);
+  box-shadow:0 0 18px rgba(139,92,246,.08);
+}
+.premium-grid .arrow{
+  margin-left:5px;
+  color:#A996FF;
+  opacity:.9;
+}
+@keyframes premiumGridIn{
+  from{opacity:0;transform:translateY(10px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@media(prefers-reduced-motion:reduce){
+  .premium-grid tbody tr{animation:none}
+}
+@media(max-width:760px){
+  .premium-grid{border-radius:14px}
+}
