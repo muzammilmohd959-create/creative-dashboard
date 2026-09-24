@@ -25,9 +25,9 @@ PAGES.intelligence = {
       '<div class="intel-map-metrics"><span><b>01</b> Signal</span><span><b>02</b> Evidence</span><span><b>03</b> Action</span></div></div>' +
       '<div class="intel-flow" aria-label="Creative intelligence flow">' +
         '<div class="intel-node node-signal" data-node="signal"><span>ATTRIBUTE</span><strong id="intelNodeSignal">' + escapeHtml(String(lead.winner)) + '</strong><small>creative signal</small></div>' +
-        '<div class="intel-connector"><i></i><b>OBSERVED</b></div>' +
+        '<div class="intel-connector"><i></i><b>OBSERVED</b><span class="intel-pulse"></span></div>' +
         '<div class="intel-node node-evidence" data-node="evidence"><span>PERFORMANCE</span><strong id="intelNodeMetric">' + Math.round(Math.abs(lead.delta || 0)) + '% ' + direction(lead) + '</strong><small id="intelNodeMetricSub">' + metricLabel(lead) + ' vs baseline</small></div>' +
-        '<div class="intel-connector"><i></i><b>TRANSLATE</b></div>' +
+        '<div class="intel-connector"><i></i><b>TRANSLATE</b><span class="intel-pulse"></span></div>' +
         '<div class="intel-node node-action" data-node="action"><span>NEXT TEST</span><strong id="intelNodeAction">Create a fresh execution</strong><small>preserve the core signal</small></div>' +
       '</div></section>' :
       '<div class="empty">Not enough spend or impressions to establish evidence-backed patterns.</div>';
@@ -61,7 +61,7 @@ PAGES.intelligence = {
       var i = evidence[idx]; if(!i) return;
       cards.forEach(function(c){ c.classList.remove('is-focused'); });
       var card = container.querySelector('.intel-signal-card[data-signal="' + idx + '"]');
-      if(card) card.classList.add('is-focused');
+      if(card) { card.classList.add('is-focused'); card.scrollIntoView({behavior:'smooth',block:'nearest'}); }
       if(signalEl) signalEl.textContent = String(i.winner);
       var ml = i.metric === 'cpa' ? 'CPA' : i.metric === 'roas' ? 'ROAS' : i.metric === 'ctr' ? 'CTR' : String(i.metric || '').toUpperCase();
       var dir = i.metric === 'cpa' ? (i.delta < 0 ? 'lower' : 'higher') : (i.delta > 0 ? 'higher' : 'lower');
@@ -73,6 +73,15 @@ PAGES.intelligence = {
       card.addEventListener('click',function(){ focusSignal(Number(card.dataset.signal)||0); });
     });
     if(evidence.length) focusSignal(0);
+    var flow = container.querySelector('.intel-flow');
+    if(flow){
+      flow.addEventListener('pointermove',function(e){
+        var r=flow.getBoundingClientRect();
+        flow.style.setProperty('--flow-x',((e.clientX-r.left)/r.width*100).toFixed(1)+'%');
+        flow.style.setProperty('--flow-y',((e.clientY-r.top)/r.height*100).toFixed(1)+'%');
+      });
+      flow.addEventListener('pointerleave',function(){flow.style.removeProperty('--flow-x');flow.style.removeProperty('--flow-y');});
+    }
   }
 };
 
