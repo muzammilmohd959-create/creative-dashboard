@@ -1981,3 +1981,10 @@ thead th{background:#F7F8FB}tbody tr.clickable-row:hover{background:#F5F3FC}
 .nav-settings{flex:0 0 auto;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);background:var(--sidebar-bg);position:relative;z-index:3}
 .nav-settings .nav-item{width:100%}
 @media(max-width:760px){.sidebar{display:block}.nav-settings{margin-top:8px}}
+
+
+/* ================= Sidebar viewport lock ================= */
+.sidebar{height:100vh;overflow:hidden!important;min-height:0}
+#sidebarNav{min-height:0;flex:1 1 auto;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin}
+.nav-settings{flex:0 0 auto;position:relative;z-index:5;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);background:var(--sidebar-bg)}
+.nav-settings .nav-item{display:grid;width:100%}
