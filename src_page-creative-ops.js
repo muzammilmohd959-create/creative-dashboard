@@ -50,7 +50,7 @@
         '<button class="btn-small test-cycle" data-id="'+esc(t.id)+'">Advance test →</button>'+
         '<button class="btn-small danger test-delete" data-id="'+esc(t.id)+'">Delete</button></div></div>';
     }).join('');
-    return '<section class="ops-tests"><div class="ops-section-head"><div><h2>Creative testing</h2><p class="sub">Track each brief from planned test to learning, winner or refresh.</p></div></div>' +
+    return '<section class="ops-tests"><div class="ops-section-head ops-section-head-premium"><div><span class="ops-eyebrow">DECISION ENGINE</span><h2>Creative testing</h2><p class="sub">Track each brief from planned test to learning, winner or refresh.</p></div><span class="ops-count">'+fmtNum(state.tests.length)+' tests</span></div>' +
       (cards || '<div class="empty">No creative tests yet. Create a test from a brief when it reaches Testing.</div>') + '</section>';
   }
 
@@ -105,14 +105,14 @@
   function render() {
     var c = document.getElementById('pageContent');
     if (!c) return;
-    c.innerHTML = pageHeader('Creative operations', 'From recommendation → brief → creator production → testing.') +
+    c.innerHTML = pageHeader('Creative operations', 'From recommendation → brief → creator production → testing.') + '<div class="ops-kicker"><span>PRODUCTION OS</span><span>Signal → brief → creator → test → decision</span></div>' +
       '<div class="ops-summary">' +
         kpiCard('Total briefs', fmtNum(state.briefs.length)) +
         kpiCard('In production', fmtNum(state.briefs.filter(function(b){return b.status==='In Production';}).length)) +
         kpiCard('Testing', fmtNum(state.briefs.filter(function(b){return b.status==='Testing';}).length)) +
         kpiCard('Live', fmtNum(state.briefs.filter(function(b){return b.status==='Live';}).length)) +
       '</div>' + formHTML() +
-      '<section><div class="ops-section-head"><div><h2>Production pipeline</h2><p class="sub">Move a brief forward as the creator workflow progresses.</p></div></div>'+renderBoard()+'</section>' +
+      '<section><div class="ops-section-head ops-section-head-premium"><div><span class="ops-eyebrow">WORKFLOW</span><h2>Production pipeline</h2><p class="sub">Move a brief forward as the creator workflow progresses.</p></div><span class="ops-count">'+fmtNum(state.briefs.length)+' briefs</span></div>'+renderBoard()+'</section>' +
       renderTests();
     wire();
   }
