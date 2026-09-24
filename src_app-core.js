@@ -49,6 +49,7 @@ var NAV_ITEMS = [
   { id: 'intelligence', label: 'Creative intelligence' },
   { id: 'patternExplorer', label: 'Pattern explorer' },
   { id: 'creativeScorecard', label: 'Creative scorecard' },
+  { id: 'comparisonInsights', label: 'Comparison insights' },
   { id: 'recommendations', label: 'Recommendations' },
   { id: 'creativeOps', label: 'Creative operations' },
   { id: 'creativeTesting', label: 'Creative testing' },
