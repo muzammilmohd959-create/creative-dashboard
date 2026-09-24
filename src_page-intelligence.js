@@ -44,6 +44,7 @@ PAGES.intelligence = {
 
     return pageHeader('Creative intelligence','A cinematic evidence layer connecting creative attributes to performance and the next test.') +
       '<div class="intel-kicker"><span>CREATIVE SIGNALS</span><span>Selected range · evidence engine</span></div>' +
+      '<section class="intelligence-command"><div><span class="ops-eyebrow">ARKFLUENCE INTELLIGENCE ENGINE</span><h2>Find the signal hiding inside the creative.</h2><p>Move from observable creative attributes to measured performance, evidence strength and the next test — without losing the chain between them.</p><div class="intelligence-flow"><span>ATTRIBUTE</span><i>→</i><span>PERFORMANCE</span><i>→</i><strong>EVIDENCE</strong><i>→</i><span>ACTION</span></div></div><div class="intelligence-core"><div class="intel-core-ring"></div><span>SIGNALS</span><strong>' + fmtNum(evidence.length) + '</strong><small>detected</small></div></section>' +
       leadHTML +
       '<section><div class="intel-section-head"><div><h2>Evidence signals</h2><p class="sub">Click a signal to focus the intelligence chain.</p></div><span class="intel-count">' + fmtNum(evidence.length) + ' signals</span></div>' +
       '<div class="insight-grid intelligence-grid">' + (cards || '<div class="empty">No evidence-backed signals yet.</div>') + '</div></section>' +
