@@ -56,7 +56,42 @@ function csvModeState(what) {
 // ================= Overview page =================
 PAGES.overview = {
   render: function () {
-    if (App.mode === 'empty') return pageHeader('Overview', 'Account-wide performance across every creator, creative and campaign.') + noDataState('your account overview');
+    if (App.mode === 'empty') {
+      return pageHeader('Overview', 'The command center for creator content, creative testing and measurable growth.') +
+        '<div class="overview-kicker"><span>PERFORMANCE OS</span><span>Workspace ready · No performance data loaded</span></div>' +
+        '<section class="overview-hero">' +
+          '<div class="overview-hero-copy">' +
+            '<span class="overview-eyebrow">ARKFLUENCE / CREATIVE PERFORMANCE OS</span>' +
+            '<h2>Turn creator content into a <em>measurable growth system.</em></h2>' +
+            '<p>Connect creators, creatives, campaigns and paid-media outcomes in one interactive workspace. Start with the sample dataset or connect your own data to activate the intelligence layer.</p>' +
+            '<div class="overview-hero-actions">' +
+              '<button class="primary overview-launch" onclick="document.getElementById(\'btnSample\').click()">Explore sample workspace <span>↗</span></button>' +
+              '<button class="overview-secondary" onclick="document.getElementById(\'fileInput\') && document.getElementById(\'fileInput\').click()">Upload your data</button>' +
+            '</div>' +
+            '<div class="overview-proof-row"><span><i></i> Creator network</span><span><i></i> Creative intelligence</span><span><i></i> Testing workflow</span></div>' +
+          '</div>' +
+          '<div class="overview-visual" aria-label="Creative performance system visualization">' +
+            '<div class="overview-orbit orbit-one"></div><div class="overview-orbit orbit-two"></div>' +
+            '<div class="overview-core"><span>ARK</span><strong>FLUENCE</strong><small>CREATIVE SIGNAL ENGINE</small></div>' +
+            '<div class="overview-node node-a"><b>01</b><span>CREATORS</span><strong>Source</strong></div>' +
+            '<div class="overview-node node-b"><b>02</b><span>CONTENT</span><strong>Test</strong></div>' +
+            '<div class="overview-node node-c"><b>03</b><span>PERFORMANCE</span><strong>Learn</strong></div>' +
+            '<div class="overview-node node-d"><b>04</b><span>ACTION</span><strong>Scale</strong></div>' +
+            '<div class="overview-scan"></div>' +
+          '</div>' +
+        '</section>' +
+        '<section class="overview-feature-grid">' +
+          '<button class="overview-feature" onclick="setPage(\'intelligence\',{})"><span class="feature-num">01</span><div><strong>Creative Intelligence</strong><p>Trace the signals behind performance and move from raw metrics to evidence.</p></div><span class="feature-arrow">↗</span></button>' +
+          '<button class="overview-feature" onclick="setPage(\'patternExplorer\',{})"><span class="feature-num">02</span><div><strong>Pattern Explorer</strong><p>Compare hooks, angles, formats, creators and campaigns across a selected range.</p></div><span class="feature-arrow">↗</span></button>' +
+          '<button class="overview-feature" onclick="setPage(\'creativeOps\',{})"><span class="feature-num">03</span><div><strong>Creative Operations</strong><p>Turn evidence into briefs, creator assignments, testing and production decisions.</p></div><span class="feature-arrow">↗</span></button>' +
+          '<button class="overview-feature" onclick="setPage(\'recommendations\',{})"><span class="feature-num">04</span><div><strong>Recommendations</strong><p>Translate observed performance signals into the next creative action.</p></div><span class="feature-arrow">↗</span></button>' +
+        '</section>' +
+        '<section class="overview-flow">' +
+          '<div class="overview-flow-head"><div><span class="overview-eyebrow">THE OPERATING LOOP</span><h2>From content to compounding creative knowledge.</h2></div><span class="overview-live-pill"><i></i> SYSTEM READY</span></div>' +
+          '<div class="overview-flow-steps"><div><b>01</b><strong>Creators</strong><span>Source the right voices</span></div><i>→</i><div><b>02</b><strong>Creative</strong><span>Capture the execution</span></div><i>→</i><div><b>03</b><strong>Testing</strong><span>Measure paid outcomes</span></div><i>→</i><div><b>04</b><strong>Intelligence</strong><span>Find repeatable signals</span></div><i>→</i><div><b>05</b><strong>Action</strong><span>Brief the next variation</span></div></div>' +
+        '</section>';
+    }
+
     var d = App.data, o = d.overall;
     var kpis = [
       kpiCard('Spend', fmtCurrency(o.spend), 'Total media spend'),
@@ -74,67 +109,53 @@ PAGES.overview = {
       ? '<section class="overview-signal"><div><span class="insight-cat">LEADING SIGNAL</span><h2>' + escapeHtml(String(signal.winner)) + '</h2><p>' +
         Math.round(Math.abs(signal.delta || 0)) + '% ' + (signal.metric === 'cpa' ? (signal.delta < 0 ? 'lower CPA' : 'higher CPA') : (signal.delta > 0 ? 'higher ' + String(signal.metric).toUpperCase() : 'lower ' + String(signal.metric).toUpperCase())) +
         ' than baseline · ' + fmtCurrency(signal.spend) + ' spend · ' + fmtNum(signal.purchases) + ' purchases.</p></div>' +
-        '<button class="primary" onclick="setPage(\'intelligence\',{})">Explore intelligence →</button></section>'
-      : '';
+        '<button class="primary" onclick="setPage(\'intelligence\',{})">Explore intelligence →</button></section>' : '';
 
     var body;
     if (App.mode === 'csv') {
       body = '<section><h2>Creators</h2>' + csvModeState('Time series and creative-level views') + '</section>';
     } else {
+      var topCreators = d.creators.map(function (c) { return Object.assign({ name: c.name }, d.creatorMetrics[c.id] || {}); }).sort(function (a,b) { return b.revenue-a.revenue; }).slice(0,5);
+      var topCreatives = d.creatives.map(function (cv) { return Object.assign({ label: cv.id }, d.creativeMetrics[cv.id] || {}); }).filter(function(c){return c.spend>50;}).sort(function(a,b){return b.roas-a.roas;}).slice(0,5);
       body =
+        '<section class="overview-data-hero"><div><span class="overview-eyebrow">LIVE PERFORMANCE</span><h2>What is happening across the system.</h2><p>Use the command center to move from account-level outcomes into the creative signals driving them.</p></div><div class="overview-data-badge"><span>RANGE</span><strong>' + escapeHtml(App.dateRangeLabel || 'Active') + '</strong></div></section>' +
         '<section><div class="charts-grid">' +
-        '<div class="chart-card"><div class="chart-title">Spend vs revenue over time</div>' +
-        '<div class="chart-body"><canvas id="ovSpendRevChart" role="img" aria-label="Line chart of daily spend and revenue"></canvas></div></div>' +
-        '<div class="chart-card"><div class="chart-title">Purchases over time</div>' +
-        '<div class="chart-body"><canvas id="ovPurchasesChart" role="img" aria-label="Bar chart of daily purchases"></canvas></div></div>' +
+          '<div class="chart-card overview-chart-large"><div class="chart-title"><span>Performance trajectory</span><small>Spend vs revenue</small></div><div class="chart-body"><canvas id="ovSpendRevChart" role="img" aria-label="Line chart of daily spend and revenue"></canvas></div></div>' +
+          '<div class="chart-card"><div class="chart-title"><span>Conversion pulse</span><small>Purchases by day</small></div><div class="chart-body"><canvas id="ovPurchasesChart" role="img" aria-label="Bar chart of daily purchases"></canvas></div></div>' +
         '</div></section>' +
-        '<section><div class="charts-grid">' +
-        '<div class="chart-card"><div class="chart-title">Top creators by revenue</div>' +
-        '<div class="chart-body"><canvas id="ovTopCreators" role="img" aria-label="Bar chart of top creators by revenue"></canvas></div></div>' +
-        '<div class="chart-card"><div class="chart-title">Top creatives by ROAS</div>' +
-        '<div class="chart-body"><canvas id="ovTopCreatives" role="img" aria-label="Bar chart of top creatives by ROAS"></canvas></div></div>' +
+        '<section><div class="overview-module-head"><div><span class="overview-eyebrow">LEADERBOARD</span><h2>Where the signal is strongest.</h2></div><button class="link-btn" onclick="setPage(\'creatives\',{})">Open creative library →</button></div><div class="charts-grid">' +
+          '<div class="chart-card"><div class="chart-title"><span>Top creators</span><small>Revenue contribution</small></div><div class="chart-body"><canvas id="ovTopCreators" role="img" aria-label="Bar chart of top creators by revenue"></canvas></div></div>' +
+          '<div class="chart-card"><div class="chart-title"><span>Top creatives</span><small>ROAS · sampled spend</small></div><div class="chart-body"><canvas id="ovTopCreatives" role="img" aria-label="Bar chart of top creatives by ROAS"></canvas></div></div>' +
         '</div></section>' +
-        '<section><div class="charts-grid">' +
-        '<div class="chart-card"><div class="chart-title">Performance alerts</div>' + renderAlertsList(d.alerts) + '</div>' +
-        '<div class="chart-card"><div class="chart-title">Creative intelligence summary</div>' + renderInsightsSummary(d.insights) + '</div>' +
-        '</div></section>';
+        '<section><div class="charts-grid"><div class="chart-card"><div class="chart-title"><span>Performance alerts</span><small>Requires attention</small></div>' + renderAlertsList(d.alerts) + '</div><div class="chart-card"><div class="chart-title"><span>Creative intelligence</span><small>Observed signals</small></div>' + renderInsightsSummary(d.insights) + '</div></div></section>';
     }
-    return pageHeader('Overview', 'Your creative performance command center — what is happening, what is working, and what to do next.') + '<div class="overview-kicker"><span>PERFORMANCE OS</span><span>Selected range · '+(App.dateRangeLabel || 'Active')+'</span></div>' + kpis + signalHtml + body;
+    return pageHeader('Overview', 'Your creative performance command center — what is happening, what is working, and what to do next.') +
+      '<div class="overview-kicker"><span>PERFORMANCE OS</span><span>Selected range · ' + (App.dateRangeLabel || 'Active') + '</span></div>' +
+      (App.mode !== 'empty' ? '<div class="overview-hero-strip"><div><span class="overview-eyebrow">ARKFLUENCE COMMAND CENTER</span><strong>Creator content → paid performance → next action.</strong></div><div class="overview-strip-dots"><i></i><i></i><i></i></div></div>' : '') +
+      kpis + signalHtml + body;
   },
   mount: function () {
     if (!isFullMode()) return;
     var d = App.data, colors = themeColors();
-
     var labels = d.dateSeries.map(function (r) { return fmtDateShort(r.date); });
     App.charts.ovSpendRev = new Chart(document.getElementById('ovSpendRevChart'), {
       type: 'line',
-      data: {
-        labels: labels,
-        datasets: [
-          { label: 'Spend', data: d.dateSeries.map(function (r) { return round2(r.spend); }), borderColor: colors.neg, backgroundColor: colors.neg + '22', borderWidth: 2, pointRadius: 0, tension: 0.25 },
-          { label: 'Revenue', data: d.dateSeries.map(function (r) { return round2(r.revenue); }), borderColor: colors.pos, backgroundColor: colors.pos + '22', borderWidth: 2, pointRadius: 0, tension: 0.25 }
-        ]
-      },
+      data: { labels: labels, datasets: [
+        { label: 'Spend', data: d.dateSeries.map(function (r) { return round2(r.spend); }), borderColor: colors.neg, backgroundColor: colors.neg + '22', borderWidth: 2, pointRadius: 0, tension: 0.25 },
+        { label: 'Revenue', data: d.dateSeries.map(function (r) { return round2(r.revenue); }), borderColor: colors.pos, backgroundColor: colors.pos + '22', borderWidth: 2, pointRadius: 0, tension: 0.25 }
+      ]},
       options: chartOptsLine(colors)
     });
-
     App.charts.ovPurchases = new Chart(document.getElementById('ovPurchasesChart'), {
       type: 'bar',
       data: { labels: labels, datasets: [{ label: 'Purchases', data: d.dateSeries.map(function (r) { return r.purchases; }), backgroundColor: colors.accent, borderRadius: 3, maxBarThickness: 16 }] },
       options: chartOptsLine(colors, true)
     });
-
-    var topCreators = d.creators.map(function (c) { return Object.assign({ name: c.name }, d.creatorMetrics[c.id] || {}); })
-      .sort(function (a, b) { return b.revenue - a.revenue; }).slice(0, 5);
     App.charts.ovTopCreators = new Chart(document.getElementById('ovTopCreators'), {
       type: 'bar',
       data: { labels: topCreators.map(function (c) { return c.name; }), datasets: [{ label: 'Revenue', data: topCreators.map(function (c) { return round2(c.revenue); }), backgroundColor: colors.pos, borderRadius: 4, maxBarThickness: 22 }] },
       options: chartOptsHBar(colors)
     });
-
-    var topCreatives = d.creatives.map(function (cv) { return Object.assign({ label: cv.id }, d.creativeMetrics[cv.id] || {}); })
-      .filter(function (c) { return c.spend > 50; })
-      .sort(function (a, b) { return b.roas - a.roas; }).slice(0, 5);
     App.charts.ovTopCreatives = new Chart(document.getElementById('ovTopCreatives'), {
       type: 'bar',
       data: { labels: topCreatives.map(function (c) { return c.label; }), datasets: [{ label: 'ROAS', data: topCreatives.map(function (c) { return round2(c.roas); }), backgroundColor: colors.accent, borderRadius: 4, maxBarThickness: 22 }] },
