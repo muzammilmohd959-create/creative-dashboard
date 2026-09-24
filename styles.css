@@ -1129,3 +1129,33 @@ section:nth-of-type(3){animation-delay:.10s}
   .chart-card,.kpi,.intelligence-card,.rec-card,.pattern-card,.comparison-card,.compare-card,.scorecard-card,.test-center-card,.ops-card,.creative-card,.nav-item,.primary,.btn,.btn-small,.link-btn{transition:none!important}
   .chart-card:hover,.kpi:hover{transform:none}
 }
+
+/* Cinematic Creative Intelligence signal map */
+.intel-map-shell{position:relative;overflow:hidden;margin:0 0 24px;padding:24px;border:1px solid rgba(139,92,246,.22);border-radius:20px;background:radial-gradient(620px 260px at 12% 0%,rgba(139,92,246,.14),transparent 68%),radial-gradient(420px 220px at 100% 100%,rgba(53,214,176,.045),transparent 70%),linear-gradient(135deg,rgba(255,255,255,.045),rgba(255,255,255,.012)),var(--surface);box-shadow:0 24px 70px rgba(0,0,0,.22)}
+.intel-map-shell::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:34px 34px;mask-image:linear-gradient(to bottom,black,transparent 88%);pointer-events:none}
+.intel-map-copy{position:relative;z-index:2;max-width:620px}
+.intel-map-copy h2{font-size:24px;letter-spacing:-.045em;margin:8px 0 7px}
+.intel-map-copy p{font-size:11.5px;line-height:1.6;color:var(--muted);margin:0}
+.intel-map-metrics{display:flex;gap:7px;flex-wrap:wrap;margin-top:16px}
+.intel-map-metrics span{padding:6px 8px;border:1px solid var(--border);border-radius:7px;background:rgba(255,255,255,.025);font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.intel-map-metrics b{color:#c4b5fd;margin-right:4px}
+.intel-flow{position:relative;z-index:2;display:grid;grid-template-columns:1fr 72px 1fr 72px 1fr;align-items:center;gap:0;margin-top:28px}
+.intel-node{min-height:128px;padding:16px;border:1px solid var(--border);border-radius:15px;background:rgba(9,11,16,.72);backdrop-filter:blur(10px);box-shadow:0 15px 45px rgba(0,0,0,.18);transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
+.intel-node:hover{transform:translateY(-4px);border-color:rgba(167,139,250,.4);box-shadow:0 18px 50px rgba(0,0,0,.26),0 0 28px rgba(139,92,246,.08)}
+.intel-node span{display:block;font:700 8px var(--mono);letter-spacing:.15em;color:#a78bfa}
+.intel-node strong{display:block;margin-top:12px;font-size:16px;line-height:1.3;letter-spacing:-.02em}
+.intel-node small{display:block;margin-top:7px;color:var(--muted);font-size:10px}
+.node-evidence{border-color:rgba(53,214,176,.18);background:radial-gradient(180px 100px at 50% 0%,rgba(53,214,176,.055),transparent 75%),rgba(9,11,16,.72)}
+.node-action{border-color:rgba(139,92,246,.2)}
+.intel-connector{position:relative;height:2px;background:linear-gradient(90deg,rgba(139,92,246,.05),rgba(167,139,250,.65),rgba(139,92,246,.05));box-shadow:0 0 15px rgba(139,92,246,.16)}
+.intel-connector i{position:absolute;top:50%;left:8%;width:7px;height:7px;border-radius:50%;background:#a78bfa;box-shadow:0 0 14px rgba(167,139,250,.9);transform:translate(-50%,-50%);animation:intelTravel 2.8s ease-in-out infinite}
+.intel-connector b{position:absolute;left:50%;top:8px;transform:translateX(-50%);font:700 7px var(--mono);letter-spacing:.12em;color:#6f7787;white-space:nowrap}
+.intel-connector:nth-of-type(4) i{animation-delay:.8s}
+@keyframes intelTravel{0%{left:7%;opacity:.25}18%{opacity:1}82%{opacity:1}100%{left:93%;opacity:.25}}
+.intel-signal-card{cursor:pointer}
+.intel-signal-card.is-focused{border-color:rgba(167,139,250,.6);box-shadow:0 18px 48px rgba(0,0,0,.24),0 0 34px rgba(139,92,246,.11);transform:translateY(-4px)}
+.intel-signal-card.is-focused::before{content:"";position:absolute;left:0;top:0;width:42%;height:2px;background:linear-gradient(90deg,#a78bfa,transparent)}
+@media(max-width:900px){.intel-flow{grid-template-columns:1fr;gap:10px}.intel-connector{height:34px;width:2px;margin:auto;background:linear-gradient(180deg,rgba(139,92,246,.05),rgba(167,139,250,.65),rgba(139,92,246,.05))}.intel-connector i{top:7%;left:50%;animation:intelTravelVertical 2.8s ease-in-out infinite}.intel-connector b{left:12px;top:50%;transform:translateY(-50%)}}
+@keyframes intelTravelVertical{0%{top:7%;opacity:.25}18%{opacity:1}82%{opacity:1}100%{top:93%;opacity:.25}}
+@media(max-width:560px){.intel-map-shell{padding:18px}.intel-map-copy h2{font-size:20px}.intel-node{min-height:110px}.intel-node strong{font-size:14px}}
+@media(prefers-reduced-motion:reduce){.intel-connector i{animation:none}.intel-node,.intel-signal-card{transition:none!important}.intel-signal-card.is-focused{transform:none}}
