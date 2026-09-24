@@ -1973,3 +1973,11 @@ thead th{background:#F7F8FB}tbody tr.clickable-row:hover{background:#F5F3FC}
 .cc-workspace-cta span{color:#A996FF}
 .cc-workspace-cta b{font:700 9px var(--sans);letter-spacing:0;text-transform:none;color:var(--text);transition:transform .2s ease,color .2s ease}
 .creative-card:hover .cc-workspace-cta b{transform:translateX(3px);color:#A996FF}
+
+
+/* ================= Pinned Settings Navigation ================= */
+.sidebar{display:flex;flex-direction:column}
+#sidebarNav{min-height:0;flex:1;overflow-y:auto;scrollbar-width:thin}
+.nav-settings{flex:0 0 auto;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);background:var(--sidebar-bg);position:relative;z-index:3}
+.nav-settings .nav-item{width:100%}
+@media(max-width:760px){.sidebar{display:block}.nav-settings{margin-top:8px}}
