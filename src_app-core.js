@@ -269,39 +269,44 @@ function sortRows(rows, sortState, columns) {
 function tableHTML(columns, rows, sortState, rowIdKey, emptyMsg) {
   if (!rows.length) return '<div class="empty">' + (emptyMsg || 'No data to show.') + '</div>';
 
-  var thead = '<thead><tr>' + columns.map(function (c, ci) {
+  var metricKeys = ['budget','spend','revenue','purchases','cpa','roas','ctr','cpc','conversions'];
+  var metricMax = {};
+  columns.forEach(function(col){
+    if (metricKeys.indexOf(col.key) === -1) return;
+    metricMax[col.key] = Math.max.apply(null, rows.map(function(r){ return Math.abs(Number(r[col.key]) || 0); }).concat([1]));
+  });
+
+  function cellValue(row, col){
+    var val = col.format ? col.format(row) : escapeHtml(row[col.key]);
+    var cls = col.align === 'left' ? 'table-text' : 'table-num';
+    if (col.key === 'status') cls += ' table-status';
+    if (col.key === 'name' || col.key === 'id') cls += ' table-primary';
+    if (col.align !== 'left' && metricKeys.indexOf(col.key) !== -1 && col.key !== 'status') {
+      var raw = Math.abs(Number(row[col.key]) || 0);
+      var pct = Math.max(4, Math.min(100, (raw / metricMax[col.key]) * 100));
+      return '<div class="grid-metric-wrap"><span class="' + cls + '">' + val + '</span><span class="grid-microbar"><i style="width:' + pct.toFixed(1) + '%"></i></span></div>';
+    }
+    return '<span class="' + cls + '">' + val + '</span>';
+  }
+
+  var thead = '<thead><tr><th class="grid-index-head"></th>' + columns.map(function(c,ci){
     var arrow = sortState && sortState.key === c.key ? (sortState.dir === 'asc' ? ' ▲' : ' ▼') : '';
     var cls = ci === 0 ? 'grid-head-primary' : (c.align === 'left' ? 'grid-head-text' : 'grid-head-num');
     return '<th class="' + cls + '" data-sort-key="' + c.key + '" style="text-align:' + (c.align || 'right') + '">' +
       '<span>' + escapeHtml(c.label) + '</span><span class="arrow">' + arrow + '</span></th>';
-  }).join('') + '</tr></thead>';
+  }).join('') + '<th class="grid-action-head"></th></tr></thead>';
 
-  var tbody = '<tbody>' + rows.map(function (r, i) {
+  var tbody = '<tbody>' + rows.map(function(r,i){
     var rowAttr = rowIdKey ? ' data-row-id="' + escapeHtml(r[rowIdKey]) + '" class="clickable-row"' : '';
     return '<tr' + rowAttr + ' style="--row-index:' + i + '">' +
-      '<td class="grid-row-marker"><span class="grid-row-number">' + String(i + 1).padStart(2,'0') + '</span></td>' +
-      columns.map(function (c, ci) {
-        var val = c.format ? c.format(r) : escapeHtml(r[c.key]);
-        var cls = c.align === 'left' ? 'table-text' : 'table-num';
-        if (c.key === 'status') cls += ' table-status';
-        if (c.key === 'name' || c.key === 'id') cls += ' table-primary';
-        if (ci === 0) cls += ' grid-entity';
-        if (['spend','revenue','purchases','cpa','roas'].indexOf(c.key) !== -1) cls += ' grid-metric';
-        return '<td class="' + cls + '" style="text-align:' + (c.align || 'right') + '">' + val + '</td>';
+      '<td class="grid-row-marker"><span class="grid-row-number">' + String(i+1).padStart(2,'0') + '</span></td>' +
+      columns.map(function(col){
+        return '<td class="' + (col.align === 'left' ? 'grid-cell-left' : 'grid-cell-right') + '" style="text-align:' + (col.align || 'right') + '">' + cellValue(r,col) + '</td>';
       }).join('') +
-      '<td class="grid-row-action"><span>↗</span></td>' +
-      '</tr>';
+      '<td class="grid-row-action"><span>↗</span></td></tr>';
   }).join('') + '</tbody>';
 
-  return '<div class="table-wrap premium-grid"><table><thead><tr>' +
-    '<th class="grid-index-head"></th>' +
-    columns.map(function (c, ci) {
-      var arrow = sortState && sortState.key === c.key ? (sortState.dir === 'asc' ? ' ▲' : ' ▼') : '';
-      var cls = ci === 0 ? 'grid-head-primary' : (c.align === 'left' ? 'grid-head-text' : 'grid-head-num');
-      return '<th class="' + cls + '" data-sort-key="' + c.key + '" style="text-align:' + (c.align || 'right') + '">' +
-        '<span>' + escapeHtml(c.label) + '</span><span class="arrow">' + arrow + '</span></th>';
-    }).join('') +
-    '<th class="grid-action-head"></th></tr></thead>' + tbody + '</table></div>';
+  return '<div class="table-wrap premium-grid"><table>' + thead + tbody + '</table></div>';
 }
 function wireTable(container, sortState, rerender, onRowClick) {
   container.querySelectorAll('[data-sort-key]').forEach(function (th) {
