@@ -20,7 +20,7 @@ PAGES.creatives = {
       body = renderCreativeGrid(allRows);
     } else {
       var sorted = sortRows(allRows, App.creativesSort, fullCreativeColumns());
-      body = tableHTML(fullCreativeColumns(), sorted, App.creativesSort, 'id', 'No creatives match these filters.');
+      body = tableHTML(fullCreativeColumns(), sorted, App.creativesSort, 'id', 'No creatives match these filters.', renderCreativeRowExpansion);
     }
 
     var libraryHero = '<section class="creative-library-hero">' +
@@ -53,6 +53,15 @@ PAGES.creatives = {
     }
   }
 };
+
+
+function renderCreativeRowExpansion(row) {
+  return '<div class="grid-insight-panel creative-insight-panel">' +
+    '<div class="grid-insight-main"><div class="grid-insight-eyebrow">CREATIVE FINGERPRINT</div><div class="grid-insight-title">'+escapeHtml(row.id)+'<span>'+escapeHtml(row.hook)+' · '+escapeHtml(row.angle)+' · '+escapeHtml(row.format)+'</span></div><div class="grid-insight-flow"><span>HOOK</span><i>→</i><span>ANGLE</span><i>→</i><span>FORMAT</span><i>→</i><span>OUTCOME</span></div></div>' +
+    '<div class="grid-insight-metrics"><div><span>ROAS</span><strong>'+fmtX(row.roas)+'</strong><small>'+fmtCurrency(row.revenue)+' revenue</small></div><div><span>CPA</span><strong>'+fmtCurrency2(row.cpa)+'</strong><small>'+fmtNum(row.purchases)+' purchases</small></div><div><span>CTR</span><strong>'+fmtPct(row.ctr)+'</strong><small>'+fmtCurrency2(row.cpc)+' CPC</small></div></div>' +
+    '<div class="grid-insight-creators"><div class="grid-insight-section-label">CREATIVE SIGNAL</div><div class="grid-creator-signal"><span class="grid-rank">LIVE</span><strong>'+escapeHtml(row.creatorName)+'</strong><span class="grid-creator-bar"><i style="width:'+Math.max(8,Math.min(100,(row.roas/Math.max(1,4))*100)).toFixed(1)+'%"></i></span><b>'+escapeHtml(row.videoLength || '—')+'</b></div></div>' +
+    '<div class="grid-insight-footer"><span>'+escapeHtml(row.cta || 'CTA not set')+'</span><span>'+escapeHtml(row.videoLength || 'Length not set')+'</span><button type="button" class="btn-small" onclick="setPage(\'creatives\',{creativeId:\''+escapeHtml(row.id)+'\'})">OPEN CREATIVE WORKSPACE →</button></div></div>';
+}
 
 function getFilteredCreatives(d) {
   var f = App.creativesFilter;
