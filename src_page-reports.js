@@ -1,6 +1,6 @@
 PAGES.reports = {
   render: function () {
-    if (App.mode === 'empty') return pageHeader('Reports', 'A client-ready summary of performance, winners and recommendations.') + noDataState('report generation');
+    if (App.mode === 'empty') return '<div class="data-kicker"><span>CLIENT REPORTING</span><span>Performance → evidence → action</span></div>' + pageHeader('Reports', 'A client-ready summary of performance, winners and recommendations.') + noDataState('report generation');
     if (App.mode === 'csv') return pageHeader('Reports', 'A client-ready summary of performance, winners and recommendations.') + csvModeState('Full reports');
 
     var actions = '<button id="btnGenReport" class="primary">Generate report</button> <button id="btnPrintReport">Print / save as PDF</button>';
