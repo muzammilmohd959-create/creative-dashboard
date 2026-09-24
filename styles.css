@@ -1962,3 +1962,14 @@ thead th{background:#F7F8FB}tbody tr.clickable-row:hover{background:#F5F3FC}
 @media(max-width:900px){.fingerprint-grid{grid-template-columns:repeat(3,1fr)}.creative-intelligence-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:650px){.fingerprint-grid,.creative-intelligence-grid{grid-template-columns:1fr}.creative-fingerprint{padding:16px}.creative-fingerprint-head{flex-direction:column}.creative-signal-panel{border-left:0;border-top:1px solid rgba(167,139,250,.12)}.creative-workspace-hero:before{display:none}}
 @media(prefers-reduced-motion:reduce){.creative-workspace-hero:before,.creative-visual-core{animation:none!important}.creative-intel-card,.fingerprint-grid>div{transition:none!important}}
+
+
+/* ================= Creative Library Workspace Entry ================= */
+.creative-card{position:relative;overflow:hidden;transition:transform .25s cubic-bezier(.2,.7,.2,1),border-color .25s ease,box-shadow .25s ease}
+.creative-card:hover{transform:translateY(-6px);border-color:rgba(167,139,250,.34)!important;box-shadow:0 22px 55px rgba(0,0,0,.2),0 0 30px rgba(118,82,232,.07)}
+.creative-card:after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 25%,rgba(255,255,255,.035) 50%,transparent 75%);transform:translateX(-120%);transition:transform .7s ease;pointer-events:none}
+.creative-card:hover:after{transform:translateX(120%)}
+.cc-workspace-cta{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:12px;padding-top:10px;border-top:1px solid var(--border);font:700 7px var(--mono);letter-spacing:.1em;text-transform:uppercase}
+.cc-workspace-cta span{color:#A996FF}
+.cc-workspace-cta b{font:700 9px var(--sans);letter-spacing:0;text-transform:none;color:var(--text);transition:transform .2s ease,color .2s ease}
+.creative-card:hover .cc-workspace-cta b{transform:translateX(3px);color:#A996FF}
