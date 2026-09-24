@@ -235,31 +235,42 @@
   function renderTestingCenter(data) {
     var tests=data.tests;
     var byStatus={}; TEST_STATUS.forEach(function(s){byStatus[s]=tests.filter(function(t){return t.status===s;}).length;});
+    var all=Object.keys(data.metrics).map(function(k){return data.metrics[k];});
+    var base={spend:0,purchases:0,revenue:0};
+    all.forEach(function(x){base.spend+=x.spend;base.purchases+=x.purchases;base.revenue+=x.revenue;});
+    base.cpa=base.purchases?base.spend/base.purchases:0;
+    base.roas=base.spend?base.revenue/base.spend:0;
+
+    function signal(m){
+      if(!m || m.spend<1000 || m.purchases<30) return {label:'Directional',kind:'',text:'More spend/data needed'};
+      if(base.cpa && m.cpa <= base.cpa*0.9 && m.roas >= base.roas*1.05) return {label:'Winner candidate',kind:'good',text:'CPA and ROAS are both better than the blended baseline'};
+      if(base.cpa && m.cpa >= base.cpa*1.1 && m.roas <= base.roas*0.95) return {label:'Needs refresh',kind:'warn',text:'CPA and ROAS are both weaker than the blended baseline'};
+      return {label:'Learning',kind:'warn',text:'Performance is mixed versus the blended baseline'};
+    }
+
     var cards=tests.map(function(t){
       var b=data.briefs.filter(function(x){return x.id===t.creative_brief_id;})[0];
       var cv=data.creatives.filter(function(x){return x.id===t.creative_id;})[0];
       var metric=data.metrics[t.creative_id]||null;
-      var performance=metric ? '<div class="test-metrics"><span>'+fmtCurrency(metric.spend)+' spend</span><span>'+fmtNum(metric.purchases)+' purchases</span><span>'+fmtCurrency2(metric.cpa)+' CPA</span><span>'+fmtX(metric.roas)+' ROAS</span></div>' : '<div class="test-no-data">No linked performance data yet</div>';
+      var sig=signal(metric);
+      var performance=metric ?
+        '<div class="test-metrics"><span>'+fmtCurrency(metric.spend)+' spend</span><span>'+fmtNum(metric.purchases)+' purchases</span><span>'+fmtCurrency2(metric.cpa)+' CPA</span><span>'+fmtX(metric.roas)+' ROAS</span></div>'+
+        '<div class="test-signal '+(sig.kind||'')+'"><strong>'+esc(sig.label)+'</strong><span>'+esc(sig.text)+'</span></div>' :
+        '<div class="test-no-data">No linked performance data yet</div>';
       var link=!cv ? '<div class="test-link-row"><select class="test-link-select" data-id="'+esc(t.id)+'"><option value="">Link a creative…</option>'+data.creatives.map(function(x){return '<option value="'+esc(x.id)+'">'+esc(x.id)+' · '+esc(x.hook)+' · '+esc(x.format)+'</option>';}).join('')+'</select><button class="btn-small test-link" data-id="'+esc(t.id)+'">Link</button></div>' : '';
+      var decision=(metric && metric.spend>=1000 && metric.purchases>=30 && sig.label!=='Learning' && sig.label!=='Directional') ?
+        '<div class="ops-actions"><button class="btn-small test-decision" data-id="'+esc(t.id)+'" data-status="'+(sig.label==='Winner candidate'?'Winner':'Needs Refresh')+'">Mark '+(sig.label==='Winner candidate'?'Winner':'Needs Refresh')+'</button></div>' : '';
       return '<article class="test-center-card">'+
         '<div class="test-center-top"><span class="ops-id">'+esc(t.id)+'</span>'+badge(t.status,statusKind(t.status))+'</div>'+
         '<h3>'+esc(b ? b.title : (cv ? cv.id : 'Creative test'))+'</h3>'+
         '<p class="ops-meta">'+esc(cv ? (cv.hook+' · '+cv.angle+' · '+cv.format) : 'No creative linked')+'</p>'+
         link+performance+
         '<div class="test-center-foot"><span>'+esc(t.platform||'Instagram')+'</span><span>'+esc(t.launch_date||'No launch date')+'</span></div>'+
+        decision+
         '<div class="ops-actions"><button class="btn-small test-center-advance" data-id="'+esc(t.id)+'">Advance →</button></div>'+
       '</article>';
     }).join('');
-';
-      return '<article class="test-center-card">'+
-        '<div class="test-center-top"><span class="ops-id">'+esc(t.id)+'</span>'+badge(t.status,statusKind(t.status))+'</div>'+
-        '<h3>'+esc(b ? b.title : (cv ? cv.id : 'Creative test'))+'</h3>'+
-        '<p class="ops-meta">'+esc(cv ? (cv.hook+' · '+cv.angle+' · '+cv.format) : 'No creative linked')+'</p>'+
-        performance+
-        '<div class="test-center-foot"><span>'+esc(t.platform||'Instagram')+'</span><span>'+esc(t.launch_date||'No launch date')+'</span></div>'+
-        '<div class="ops-actions"><button class="btn-small test-center-advance" data-id="'+esc(t.id)+'">Advance →</button></div>'+
-      '</article>';
-    }).join('');
+
     var summary=TEST_STATUS.map(function(s){return kpiCard(s,fmtNum(byStatus[s]));}).join('');
     return pageHeader('Creative testing','Track hypotheses from planned test → learning → winner or refresh.')+
       '<div class="ops-summary test-summary">'+summary+'</div>'+
