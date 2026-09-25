@@ -3270,3 +3270,95 @@ body::-webkit-scrollbar,.sidebar::-webkit-scrollbar{width:7px}body::-webkit-scro
   .nav-item,.nav-settings .nav-item{min-height:28px!important;height:28px!important}
   .nav-item .nav-label{font-size:10.5px!important}
 }
+
+/* ================= Overview hero cinematic signal pass ================= */
+.overview-hero{
+  position:relative!important;
+  overflow:hidden!important;
+}
+.overview-hero:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg,rgba(139,92,246,.055) 1px,transparent 1px),
+    linear-gradient(rgba(139,92,246,.035) 1px,transparent 1px);
+  background-size:42px 42px;
+  mask-image:linear-gradient(90deg,black,transparent 88%);
+  opacity:.55;
+}
+.overview-visual:before{
+  content:"";
+  position:absolute;
+  width:360px;height:360px;
+  left:50%;top:50%;
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(139,92,246,.13),rgba(139,92,246,.035) 42%,transparent 70%);
+  filter:blur(8px);
+  animation:arkCorePulse 5s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes arkCorePulse{
+  0%,100%{transform:translate(-50%,-50%) scale(.92);opacity:.65}
+  50%{transform:translate(-50%,-50%) scale(1.08);opacity:1}
+}
+.overview-core{
+  animation:arkCoreFloat 5s ease-in-out infinite;
+}
+@keyframes arkCoreFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-5px)}
+}
+.overview-node{
+  transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease!important;
+}
+.overview-node:hover{
+  transform:translateY(-4px)!important;
+  border-color:rgba(167,139,250,.35)!important;
+  box-shadow:0 20px 45px rgba(0,0,0,.35),0 0 24px rgba(139,92,246,.09)!important;
+}
+.overview-node:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  background:linear-gradient(135deg,rgba(255,255,255,.045),transparent 45%);
+  pointer-events:none;
+}
+.overview-orbit{
+  animation:arkOrbitGlow 7s ease-in-out infinite;
+}
+.orbit-two{animation-delay:-2.5s}
+@keyframes arkOrbitGlow{
+  0%,100%{opacity:.42}
+  50%{opacity:.8}
+}
+.overview-scan{
+  opacity:.55!important;
+  animation:arkScan 4s linear infinite!important;
+}
+@keyframes arkScan{
+  0%{transform:translateY(-170px);opacity:0}
+  15%{opacity:.5}
+  50%{opacity:.85}
+  85%{opacity:.5}
+  100%{transform:translateY(170px);opacity:0}
+}
+.overview-hero-actions button{
+  transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease!important;
+}
+.overview-hero-actions button:hover{
+  transform:translateY(-2px)!important;
+}
+.overview-proof-row span{
+  transition:color .2s ease,transform .2s ease;
+}
+.overview-proof-row span:hover{
+  color:#b8a5ff!important;
+  transform:translateY(-1px);
+}
+@media(prefers-reduced-motion:reduce){
+  .overview-core,.overview-visual:before,.overview-orbit,.overview-scan{animation:none!important}
+}
