@@ -96,7 +96,7 @@ PAGES.overview = {
   render: function () {
     if (App.mode === 'empty') {
       return pageHeader('Overview', 'The command center for creator content, creative testing and measurable growth.') +
-        '<div class="overview-kicker"><span>PERFORMANCE OS</span><span>Workspace ready · No performance data loaded</span></div>' +
+        '<div class="overview-kicker"><span><i class="ark-status-dot"></i> PERFORMANCE OS</span><span>READY TO CONNECT <b>·</b> NO DATA LOADED</span></div>' +
         '<section class="overview-hero">' +
           '<div class="overview-hero-copy">' +
             '<span class="overview-eyebrow">ARKFLUENCE / CREATIVE PERFORMANCE OS</span>' +
@@ -106,7 +106,7 @@ PAGES.overview = {
               '<span class="aura aura-glow aura-lg overview-launch-aura"><button class="primary overview-launch" onclick="document.getElementById(\'btnSample\').click()">Explore sample workspace <span>↗</span></button></span>' +
               '<button class="overview-secondary" onclick="document.getElementById(\'fileInput\') && document.getElementById(\'fileInput\').click()">Upload your data</button>' +
             '</div>' +
-            '<div class="overview-proof-row"><span><i></i> Creator network</span><span><i></i> Creative intelligence</span><span><i></i> Testing workflow</span></div>' +
+            '<div class="overview-proof-row"><span><i></i> Creator network</span><span><i></i> Creative intelligence</span><span><i></i> Testing workflow</span><span class="overview-proof-live">● LIVE ENGINE</span></div>' +
           '</div>' +
           '<div class="overview-visual" aria-label="Creative performance system visualization">' +
             '<div class="overview-orbit orbit-one"></div><div class="overview-orbit orbit-two"></div>' +
@@ -118,7 +118,8 @@ PAGES.overview = {
             '<div class="overview-scan"></div>' +
           '</div>' +
         '</section>' +
-        '<section class="overview-feature-grid">' +
+        '<div class="overview-command-strip"><span class="command-strip-label">ARK / SYSTEM MAP</span><div class="command-strip-line"></div><span>04 INTELLIGENCE MODULES</span></div>' +
+        '<section class="overview-feature-grid"> +
           '<button class="overview-feature" onclick="setPage(\'intelligence\',{})"><span class="feature-num">01</span><div><strong>Creative Intelligence</strong><p>Trace the signals behind performance and move from raw metrics to evidence.</p></div><span class="feature-arrow">↗</span></button>' +
           '<button class="overview-feature" onclick="setPage(\'patternExplorer\',{})"><span class="feature-num">02</span><div><strong>Pattern Explorer</strong><p>Compare hooks, angles, formats, creators and campaigns across a selected range.</p></div><span class="feature-arrow">↗</span></button>' +
           '<button class="overview-feature" onclick="setPage(\'creativeOps\',{})"><span class="feature-num">03</span><div><strong>Creative Operations</strong><p>Turn evidence into briefs, creator assignments, testing and production decisions.</p></div><span class="feature-arrow">↗</span></button>' +
