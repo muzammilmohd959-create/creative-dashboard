@@ -119,7 +119,7 @@ PAGES.overview = {
           '</div>' +
         '</section>' +
         '<div class="overview-command-strip"><span class="command-strip-label">ARK / SYSTEM MAP</span><div class="command-strip-line"></div><span>04 INTELLIGENCE MODULES</span></div>' +
-        '<section class="overview-feature-grid"> +
+        '<section class="overview-feature-grid">' +
           '<button class="overview-feature" onclick="setPage(\'intelligence\',{})"><span class="feature-num">01</span><div><strong>Creative Intelligence</strong><p>Trace the signals behind performance and move from raw metrics to evidence.</p></div><span class="feature-arrow">↗</span></button>' +
           '<button class="overview-feature" onclick="setPage(\'patternExplorer\',{})"><span class="feature-num">02</span><div><strong>Pattern Explorer</strong><p>Compare hooks, angles, formats, creators and campaigns across a selected range.</p></div><span class="feature-arrow">↗</span></button>' +
           '<button class="overview-feature" onclick="setPage(\'creativeOps\',{})"><span class="feature-num">03</span><div><strong>Creative Operations</strong><p>Turn evidence into briefs, creator assignments, testing and production decisions.</p></div><span class="feature-arrow">↗</span></button>' +
