@@ -2929,3 +2929,70 @@ body::-webkit-scrollbar,.sidebar::-webkit-scrollbar{width:7px}body::-webkit-scro
 .overview-flow{margin-top:2px}
 @media(max-width:1050px){.overview-hero{padding:28px!important}.overview-hero-copy{padding-top:0}.overview-visual{min-height:370px!important}}
 @media(max-width:650px){.overview-kicker{height:auto!important}.overview-hero{min-height:0!important}.overview-command-strip{margin-top:4px}.overview-hero-copy h2{font-size:35px!important}}
+
+/* ================= Sidebar breathing-room pass ================= */
+.sidebar{
+  width:252px!important;
+  flex:0 0 252px!important;
+  padding:18px 13px!important;
+}
+.brand{
+  padding:8px 12px 24px!important;
+  margin-bottom:2px;
+}
+#sidebarNav{
+  padding:2px 0 12px!important;
+  scrollbar-width:none;
+}
+#sidebarNav::-webkit-scrollbar{width:0}
+.nav-group{
+  gap:4px!important;
+  margin-bottom:14px!important;
+}
+.nav-group-label{
+  padding:8px 12px 6px!important;
+  font-size:7px!important;
+  letter-spacing:.2em!important;
+  opacity:.58;
+}
+.nav-item{
+  min-height:40px!important;
+  padding:0 11px!important;
+  grid-template-columns:24px 1fr 16px!important;
+  gap:5px!important;
+  border-color:transparent!important;
+  border-radius:9px!important;
+}
+.nav-item .nav-index{
+  font-size:7px!important;
+}
+.nav-item .nav-label{
+  font-size:12.5px!important;
+  letter-spacing:.005em;
+}
+.nav-item .nav-arrow{
+  opacity:.18;
+}
+.nav-item:hover{
+  transform:translateX(2px)!important;
+}
+.nav-item.active{
+  box-shadow:inset 0 0 28px rgba(118,82,232,.055),0 7px 22px rgba(0,0,0,.10)!important;
+}
+.nav-item.active:before{
+  top:9px!important;
+  bottom:9px!important;
+}
+.nav-settings{
+  margin-top:4px!important;
+  padding:10px 0 0!important;
+}
+.nav-settings .nav-item{
+  min-height:40px!important;
+}
+@media(max-width:1050px){
+  .sidebar{width:238px!important;flex-basis:238px!important}
+}
+@media(max-width:760px){
+  .sidebar{width:100%!important;flex-basis:auto!important;padding:12px!important}
+}
