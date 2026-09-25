@@ -3202,3 +3202,71 @@ body::-webkit-scrollbar,.sidebar::-webkit-scrollbar{width:7px}body::-webkit-scro
   .nav-item,.nav-settings .nav-item{min-height:31px!important;height:31px!important}
   .nav-item .nav-label{font-size:11px!important}
 }
+
+/* ================= Sidebar always-visible navigation ================= */
+.app-shell{overflow:hidden!important}
+.sidebar{
+  width:258px!important;
+  flex:0 0 258px!important;
+  height:100dvh!important;
+  max-height:100dvh!important;
+  box-sizing:border-box!important;
+  overflow:hidden!important;
+  padding:10px 11px 8px!important;
+}
+.brand{
+  flex:0 0 auto!important;
+  height:48px!important;
+  box-sizing:border-box!important;
+  padding:5px 11px 12px!important;
+}
+.brand::after{top:27px!important}
+#sidebarNav{
+  flex:1 1 auto!important;
+  min-height:0!important;
+  height:auto!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  padding:0 1px!important;
+  scrollbar-width:none!important;
+}
+#sidebarNav::-webkit-scrollbar{display:none!important}
+.nav-group{
+  gap:1px!important;
+  margin:0 0 5px!important;
+}
+.nav-group-label{
+  height:17px!important;
+  box-sizing:border-box!important;
+  padding:5px 11px 2px!important;
+  font-size:6.5px!important;
+}
+.nav-item,
+.nav-settings .nav-item{
+  min-height:31px!important;
+  height:31px!important;
+  box-sizing:border-box!important;
+  padding:0 10px!important;
+  grid-template-columns:22px 1fr 13px!important;
+  gap:4px!important;
+}
+.nav-item .nav-label{
+  font-size:11.5px!important;
+  line-height:1!important;
+}
+.nav-item .nav-index{font-size:6px!important}
+.nav-item .nav-arrow{font-size:9px!important}
+.nav-settings{
+  flex:0 0 auto!important;
+  margin:3px 0 0!important;
+  padding:5px 0 0!important;
+}
+@media(max-height:850px) and (min-width:761px){
+  .sidebar{padding-top:7px!important}
+  .brand{height:43px!important;padding-bottom:8px!important}
+  .brand::after{top:24px!important}
+  .nav-group{margin-bottom:3px!important}
+  .nav-group-label{height:15px!important;padding-top:4px!important}
+  .nav-item,.nav-settings .nav-item{min-height:28px!important;height:28px!important}
+  .nav-item .nav-label{font-size:10.5px!important}
+}
