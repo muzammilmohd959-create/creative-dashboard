@@ -3066,3 +3066,91 @@ body::-webkit-scrollbar,.sidebar::-webkit-scrollbar{width:7px}body::-webkit-scro
   .page-head{align-items:flex-start}
   .page-head:after{display:none}
 }
+
+/* ================= Intelligence module cards — premium pass ================= */
+.overview-feature-grid{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:12px!important;
+}
+.overview-feature{
+  position:relative!important;
+  min-height:145px!important;
+  padding:18px 18px 17px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:flex-end!important;
+  text-align:left!important;
+  overflow:hidden!important;
+  isolation:isolate;
+  border:1px solid rgba(255,255,255,.075)!important;
+  background:
+    radial-gradient(180px 100px at 100% 0%,rgba(139,92,246,.075),transparent 70%),
+    linear-gradient(145deg,rgba(255,255,255,.038),rgba(255,255,255,.008))!important;
+  transition:transform .24s ease,border-color .24s ease,box-shadow .24s ease,background .24s ease!important;
+}
+.overview-feature:after{
+  content:"";
+  position:absolute;
+  width:90px;height:90px;
+  right:-38px;bottom:-44px;
+  border:1px solid rgba(167,139,250,.12);
+  border-radius:50%;
+  box-shadow:0 0 0 18px rgba(167,139,250,.025),0 0 0 36px rgba(167,139,250,.015);
+  z-index:-1;
+}
+.overview-feature:hover{
+  transform:translateY(-5px)!important;
+  border-color:rgba(167,139,250,.28)!important;
+  background:
+    radial-gradient(210px 120px at 100% 0%,rgba(139,92,246,.13),transparent 70%),
+    linear-gradient(145deg,rgba(255,255,255,.05),rgba(255,255,255,.012))!important;
+  box-shadow:0 22px 48px rgba(0,0,0,.28),0 0 28px rgba(139,92,246,.055)!important;
+}
+.overview-feature .feature-num{
+  position:absolute!important;
+  left:18px;top:16px;
+  font:700 7px var(--mono)!important;
+  color:#a78bfa!important;
+  letter-spacing:.12em;
+}
+.overview-feature .feature-arrow{
+  position:absolute!important;
+  right:18px;top:14px;
+  color:#a78bfa!important;
+  opacity:.55;
+  transition:transform .2s ease,opacity .2s ease;
+}
+.overview-feature:hover .feature-arrow{transform:translate(2px,-2px);opacity:1}
+.overview-feature .feature-glyph{
+  position:absolute!important;
+  left:18px;top:39px;
+  right:auto!important;
+  font-size:18px!important;
+  line-height:1!important;
+  color:rgba(167,139,250,.42)!important;
+}
+.overview-feature:hover .feature-glyph{color:#b8a5ff!important}
+.overview-feature div{
+  margin-top:auto!important;
+  padding-top:40px;
+}
+.overview-feature strong{
+  display:block!important;
+  font-size:14px!important;
+  line-height:1.2!important;
+  letter-spacing:-.015em;
+}
+.overview-feature p{
+  margin:7px 0 0!important;
+  font-size:10px!important;
+  line-height:1.55!important;
+  color:rgba(153,161,178,.7)!important;
+}
+@media(max-width:1100px){
+  .overview-feature-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:650px){
+  .overview-feature-grid{grid-template-columns:1fr!important}
+  .overview-feature{min-height:135px!important}
+}
