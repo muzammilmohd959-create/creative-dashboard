@@ -3579,3 +3579,62 @@ body::-webkit-scrollbar,.sidebar::-webkit-scrollbar{width:7px}body::-webkit-scro
   font-size:12px;
   color:rgba(167,139,250,.55);
 }
+
+/* ================= Operating loop intelligence polish ================= */
+.overview-flow{
+  border-color:rgba(167,139,250,.14)!important;
+}
+.overview-flow-head{
+  display:flex!important;
+  align-items:flex-start!important;
+  justify-content:space-between!important;
+  gap:20px!important;
+}
+.overview-flow-sub{
+  margin:7px 0 0!important;
+  max-width:620px;
+  font-size:10px!important;
+  line-height:1.55!important;
+  color:rgba(153,161,178,.58)!important;
+}
+.overview-flow-steps>div{
+  position:relative!important;
+}
+.overview-flow-steps>div:before{
+  content:"";
+  position:absolute;
+  top:-1px;left:14px;right:14px;height:1px;
+  background:linear-gradient(90deg,rgba(53,214,176,.35),rgba(167,139,250,.18));
+  opacity:.7;
+}
+.overview-flow-steps>div:after{
+  content:"";
+  position:absolute;
+  width:5px;height:5px;
+  top:-3px;left:50%;
+  transform:translateX(-50%);
+  border-radius:50%;
+  background:#35d6b0;
+  box-shadow:0 0 12px rgba(53,214,176,.65);
+}
+.overview-flow-steps>div:hover:after{
+  box-shadow:0 0 18px rgba(167,139,250,.9);
+  background:#a78bfa;
+}
+.overview-flow-steps>i:after{
+  animation:arkFlowPulse 2.2s ease-in-out infinite;
+}
+.overview-flow-steps>i:nth-of-type(2):after{animation-delay:.3s}
+.overview-flow-steps>i:nth-of-type(3):after{animation-delay:.6s}
+.overview-flow-steps>i:nth-of-type(4):after{animation-delay:.9s}
+@keyframes arkFlowPulse{
+  0%,100%{opacity:.35;transform:translateX(0)}
+  50%{opacity:1;transform:translateX(3px)}
+}
+@media(max-width:650px){
+  .overview-flow-head{display:block!important}
+  .overview-live-pill{display:inline-flex!important;margin-top:12px}
+}
+@media(prefers-reduced-motion:reduce){
+  .overview-flow-steps>i:after{animation:none!important}
+}
