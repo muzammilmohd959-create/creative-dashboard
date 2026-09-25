@@ -3638,3 +3638,124 @@ body::-webkit-scrollbar,.sidebar::-webkit-scrollbar{width:7px}body::-webkit-scro
 @media(prefers-reduced-motion:reduce){
   .overview-flow-steps>i:after{animation:none!important}
 }
+
+/* ================= ARKFLUENCE authentication experience ================= */
+.auth-shell{
+  position:relative!important;
+  min-height:100vh!important;
+  overflow:hidden!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  padding:54px 42px 30px!important;
+  background:
+    radial-gradient(700px 520px at 18% 45%,rgba(139,92,246,.12),transparent 68%),
+    radial-gradient(620px 500px at 88% 15%,rgba(53,214,176,.045),transparent 70%),
+    #05070b!important;
+}
+.auth-noise{
+  position:absolute;inset:0;pointer-events:none;opacity:.18;
+  background-image:linear-gradient(rgba(167,139,250,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(167,139,250,.045) 1px,transparent 1px);
+  background-size:48px 48px;
+  mask-image:linear-gradient(90deg,black,transparent 90%);
+}
+.auth-orbit{
+  position:absolute;border:1px solid rgba(167,139,250,.1);border-radius:50%;pointer-events:none;
+  box-shadow:0 0 70px rgba(139,92,246,.035);
+}
+.auth-orbit-a{width:720px;height:720px;left:-300px;top:18%;animation:authOrbit 14s linear infinite}
+.auth-orbit-b{width:440px;height:440px;right:-150px;top:-90px;animation:authOrbit 11s linear infinite reverse}
+@keyframes authOrbit{to{transform:rotate(360deg)}}
+.auth-brand{
+  position:relative;z-index:2;
+  width:min(1120px,100%);margin:0 auto 34px!important;
+  display:flex!important;align-items:center!important;gap:9px!important;
+  font-family:'Space Grotesk',Inter,sans-serif!important;font-size:15px!important;
+  letter-spacing:.08em!important;
+}
+.auth-brand .dot{width:8px!important;height:8px!important}
+.auth-brand small{
+  margin-left:8px;color:rgba(167,139,250,.45);font:700 6px var(--mono);
+  letter-spacing:.18em;
+}
+.auth-layout{
+  position:relative;z-index:2;width:min(1120px,100%);margin:auto;
+  display:grid;grid-template-columns:minmax(0,1fr) 410px;gap:72px;align-items:center;
+}
+.auth-visual{padding:18px 0 18px 10px}
+.auth-eyebrow{
+  color:#a78bfa;font:700 8px var(--mono);letter-spacing:.2em;margin-bottom:18px;
+}
+.auth-visual h2{
+  font-family:'Space Grotesk',Inter,sans-serif;font-size:clamp(40px,5vw,70px);
+  line-height:.94;letter-spacing:-.065em;margin:0;max-width:650px;
+}
+.auth-visual h2 em{font-style:normal;color:#a78bfa}
+.auth-visual>p{
+  max-width:480px;margin:24px 0 0;color:rgba(171,179,195,.68);
+  font-size:13px;line-height:1.75;
+}
+.auth-signal-map{
+  position:relative;width:390px;height:230px;margin:28px 0 8px;
+}
+.auth-signal-map:before,.auth-signal-map:after{
+  content:"";position:absolute;left:85px;top:20px;width:170px;height:170px;border:1px solid rgba(167,139,250,.13);border-radius:50%;
+}
+.auth-signal-map:after{left:112px;top:47px;width:116px;height:116px;border-color:rgba(167,139,250,.26)}
+.auth-signal-core{
+  position:absolute;left:143px;top:78px;width:86px;height:86px;border-radius:50%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:radial-gradient(circle at 35% 25%,rgba(167,139,250,.28),#0a0c12 65%);
+  border:1px solid rgba(167,139,250,.45);box-shadow:0 0 55px rgba(139,92,246,.16);
+}
+.auth-signal-core strong{font:700 18px 'Space Grotesk',sans-serif}.auth-signal-core span{font:600 5px var(--mono);letter-spacing:.13em;color:#8b93a3;margin-top:3px}
+.auth-signal-node{
+  position:absolute;font-style:normal;font:700 6px var(--mono);letter-spacing:.12em;color:#8b93a3;
+  padding:7px 9px;border:1px solid rgba(255,255,255,.08);border-radius:7px;background:rgba(8,10,15,.72);
+}
+.auth-signal-node.n1{left:0;top:62px}.auth-signal-node.n2{right:0;top:26px}.auth-signal-node.n3{right:14px;bottom:34px}
+.auth-visual-meta{display:flex;gap:22px;color:rgba(139,147,163,.45);font:700 6px var(--mono);letter-spacing:.12em}
+.auth-visual-meta span:first-child{color:#59d9be}
+.auth-card{
+  position:relative!important;width:100%!important;padding:34px!important;
+  background:linear-gradient(145deg,rgba(18,21,29,.96),rgba(10,12,17,.94))!important;
+  border:1px solid rgba(167,139,250,.18)!important;border-radius:18px!important;
+  box-shadow:0 35px 100px rgba(0,0,0,.48),inset 0 1px 0 rgba(255,255,255,.035)!important;
+  backdrop-filter:blur(20px);
+}
+.auth-card:before{
+  content:"";position:absolute;left:0;right:0;top:0;height:1px;
+  background:linear-gradient(90deg,transparent,#a78bfa,transparent);opacity:.65;
+}
+.auth-kicker{margin-bottom:11px!important}
+.auth-card h1{font-family:'Space Grotesk',Inter,sans-serif!important;font-size:30px!important;letter-spacing:-.04em}
+.auth-sub{margin-bottom:26px!important}
+.auth-card form{gap:15px!important}
+.auth-card input{
+  border-color:rgba(255,255,255,.09)!important;background:rgba(5,7,11,.72)!important;
+  border-radius:10px!important;padding:12px 13px!important;
+}
+.auth-card input:hover{border-color:rgba(167,139,250,.2)}
+.auth-card input:focus{border-color:#8b5cf6!important;box-shadow:0 0 0 3px rgba(139,92,246,.1),0 0 22px rgba(139,92,246,.06)!important}
+.auth-submit{
+  position:relative;overflow:hidden;border-radius:10px!important;margin-top:5px!important;
+  background:linear-gradient(135deg,#8b5cf6,#6f45df)!important;
+  box-shadow:0 12px 32px rgba(139,92,246,.22)!important;
+}
+.auth-submit:after{
+  content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.18) 50%,transparent 65%);
+  transform:translateX(-100%);animation:authButtonSweep 4s ease-in-out infinite;
+}
+@keyframes authButtonSweep{0%,65%{transform:translateX(-100%)}85%,100%{transform:translateX(100%)}}
+.auth-switch{border-top-color:rgba(255,255,255,.08)!important}
+.auth-foot{color:rgba(95,102,116,.65)!important}
+@media(max-width:900px){
+  .auth-shell{padding:35px 20px 25px!important}
+  .auth-layout{grid-template-columns:1fr;gap:25px;max-width:520px}
+  .auth-visual{display:none}
+  .auth-brand{margin-bottom:25px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .auth-orbit,.auth-submit:after{animation:none}
+}
