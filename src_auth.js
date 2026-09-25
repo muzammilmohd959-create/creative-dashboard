@@ -23,8 +23,18 @@
     var isSignup = mode === 'signup';
     gate.innerHTML =
       '<div class="auth-shell">' +
-        '<div class="auth-brand"><span class="dot"></span><span>ARKFLUENCE</span></div>' +
-        '<div class="auth-card">' +
+        '<div class="auth-noise"></div>' +
+        '<div class="auth-orbit auth-orbit-a"></div><div class="auth-orbit auth-orbit-b"></div>' +
+        '<div class="auth-brand"><span class="dot"></span><span>ARKFLUENCE</span><small>CREATOR PERFORMANCE OS</small></div>' +
+        '<div class="auth-layout">' +
+        '<div class="auth-visual">' +
+          '<div class="auth-eyebrow">CREATIVE SIGNAL ENGINE · 01</div>' +
+          '<h2>Turn creator content<br><em>into measurable signal.</em></h2>' +
+          '<p>Source creators. Test creative. Read performance. Scale what works.</p>' +
+          '<div class="auth-signal-map"><div class="auth-signal-core"><strong>ARK</strong><span>INTELLIGENCE</span></div><i class="auth-signal-node n1">CREATORS</i><i class="auth-signal-node n2">CREATIVE</i><i class="auth-signal-node n3">PERFORMANCE</i></div>' +
+          '<div class="auth-visual-meta"><span>● SYSTEM ONLINE</span><span>04 SIGNAL LAYERS</span><span>PRIVATE WORKSPACE</span></div>' +
+        '</div>' +
+        '<div class="auth-card"> +
           '<div class="auth-kicker">CREATOR PERFORMANCE</div>' +
           '<h1>' + (isSignup ? 'Create your account' : 'Welcome back') + '</h1>' +
           '<p class="auth-sub">' + (isSignup ? 'Create your ARKFLUENCE workspace account.' : 'Sign in to your creator-performance workspace.') + '</p>' +
@@ -41,6 +51,7 @@
           '</div>' +
         '</div>' +
         '<div class="auth-foot">Private workspace · Powered by Supabase Auth</div>' +
+        '</div>' +
       '</div>';
 
     document.getElementById('authForm').addEventListener('submit', function (event) {
