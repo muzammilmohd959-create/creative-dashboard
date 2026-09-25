@@ -2996,3 +2996,73 @@ body::-webkit-scrollbar,.sidebar::-webkit-scrollbar{width:7px}body::-webkit-scro
 @media(max-width:760px){
   .sidebar{width:100%!important;flex-basis:auto!important;padding:12px!important}
 }
+
+/* ================= Command bar / top header pass ================= */
+.topbar{
+  min-height:58px!important;
+  height:58px!important;
+  padding:8px 24px!important;
+  background:rgba(7,9,14,.82)!important;
+  border-bottom:1px solid rgba(167,139,250,.12)!important;
+  backdrop-filter:blur(20px)!important;
+  -webkit-backdrop-filter:blur(20px)!important;
+}
+.topbar-left{
+  gap:8px!important;
+}
+.topbar-left .user-pill,
+.topbar-left .user-badge,
+.topbar-left > *{
+  min-height:34px;
+}
+.topbar-actions{
+  gap:6px!important;
+}
+.topbar-actions button{
+  min-height:34px!important;
+  height:34px;
+  padding:7px 11px!important;
+  border-radius:9px!important;
+  font-size:11px!important;
+  letter-spacing:.005em;
+}
+.topbar-actions button.primary{
+  box-shadow:0 7px 24px rgba(139,92,246,.22)!important;
+}
+.content{
+  padding-top:20px!important;
+}
+.page-head{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:20px;
+  margin-bottom:13px!important;
+}
+.page-head h1{
+  margin:0!important;
+  font-size:21px!important;
+  line-height:1.05!important;
+}
+.page-head .sub{
+  margin-top:5px!important;
+  font-size:11.5px!important;
+  color:rgba(153,161,178,.72)!important;
+}
+.page-head:after{
+  content:"ARK / WORKSPACE";
+  flex:0 0 auto;
+  margin-bottom:2px;
+  font:700 7px var(--mono);
+  letter-spacing:.18em;
+  color:rgba(167,139,250,.38);
+}
+.overview-kicker{
+  border-color:rgba(167,139,250,.16)!important;
+  background:rgba(139,92,246,.025)!important;
+}
+@media(max-width:760px){
+  .topbar{height:auto!important;min-height:58px!important;padding:8px 14px!important}
+  .page-head{align-items:flex-start}
+  .page-head:after{display:none}
+}
