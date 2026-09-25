@@ -3533,3 +3533,49 @@ body::-webkit-scrollbar,.sidebar::-webkit-scrollbar{width:7px}body::-webkit-scro
   .overview-flow-steps{grid-template-columns:1fr!important}
   .overview-flow-steps>div{min-height:70px!important}
 }
+
+/* ================= Fix intelligence meters + operating loop polish ================= */
+.overview-feature .feature-body{
+  margin-top:auto!important;
+  padding-top:58px!important;
+}
+.overview-feature .feature-meter{
+  display:block!important;
+  height:3px!important;
+  min-height:3px!important;
+  width:100%!important;
+  margin:13px 0 0!important;
+  padding:0!important;
+  border-radius:99px!important;
+  overflow:hidden!important;
+  background:rgba(255,255,255,.055)!important;
+}
+.overview-feature .feature-meter i{
+  display:block!important;
+  height:100%!important;
+  width:var(--meter-width,86%) ;
+  margin:0!important;
+  padding:0!important;
+  border-radius:99px!important;
+  background:linear-gradient(90deg,#35d6b0,#a78bfa)!important;
+  box-shadow:0 0 10px rgba(139,92,246,.35);
+  transform-origin:left!important;
+}
+.overview-feature:nth-child(1) .feature-meter i{width:86%!important}
+.overview-feature:nth-child(2) .feature-meter i{width:72%!important}
+.overview-feature:nth-child(3) .feature-meter i{width:64%!important}
+.overview-feature:nth-child(4) .feature-meter i{width:91%!important}
+.overview-feature small{
+  display:flex!important;
+  width:100%!important;
+  margin:6px 0 0!important;
+  padding:0!important;
+}
+.overview-flow-steps>i{
+  font-size:0!important;
+}
+.overview-flow-steps>i:after{
+  content:"→";
+  font-size:12px;
+  color:rgba(167,139,250,.55);
+}
