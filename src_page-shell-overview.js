@@ -126,7 +126,7 @@ PAGES.overview = {
           '<button class="overview-feature" onclick="setPage(\'recommendations\',{})"><span class="feature-num">04</span><span class="feature-type">ACTION</span><span class="feature-glyph">↗</span><div class="feature-body"><strong>Recommendations</strong><p>Translate observed performance signals into the next creative action.</p><div class="feature-meter"><i style="width:91%"></i></div><small>Action confidence <b>91%</b></small></div><span class="feature-arrow">↗</span></button>' +
         '</section>' +
         '<section class="overview-flow">' +
-          '<div class="overview-flow-head"><div><span class="overview-eyebrow">THE OPERATING LOOP</span><h2>From content to compounding creative knowledge.</h2></div><span class="overview-live-pill"><i></i> SYSTEM READY</span></div>' +
+          '<div class="overview-flow-head"><div><span class="overview-eyebrow">THE OPERATING LOOP</span><h2>From content to compounding creative knowledge.</h2><p class="overview-flow-sub">A continuous system for sourcing, testing, learning and scaling creator-led creative.</p></div><span class="overview-live-pill"><i></i> SYSTEM READY</span></div>' +
           '<div class="overview-flow-steps"><div><b>01</b><strong>Creators</strong><span>Source the right voices</span></div><i>→</i><div><b>02</b><strong>Creative</strong><span>Capture the execution</span></div><i>→</i><div><b>03</b><strong>Testing</strong><span>Measure paid outcomes</span></div><i>→</i><div><b>04</b><strong>Intelligence</strong><span>Find repeatable signals</span></div><i>→</i><div><b>05</b><strong>Action</strong><span>Brief the next variation</span></div></div>' +
         '</section>';
     }
