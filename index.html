@@ -20,6 +20,10 @@
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text)}
 body{font-family:Inter,system-ui,sans-serif}
 #particleCanvas{position:fixed;inset:0;width:100%;height:100%;display:block}
+.signal-field{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.34;mix-blend-mode:screen}
+.signal-field svg{width:100%;height:100%;display:block}
+.signal-line{fill:none;stroke:rgba(180,120,255,.22);stroke-width:.7;vector-effect:non-scaling-stroke}
+.signal-line.hot{stroke:rgba(216,180,254,.42);stroke-width:1.1}
 .vignette{position:fixed;inset:0;pointer-events:none;background:
   radial-gradient(circle at 50% 46%,transparent 0%,rgba(2,2,5,.08) 42%,rgba(2,2,5,.9) 100%),
   linear-gradient(180deg,rgba(2,2,5,.18),rgba(2,2,5,.45))}
@@ -34,6 +38,7 @@ h1{margin:0;font:600 clamp(58px,10vw,132px)/.84 "Space Grotesk",sans-serif;lette
 .subtitle{margin:28px 0 0;max-width:620px;color:#a49daf;font-size:clamp(14px,1.4vw,18px);line-height:1.7}
 .cta{margin-top:38px;position:relative;display:inline-flex;align-items:center;gap:12px;padding:15px 22px;border:1px solid rgba(196,130,255,.5);border-radius:14px;background:linear-gradient(135deg,rgba(168,85,247,.24),rgba(76,29,149,.16));color:#fff;text-decoration:none;font:600 12px/1 "IBM Plex Mono",monospace;letter-spacing:.12em;box-shadow:0 0 0 1px rgba(255,255,255,.025) inset,0 12px 45px rgba(88,28,135,.18);backdrop-filter:blur(14px);transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease}
 .cta:before{content:"";position:absolute;inset:-1px;border-radius:14px;background:linear-gradient(90deg,transparent,rgba(216,180,254,.55),transparent);opacity:0;transition:opacity .22s ease}
+.cta:after{content:"";position:absolute;inset:1px;border-radius:13px;background:linear-gradient(135deg,rgba(255,255,255,.07),transparent 42%,rgba(168,85,247,.08));pointer-events:none}
 .cta:hover{transform:translateY(-2px);border-color:rgba(216,180,254,.9);box-shadow:0 16px 55px rgba(126,34,206,.28)}
 .cta:hover:before{opacity:1}
 .arrow{font-size:16px;line-height:0;transition:transform .22s ease}.cta:hover .arrow{transform:translateX(4px)}
@@ -48,6 +53,16 @@ h1{margin:0;font:600 clamp(58px,10vw,132px)/.84 "Space Grotesk",sans-serif;lette
 </head>
 <body>
 <canvas id="particleCanvas" aria-hidden="true"></canvas>
+<div class="signal-field" aria-hidden="true">
+  <svg viewBox="0 0 1440 900" preserveAspectRatio="none">
+    <path class="signal-line hot" d="M-80 520 C 220 430, 350 620, 610 510 S 1030 380, 1520 470"/>
+    <path class="signal-line" d="M-80 555 C 210 465, 380 650, 640 535 S 1040 410, 1520 505"/>
+    <path class="signal-line" d="M-80 590 C 190 505, 410 675, 670 560 S 1060 445, 1520 540"/>
+    <path class="signal-line" d="M-80 625 C 180 545, 430 700, 700 585 S 1080 480, 1520 575"/>
+    <path class="signal-line" d="M-80 660 C 170 585, 450 725, 730 610 S 1100 515, 1520 610"/>
+    <path class="signal-line" d="M-80 695 C 160 625, 470 750, 760 635 S 1120 550, 1520 645"/>
+  </svg>
+</div>
 <div class="vignette" aria-hidden="true"></div>
 <div class="grain" aria-hidden="true"></div>
 
@@ -102,6 +117,18 @@ h1{margin:0;font:600 clamp(58px,10vw,132px)/.84 "Space Grotesk",sans-serif;lette
     ctx.clearRect(0, 0, width, height);
     const t = time * .00035;
     const maxLink = Math.min(135, width * .12);
+    const paths = document.querySelectorAll('.signal-line');
+    paths.forEach((path, idx) => {
+      const phase = (idx - 2) * 12;
+      const bend = Math.sin(t * 2.2 + idx) * 8;
+      const y = 520 + idx * 35 + bend;
+      path.setAttribute('d', 'M-80 ' + (y + phase) + ' C 220 ' + (y - 90) + ', 350 ' + (y + 100) + ', 610 ' + (y - 10) + ' S 1030 ' + (y - 130) + ', 1520 ' + (y - 40));
+      if (mouse.x > -1000) {
+        const strength = Math.max(0, 1 - Math.abs(mouse.y - y) / 220);
+        path.style.opacity = String(.25 + strength * .75);
+        path.style.transform = 'translateY(' + ((mouse.x - width/2) / width * 10 * strength) + 'px)';
+      }
+    });
 
     for (let i = 0; i < particles.length; i++) {
       const p = particles[i];
