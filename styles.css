@@ -3362,3 +3362,38 @@ body::-webkit-scrollbar,.sidebar::-webkit-scrollbar{width:7px}body::-webkit-scro
 @media(prefers-reduced-motion:reduce){
   .overview-core,.overview-visual:before,.overview-orbit,.overview-scan{animation:none!important}
 }
+
+/* ================= Intelligence modules v2 ================= */
+.overview-feature .feature-type{
+  position:absolute!important;
+  left:18px;
+  top:39px;
+  font:700 6px var(--mono)!important;
+  letter-spacing:.16em;
+  color:rgba(53,214,176,.72)!important;
+  background:rgba(53,214,176,.055);
+  border:1px solid rgba(53,214,176,.12);
+  border-radius:999px;
+  padding:4px 6px;
+}
+.overview-feature .feature-glyph{
+  top:36px!important;
+  left:auto!important;
+  right:18px!important;
+  font-size:20px!important;
+}
+.overview-feature div{
+  padding-top:58px!important;
+}
+.overview-feature strong{
+  font-size:15px!important;
+}
+.overview-feature p{
+  max-width:235px;
+}
+.overview-feature:nth-child(1):hover .feature-type,
+.overview-feature:nth-child(4):hover .feature-type{
+  color:#a78bfa!important;
+  border-color:rgba(167,139,250,.2);
+  background:rgba(139,92,246,.06);
+}
